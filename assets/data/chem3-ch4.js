@@ -73,20 +73,20 @@ Object.assign(window.LESSONS_REGISTRY, {
       }
     ],
     tahsiliTips: [
-      '<strong>تأسيس يلو:</strong> في الخلية الجلفانية: <span class="chem">E°<sub>cell</sub> = E°<sub>الاختزال (الأعلى)</sub> - E°<sub>الأكسدة (الأقل)</sub></span>.',
-      '<strong>تأسيس يلو:</strong> تترسب الأيونات عند <strong>الكاثود</strong> (المهبط)، وتتحرك الأيونات الموجبة في القنطرة نحو الكاثود والسالبة نحو الأنود.',
-      '<strong>تأسيس يلو:</strong> جهد قطب الهيدروجين القياسي يساوي <span class="chem">0.000 V</span>.'
+      '<strong>قاعدة تحصيلي:</strong> في الخلية الجلفانية: <span class="chem">E°<sub>cell</sub> = E°<sub>الاختزال (الأعلى)</sub> - E°<sub>الأكسدة (الأقل)</sub></span>.',
+      '<strong>قاعدة تحصيلي:</strong> تترسب الأيونات عند <strong>الكاثود</strong> (المهبط)، وتتحرك الأيونات الموجبة في القنطرة نحو الكاثود والسالبة نحو الأنود.',
+      '<strong>قاعدة تحصيلي:</strong> جهد قطب الهيدروجين القياسي يساوي <span class="chem">0.000 V</span>.'
     ],
     finalQuiz: [
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'احسب جهد خلية جلفانية مكونة من قصدير وبلاتين: <span class="chem">Sn(s) + Pt²⁺(aq) → Sn²⁺(aq) + Pt(s)</span> علماً أن <span class="chem">E°<sub>Pt²⁺</sub> = +1.18 V</span> و <span class="chem">E°<sub>Sn²⁺</sub> = -0.137 V</span>:',
         options: ['<span class="chem">+1.04 V</span>', '<span class="chem">+1.32 V</span>', '<span class="chem">-1.32 V</span>', '<span class="chem">+0.86 V</span>'],
         answer: 1,
         explain: '<span class="chem">E°<sub>cell</sub> = +1.18 - (-0.137) = +1.317 V ≈ 1.32 V</span>.'
       },
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'احسب جهد الخلية للتفاعل <span class="chem">Mn(s) + Zn²⁺(aq) → Mn²⁺(aq) + Zn(s)</span> علماً أن <span class="chem">E°<sub>Zn²⁺</sub> = -0.762 V</span> و <span class="chem">E°<sub>Mn²⁺</sub> = -1.185 V</span>:',
         options: ['<span class="chem">+0.423 V</span>', '<span class="chem">-0.423 V</span>', '<span class="chem">-1.947 V</span>', '<span class="chem">+1.947 V</span>'],
         answer: 0,
@@ -196,9 +196,9 @@ Object.assign(window.LESSONS_REGISTRY, {
       }
     ],
     tahsiliTips: [
-      '<strong>تأسيس يلو:</strong> الليثيوم أخف فلز معروف وله أقل جهد اختزال قياسي (<span class="chem">-3.04 V</span>)، لذا يعطي جهداً عالياً.',
-      '<strong>تأسيس يلو:</strong> المركم الرصاصي يستخدم محلول <span class="chem">H₂SO₄</span> وتُعد بطاريات الفضة والقلوية والجافة أولية، بينما نيكل-كادميوم والمركم الرصاصي ثانوية.',
-      '<strong>تأسيس يلو:</strong> طرق تقليل التآكل ثلاث: الطلاء، الجلفنة (تغليف بالخارصين)، والأنود المضحي (مثل الماغنسيوم).'
+      '<strong>قاعدة تحصيلي:</strong> الليثيوم أخف فلز معروف وله أقل جهد اختزال قياسي (<span class="chem">-3.04 V</span>)، لذا يعطي جهداً عالياً.',
+      '<strong>قاعدة تحصيلي:</strong> المركم الرصاصي يستخدم محلول <span class="chem">H₂SO₄</span> وتُعد بطاريات الفضة والقلوية والجافة أولية، بينما نيكل-كادميوم والمركم الرصاصي ثانوية.',
+      '<strong>قاعدة تحصيلي:</strong> طرق تقليل التآكل ثلاث: الطلاء، الجلفنة (تغليف بالخارصين)، والأنود المضحي (مثل الماغنسيوم).'
     ],
     finalQuiz: [
       {
@@ -209,14 +209,14 @@ Object.assign(window.LESSONS_REGISTRY, {
         explain: 'يمكن أن تتكون البطارية من خلية جلفانية واحدة أو أكثر في عبوة واحدة.'
       },
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'بطاريات صغيرة جداً تُستخدم في سماعات الأذن والساعات وآلات التصوير:',
         options: ['المركم الرصاصي', 'بطارية الفضة', 'بطارية نيكل-كادميوم', 'خلية داون'],
         answer: 1,
         explain: 'بطارية الفضة أصغر حجماً من القلوية وتناسب الأجهزة الدقيقة.'
       },
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'أي مما يأتي يُعد الناتج الوحيد لخلية وقود الهيدروجين-الأكسجين؟',
         options: ['ثاني أكسيد الكربون', 'الماء النقي', 'غاز الكلور', 'أكسيد المنجنيز'],
         answer: 1,
@@ -237,7 +237,7 @@ Object.assign(window.LESSONS_REGISTRY, {
         explain: 'يتأكسد الماغنسيوم أسهل من الحديد فيحمي الأنبوب الحديدي (يصبح الحديد كاثوداً).'
       },
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'ما المحلول الموصل في بطارية المركم الرصاصي (السيارة)؟',
         options: ['هيدروكسيد البوتاسيوم', 'حمض الكبريتيك المخفف <span class="chem">H₂SO₄</span>', 'كلوريد الأمونيوم', 'نترات الفضة'],
         answer: 1,
@@ -318,9 +318,9 @@ Object.assign(window.LESSONS_REGISTRY, {
       }
     ],
     tahsiliTips: [
-      '<strong>تأسيس يلو:</strong> خلية داون تحلل <strong>مصهور</strong> <span class="chem">NaCl</span> إلى صوديوم نقي وغاز كلور.',
-      '<strong>تأسيس يلو:</strong> التحليل الكهربائي لماء البحر (<span class="chem">NaCl</span> المائي) ينتج <span class="chem">H₂ + Cl₂ + NaOH</span> ولا ينتج فلز الصوديوم.',
-      '<strong>تأسيس يلو:</strong> عملية هول-هيروليت خاصة بإنتاج <strong>الألومنيوم</strong> وتُشجع إعادة تدويره لتوفير الطاقة.'
+      '<strong>قاعدة تحصيلي:</strong> خلية داون تحلل <strong>مصهور</strong> <span class="chem">NaCl</span> إلى صوديوم نقي وغاز كلور.',
+      '<strong>قاعدة تحصيلي:</strong> التحليل الكهربائي لماء البحر (<span class="chem">NaCl</span> المائي) ينتج <span class="chem">H₂ + Cl₂ + NaOH</span> ولا ينتج فلز الصوديوم.',
+      '<strong>قاعدة تحصيلي:</strong> عملية هول-هيروليت خاصة بإنتاج <strong>الألومنيوم</strong> وتُشجع إعادة تدويره لتوفير الطاقة.'
     ],
     finalQuiz: [
       {
@@ -331,14 +331,14 @@ Object.assign(window.LESSONS_REGISTRY, {
         explain: 'جزيئات الماء لها ميل للاختزال أكبر من أيونات <span class="chem">Na⁺</span> فينطلق غاز الهيدروجين عند الكاثود.'
       },
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'النواتج الثلاثة للتحليل الكهربائي لماء البحر (<span class="chem">2H₂O + 2NaCl</span>) هي:',
         options: ['<span class="chem">Na, Cl₂, O₂</span>', '<span class="chem">H₂, Cl₂, NaOH</span>', '<span class="chem">H₂, O₂, NaCl</span>', '<span class="chem">Na, H₂, O₂</span>'],
         answer: 1,
         explain: 'المعادلة: <span class="chem">2H₂O(l) + 2NaCl(aq) → H₂(g) + Cl₂(g) + 2NaOH(aq)</span>.'
       },
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'تُستخدم عملية هول-هيروليت في الصناعة لـ:',
         options: ['استخلاص الصوديوم من ماء البحر', 'إنتاج الألومنيوم النقي بالتحليل الكهربائي', 'تنقية الفضة بالترسيب', 'شحن بطاريات الرصاص'],
         answer: 1,
@@ -352,7 +352,7 @@ Object.assign(window.LESSONS_REGISTRY, {
         explain: 'يتأكسد النحاس غير النقي عند الأنود وتترسب ذرات النحاس النقية على الكاثود بينما تسقط الشوائب في القاع.'
       },
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'أين تحدث عملية الأكسدة في خلية التحليل الكهربائي لمصهور <span class="chem">NaCl</span> (خلية داون)؟',
         options: ['عند الكاثود لأيونات <span class="chem">Na⁺</span>', 'عند الأنود لأيونات <span class="chem">Cl⁻</span> لإنتاج <span class="chem">Cl₂</span>', 'عند الكاثود للماء', 'لا تحدث أكسدة'],
         answer: 1,

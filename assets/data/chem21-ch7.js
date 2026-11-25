@@ -68,34 +68,34 @@ Object.assign(window.LESSONS_REGISTRY, {
       }
     ],
     tahsiliTips: [
-      '<strong>تأسيس يلو:</strong> الصفر المطلق (<span class="chem">0 K = -273 °C</span>) هو أقل درجة حرارة ممكنة تصبح عندها طاقة الذرات أقل ما يمكن.',
-      '<strong>تأسيس يلو:</strong> جميع الحسابات التي تحوي درجة حرارة في قوانين الغازات يجب أن تُحوّل أولاً إلى <strong>كلفن</strong>.',
-      '<strong>تأسيس يلو:</strong> بويل (حجاب حاجز)، شارل (بالون)، جاي-لوساك (أواني الضغط).'
+      '<strong>قاعدة تحصيلي:</strong> الصفر المطلق (<span class="chem">0 K = -273 °C</span>) هو أقل درجة حرارة ممكنة تصبح عندها طاقة الذرات أقل ما يمكن.',
+      '<strong>قاعدة تحصيلي:</strong> جميع الحسابات التي تحوي درجة حرارة في قوانين الغازات يجب أن تُحوّل أولاً إلى <strong>كلفن</strong>.',
+      '<strong>قاعدة تحصيلي:</strong> بويل (حجاب حاجز)، شارل (بالون)، جاي-لوساك (أواني الضغط).'
     ],
     finalQuiz: [
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'غاز حجمه <span class="chem">42 cm³</span> عند ضغط <span class="chem">90 Pa</span>، ما حجمه الجديد عند ضغط <span class="chem">180 Pa</span> مع ثبات الحرارة؟',
         options: ['<span class="chem">84 cm³</span>', '<span class="chem">21 cm³</span>', '<span class="chem">42 cm³</span>', '<span class="chem">10.5 cm³</span>'],
         answer: 1,
         explain: 'بقانون بويل: ضوعف الضغط فينقص الحجم للنصف <span class="chem">(90 × 42)/180 = 21 cm³</span>.'
       },
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'غاز ضغطه <span class="chem">4 atm</span> عند <span class="chem">200 K</span>، فإذا زادت حرارته إلى <span class="chem">450 K</span> بثبوت الحجم، فما ضغطه الجديد؟',
         options: ['<span class="chem">9 atm</span>', '<span class="chem">1.78 atm</span>', '<span class="chem">8 atm</span>', '<span class="chem">6 atm</span>'],
         answer: 0,
         explain: 'بجاي-لوساك: <span class="chem">P₂ = 4 × 450 / 200 = 9 atm</span>.'
       },
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'غاز حجمه <span class="chem">10 L</span> عند <span class="chem">240 K</span>، ما حجمه عند <span class="chem">60 K</span> بثبوت الضغط؟',
         options: ['<span class="chem">40 L</span>', '<span class="chem">2.5 L</span>', '<span class="chem">5 L</span>', '<span class="chem">15 L</span>'],
         answer: 1,
         explain: 'بشارل: <span class="chem">V₂ = 10 × 60 / 240 = 2.5 L</span>.'
       },
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'غاز حجمه <span class="chem">7 L</span> عند <span class="chem">5 atm</span> و <span class="chem">280 K</span>، ما حجمه عند <span class="chem">4 atm</span> و <span class="chem">320 K</span>؟',
         options: ['<span class="chem">10 L</span>', '<span class="chem">5 L</span>', '<span class="chem">7.5 L</span>', '<span class="chem">14 L</span>'],
         answer: 0,
@@ -109,7 +109,7 @@ Object.assign(window.LESSONS_REGISTRY, {
         explain: '<span class="chem">T₁ = 298 K, T₂ = 285 K ← V₂ = 5.66×10⁶ × (285/298) ≈ 5.41×10⁶ L</span>.'
       },
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'درجة الحرارة <span class="chem">200 K</span> تساوي على المقياس السيليزي:',
         options: ['<span class="chem">473 °C</span>', '<span class="chem">-73 °C</span>', '<span class="chem">73 °C</span>', '<span class="chem">-200 °C</span>'],
         answer: 1,
@@ -194,13 +194,13 @@ Object.assign(window.LESSONS_REGISTRY, {
       }
     ],
     tahsiliTips: [
-      '<strong>تأسيس يلو:</strong> الظروف المعيارية للغاز <span class="chem">STP</span> هي <span class="chem">0 °C (273 K)</span> و <span class="chem">1 atm</span>، والحجم المولاري <span class="chem">22.4 L</span>.',
-      '<strong>تأسيس يلو:</strong> الغاز الحقيقي يسلك سلوك الغاز المثالي عند زيادة الحرارة وتقليل الضغط.',
-      '<strong>تأسيس يلو:</strong> الغازات القطبية والكبيرة الجسيمات أكثر ابتعاداً عن السلوك المثالي من الهيليوم.'
+      '<strong>قاعدة تحصيلي:</strong> الظروف المعيارية للغاز <span class="chem">STP</span> هي <span class="chem">0 °C (273 K)</span> و <span class="chem">1 atm</span>، والحجم المولاري <span class="chem">22.4 L</span>.',
+      '<strong>قاعدة تحصيلي:</strong> الغاز الحقيقي يسلك سلوك الغاز المثالي عند زيادة الحرارة وتقليل الضغط.',
+      '<strong>قاعدة تحصيلي:</strong> الغازات القطبية والكبيرة الجسيمات أكثر ابتعاداً عن السلوك المثالي من الهيليوم.'
     ],
     finalQuiz: [
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'ما حجم وعاء يحوي <span class="chem">2 mol</span> من غاز الأكسجين في الظروف المعيارية <span class="chem">STP</span>؟',
         options: ['<span class="chem">11.2 L</span>', '<span class="chem">22.4 L</span>', '<span class="chem">44.8 L</span>', '<span class="chem">67.2 L</span>'],
         answer: 2,
@@ -221,7 +221,7 @@ Object.assign(window.LESSONS_REGISTRY, {
         explain: '<span class="chem">M = mRT / PV = (4 × 0.0821 × 298) / (2 × 2) ≈ 24.5 g/mol</span>.'
       },
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'يسلك الغاز الحقيقي سلوك الغاز المثالي عند:',
         options: ['زيادة الضغط وتقليل الحرارة', 'زيادة الحرارة وتقليل الضغط', 'نقصان الحجم جداً', 'التبريد حتى التكاثف'],
         answer: 1,
@@ -315,19 +315,19 @@ Object.assign(window.LESSONS_REGISTRY, {
       }
     ],
     tahsiliTips: [
-      '<strong>تأسيس يلو:</strong> في مسائل حجم-حجم للغازات استخدم طريقة المقص مباشرة بالمعاملات الموزونة دون حاجة لـ T و P.',
-      '<strong>تأسيس يلو:</strong> تأكد من أن المواد في المعادلة غازات (<span class="chem">g</span>) عند استخدام النسبة الحجمية للمعاملات.'
+      '<strong>قاعدة تحصيلي:</strong> في مسائل حجم-حجم للغازات استخدم طريقة المقص مباشرة بالمعاملات الموزونة دون حاجة لـ T و P.',
+      '<strong>قاعدة تحصيلي:</strong> تأكد من أن المواد في المعادلة غازات (<span class="chem">g</span>) عند استخدام النسبة الحجمية للمعاملات.'
     ],
     finalQuiz: [
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'ما حجم غاز الأكسجين اللازم لإحراق <span class="chem">4 L</span> من غاز البروبان حرقاً كاملاً وفق <span class="chem">C₃H₈ + 5O₂ → 3CO₂ + 4H₂O</span>؟',
         options: ['<span class="chem">4 L</span>', '<span class="chem">12 L</span>', '<span class="chem">20 L</span>', '<span class="chem">16 L</span>'],
         answer: 2,
         explain: 'المقص: <span class="chem">4 × 5 = 20 L O₂</span>.'
       },
       {
-        source: 'تحصيلي · تأسيس يلو',
+        source: 'أسئلة من التحصيلي',
         q: 'احسب حجم غاز الأمونيا الناتج عن تفاعل <span class="chem">6 L</span> من النيتروجين مع كمية كافية من الهيدروجين في <span class="chem">N₂ + 3H₂ → 2NH₃</span>:',
         options: ['<span class="chem">3 L</span>', '<span class="chem">6 L</span>', '<span class="chem">12 L</span>', '<span class="chem">18 L</span>'],
         answer: 2,

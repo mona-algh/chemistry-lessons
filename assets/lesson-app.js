@@ -1,4 +1,4 @@
-// Shared Interactive Lesson Engine (Tabs, Timer, Whiteboard, Simulations, Quizzes)
+// Interactive Slide-Deck Lesson Engine (Slides, Section Tabs, Instant Quizzes, Timer, Whiteboard)
 (function () {
   function el(tag, attrs, children) {
     const node = document.createElement(tag);
@@ -22,7 +22,6 @@
     return node;
   }
 
-  /* ================= 1. CLASSROOM TIMER ================= */
   function initTimer() {
     const display = document.getElementById('timerDisplay');
     const toggleBtn = document.getElementById('timerToggleBtn');
@@ -83,7 +82,6 @@
     render();
   }
 
-  /* ================= 2. WHITEBOARD ANNOTATION OVERLAY ================= */
   function initWhiteboard() {
     const toggleBtn = document.getElementById('wbToggleBtn');
     const dock = document.getElementById('wbDock');
@@ -134,10 +132,7 @@
       toggleBtn.textContent = active ? 'إخفاء القلم' : 'قلم الشرح';
     }
 
-    toggleBtn.addEventListener('click', function () {
-      setActive(!active);
-    });
-
+    toggleBtn.addEventListener('click', function () { setActive(!active); });
     document.addEventListener('keydown', function (e) {
       if (e.key === 'Escape' && active) setActive(false);
     });
@@ -160,23 +155,14 @@
         erBtn.classList.toggle('btn-active', eraser);
       });
     }
-
     const undoBtn = document.getElementById('wbUndoBtn');
     if (undoBtn) {
-      undoBtn.addEventListener('click', function () {
-        strokes.pop();
-        redraw(strokes);
-      });
+      undoBtn.addEventListener('click', function () { strokes.pop(); redraw(strokes); });
     }
-
     const clearBtn = document.getElementById('wbClearBtn');
     if (clearBtn) {
-      clearBtn.addEventListener('click', function () {
-        strokes.length = 0;
-        redraw(strokes);
-      });
+      clearBtn.addEventListener('click', function () { strokes.length = 0; redraw(strokes); });
     }
-
     const closeBtn = document.getElementById('wbCloseBtn');
     if (closeBtn) {
       closeBtn.addEventListener('click', function () { setActive(false); });
@@ -193,69 +179,24 @@
       currentStroke = { color: color, eraser: eraser, points: [pt(e)] };
       strokes.push(currentStroke);
     });
-
     canvas.addEventListener('pointermove', function (e) {
       if (!active || !drawing || !currentStroke) return;
       currentStroke.points.push(pt(e));
       redraw(strokes);
     });
-
     window.addEventListener('pointerup', function () {
       drawing = false;
       currentStroke = null;
     });
-
     window.addEventListener('resize', resize);
     resize();
   }
 
-  /* ================= 3. TABS NAVIGATION ================= */
-  function initTabs() {
-    const tabBtns = Array.from(document.querySelectorAll('[role="tab"]'));
-    const panels = Array.from(document.querySelectorAll('[role="tabpanel"]'));
-    if (!tabBtns.length) return;
-
-    function activate(tabId) {
-      tabBtns.forEach(function (btn) {
-        const selected = btn.id === tabId;
-        btn.setAttribute('aria-selected', String(selected));
-        btn.setAttribute('tabindex', selected ? '0' : '-1');
-      });
-      panels.forEach(function (panel) {
-        panel.hidden = panel.getAttribute('aria-labelledby') !== tabId;
-      });
-    }
-
-    tabBtns.forEach(function (btn, idx) {
-      btn.addEventListener('click', function () {
-        activate(btn.id);
-      });
-      btn.addEventListener('keydown', function (e) {
-        let nextIdx = idx;
-        if (e.key === 'ArrowLeft') nextIdx = (idx + 1) % tabBtns.length;
-        else if (e.key === 'ArrowRight') nextIdx = (idx - 1 + tabBtns.length) % tabBtns.length;
-        else if (e.key === 'Home') nextIdx = 0;
-        else if (e.key === 'End') nextIdx = tabBtns.length - 1;
-        else return;
-        e.preventDefault();
-        tabBtns[nextIdx].focus();
-        activate(tabBtns[nextIdx].id);
-      });
-    });
-
-    activate(tabBtns[0].id);
-  }
-
-  /* ================= 4. INTERACTIVE SIMULATIONS PER LESSON ================= */
-  function mountSimulation(container, simType) {
-    if (!simType) return;
+  function createSimulationNode(simType) {
+    if (!simType) return null;
     const box = el('div', { className: 'sim-box' });
 
     if (simType === 'states-particles') {
-      box.appendChild(el('div', { className: 'sim-header' }, [
-        el('h3', { text: 'محاكاة تفاعلية: كيف تتحرك الجسيمات؟' }),
-        el('span', { className: 'page-ref', text: 'اختر الحالة للمقارنة' })
-      ]));
       const controls = el('div', { className: 'sim-controls' });
       const canvasWrap = el('div', { className: 'sim-canvas-wrap' });
       const canvas = el('canvas', { width: '520', height: '210' });
@@ -271,7 +212,6 @@
         liquid: { label: 'سائل', desc: 'سائل: الجسيمات متقاربة لكنها تنزلق فوق بعضها فتأخذ شكل الوعاء وتحتفظ بحجم ثابت.' },
         gas: { label: 'غاز', desc: 'غاز: الجسيمات متباعدة جداً وتتحرك عشوائياً بسرعة في خطوط مستقيمة وتنتشر لتملأ الوعاء.' }
       };
-
       const particles = [];
       for (let i = 0; i < 36; i++) {
         particles.push({
@@ -284,7 +224,6 @@
           phase: Math.random() * Math.PI * 2
         });
       }
-
       const btns = {};
       Object.keys(modes).forEach(function (k) {
         const b = el('button', { type: 'button', className: 'btn btn-sm', text: modes[k].label });
@@ -302,6 +241,7 @@
       const ctx = canvas.getContext('2d');
       let t = 0;
       function tick() {
+        if (!document.body.contains(canvas)) return;
         t += 0.08;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
@@ -341,21 +281,17 @@
         });
         requestAnimationFrame(tick);
       }
-      tick();
+      requestAnimationFrame(tick);
     } else if (simType === 'graham-gas') {
-      box.appendChild(el('div', { className: 'sim-header' }, [
-        el('h3', { text: 'محاكاة قانون جراهام للتدفق والانتشار' }),
-        el('span', { className: 'page-ref', text: 'قارن سرعة غازين' })
-      ]));
       const controls = el('div', { className: 'sim-controls' });
       const gases = [
-        { name: 'الهيليوم He (M = 4 g/mol)', m: 4 },
-        { name: 'الميثان CH₄ (M = 16 g/mol)', m: 16 },
-        { name: 'الأمونيا NH₃ (M = 17 g/mol)', m: 17 },
-        { name: 'النيتروجين N₂ (M = 28 g/mol)', m: 28 },
-        { name: 'الأكسجين O₂ (M = 32 g/mol)', m: 32 },
-        { name: 'كلوريد الهيدروجين HCl (M = 36.5 g/mol)', m: 36.5 },
-        { name: 'ثاني أكسيد الكربون CO₂ (M = 44 g/mol)', m: 44 }
+        { name: 'الهيليوم He (4 g/mol)', m: 4 },
+        { name: 'الميثان CH₄ (16 g/mol)', m: 16 },
+        { name: 'الأمونيا NH₃ (17 g/mol)', m: 17 },
+        { name: 'النيتروجين N₂ (28 g/mol)', m: 28 },
+        { name: 'الأكسجين O₂ (32 g/mol)', m: 32 },
+        { name: 'كلوريد الهيدروجين HCl (36.5 g/mol)', m: 36.5 },
+        { name: 'ثاني أكسيد الكربون CO₂ (44 g/mol)', m: 44 }
       ];
       const selA = el('select', { className: 'btn btn-sm', 'aria-label': 'الغاز الأول A' });
       const selB = el('select', { className: 'btn btn-sm', 'aria-label': 'الغاز الثاني B' });
@@ -363,11 +299,10 @@
         selA.appendChild(el('option', { value: String(i), text: 'الغاز A: ' + g.name }));
         selB.appendChild(el('option', { value: String(i), text: 'الغاز B: ' + g.name }));
       });
-      selA.value = '2'; // NH3
-      selB.value = '5'; // HCl
+      selA.value = '2';
+      selB.value = '5';
       controls.appendChild(selA);
       controls.appendChild(selB);
-
       const readout = el('div', { className: 'sim-readout' });
       function update() {
         const gA = gases[Number(selA.value)];
@@ -382,10 +317,6 @@
       box.appendChild(controls);
       box.appendChild(readout);
     } else if (simType === 'imf-compare') {
-      box.appendChild(el('div', { className: 'sim-header' }, [
-        el('h3', { text: 'مستكشف القوى بين الجزيئات ودرجة الغليان' }),
-        el('span', { className: 'page-ref', text: 'مقارنة تفاعلية' })
-      ]));
       const items = [
         { label: 'CH₄ (الميثان)', m: '16.0 g/mol', bp: '-164 °C', force: 'قوى تشتت ضعيفة (جزيء غير قطبي) لذلك يوجد غازاً في درجة حرارة الغرفة.' },
         { label: 'HCl (كلوريد الهيدروجين)', m: '36.5 g/mol', bp: '-85 °C', force: 'قوى ثنائية قطبية دائمة بين الجزيئات القطبية + قوى تشتت.' },
@@ -407,10 +338,6 @@
       box.appendChild(controls);
       box.appendChild(readout);
     } else if (simType === 'phase-diagram') {
-      box.appendChild(el('div', { className: 'sim-header' }, [
-        el('h3', { text: 'مستكشف مخطط الطور للماء وتحولات الحالة' }),
-        el('span', { className: 'page-ref', text: 'جرّب تغيير الحرارة والضغط' })
-      ]));
       const controls = el('div', { className: 'sim-controls' });
       const tInput = el('input', { type: 'range', min: '-20', max: '400', value: '25', 'aria-label': 'درجة الحرارة بالسيليزية' });
       const pInput = el('input', { type: 'range', min: '0.001', max: '230', step: '0.5', value: '1', 'aria-label': 'الضغط الجوي' });
@@ -418,7 +345,6 @@
       const pLbl = el('span', { className: 'page-ref' });
       controls.appendChild(el('label', { text: 'الحرارة (°C): ' }, [tInput, tLbl]));
       controls.appendChild(el('label', { text: 'الضغط (atm): ' }, [pInput, pLbl]));
-
       const presetRow = el('div', { className: 'sim-controls' });
       const readout = el('div', { className: 'sim-readout' });
 
@@ -455,7 +381,6 @@
         });
         presetRow.appendChild(b);
       });
-
       tInput.addEventListener('input', evaluate);
       pInput.addEventListener('input', evaluate);
       evaluate();
@@ -463,10 +388,6 @@
       box.appendChild(presetRow);
       box.appendChild(readout);
     } else if (simType === 'gas-laws') {
-      box.appendChild(el('div', { className: 'sim-header' }, [
-        el('h3', { text: 'محاكاة قوانين الغازات (بويل · شارل · جاي لوساك)' }),
-        el('span', { className: 'page-ref', text: 'حرّك المؤشرات لملاحظة العلاقة' })
-      ]));
       const controls = el('div', { className: 'sim-controls' });
       const lawSel = el('select', { className: 'btn btn-sm', 'aria-label': 'اختر القانون' });
       [
@@ -494,23 +415,18 @@
         const x = Number(slider.value);
         let p = 1, v = 10, tK = 300;
         if (law === 'boyle') {
-          p = x;
-          v = 10 / p;
+          p = x; v = 10 / p;
           sliderVal.textContent = ' P = ' + p.toFixed(1) + ' atm';
           readout.innerHTML = 'قانون بويل: <span class="chem">P₁V₁ = P₂V₂ = 10 atm·L</span> ← الحجم الجديد <span class="chem">V = ' + v.toFixed(2) + ' L</span>';
         } else if (law === 'charles') {
-          tK = x * 150;
-          v = (tK / 150) * 3;
+          tK = x * 150; v = (tK / 150) * 3;
           sliderVal.textContent = ' T = ' + tK + ' K';
           readout.innerHTML = 'قانون شارل: <span class="chem">V₁/T₁ = V₂/T₂</span> ← الحجم عند ' + tK + ' K يساوي <span class="chem">' + v.toFixed(1) + ' L</span>';
         } else {
-          tK = x * 150;
-          p = (tK / 150) * 1.5;
-          v = 6;
+          tK = x * 150; p = (tK / 150) * 1.5; v = 6;
           sliderVal.textContent = ' T = ' + tK + ' K';
           readout.innerHTML = 'جاي-لوساك: <span class="chem">P₁/T₁ = P₂/T₂</span> ← الضغط عند ' + tK + ' K يساوي <span class="chem">' + p.toFixed(2) + ' atm</span> (الحجم ثابت)';
         }
-
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
         const cylW = Math.min(380, Math.max(80, v * 28));
@@ -529,10 +445,6 @@
       slider.addEventListener('input', update);
       update();
     } else if (simType === 'ideal-gas') {
-      box.appendChild(el('div', { className: 'sim-header' }, [
-        el('h3', { text: 'حاسبة قانون الغاز المثالي (PV = nRT)' }),
-        el('span', { className: 'page-ref', text: 'احسب عدد المولات n' })
-      ]));
       const controls = el('div', { className: 'sim-controls' });
       const pIn = el('input', { type: 'number', step: '0.1', value: '1.5', className: 'btn btn-sm', style: 'width:90px', 'aria-label': 'الضغط atm' });
       const vIn = el('input', { type: 'number', step: '0.5', value: '3.0', className: 'btn btn-sm', style: 'width:90px', 'aria-label': 'الحجم L' });
@@ -541,7 +453,6 @@
       controls.appendChild(el('label', { text: 'V (L): ' }, [vIn]));
       controls.appendChild(el('label', { text: 'T (°C): ' }, [tIn]));
       const readout = el('div', { className: 'sim-readout' });
-
       function calc() {
         const P = parseFloat(pIn.value) || 0;
         const V = parseFloat(vIn.value) || 0;
@@ -559,10 +470,6 @@
       box.appendChild(controls);
       box.appendChild(readout);
     } else if (simType === 'gas-stoich') {
-      box.appendChild(el('div', { className: 'sim-header' }, [
-        el('h3', { text: 'حاسبة النسب الحجمية للتفاعلات الغازية' }),
-        el('span', { className: 'page-ref', text: 'N₂ + 3H₂ → 2NH₃' })
-      ]));
       const controls = el('div', { className: 'sim-controls' });
       const n2In = el('input', { type: 'range', min: '1', max: '10', step: '0.5', value: '5', 'aria-label': 'حجم غاز النيتروجين باللتر' });
       const readout = el('div', { className: 'sim-readout' });
@@ -576,10 +483,6 @@
       box.appendChild(controls);
       box.appendChild(readout);
     } else if (simType === 'galvanic-cell') {
-      box.appendChild(el('div', { className: 'sim-header' }, [
-        el('h3', { text: 'محاكاة الخلية الجلفانية وحساب الجهد القياسي E°cell' }),
-        el('span', { className: 'page-ref', text: 'اختر القطبين' })
-      ]));
       const halfCells = [
         { name: 'Mg²⁺ | Mg', e: -2.372, ion: 'Mg²⁺', metal: 'Mg' },
         { name: 'Zn²⁺ | Zn', e: -0.762, ion: 'Zn²⁺', metal: 'Zn' },
@@ -595,11 +498,10 @@
         sel1.appendChild(el('option', { value: String(i), text: h.name + ' (' + (h.e >= 0 ? '+' : '') + h.e + ' V)' }));
         sel2.appendChild(el('option', { value: String(i), text: h.name + ' (' + (h.e >= 0 ? '+' : '') + h.e + ' V)' }));
       });
-      sel1.value = '1'; // Zn
-      sel2.value = '4'; // Cu
+      sel1.value = '1';
+      sel2.value = '4';
       controls.appendChild(el('label', { text: 'القطب 1: ' }, [sel1]));
       controls.appendChild(el('label', { text: 'القطب 2: ' }, [sel2]));
-
       const readout = el('div', { className: 'sim-readout' });
       function update() {
         const a = halfCells[Number(sel1.value)];
@@ -613,8 +515,7 @@
         const eCell = cathode.e - anode.e;
         readout.innerHTML =
           'الأنود (أكسدة): <span class="chem">' + anode.metal + ' → ' + anode.ion + '</span> · الكاثود (اختزال): <span class="chem">' + cathode.ion + ' → ' + cathode.metal + '</span><br>' +
-          'تتدفق الإلكترونات عبر السلك من <span class="chem">' + anode.metal + '</span> إلى <span class="chem">' + cathode.metal + '</span> · الجهد القياسي <span class="chem">E°cell = ' +
-          cathode.e + ' - (' + anode.e + ') = +' + eCell.toFixed(3) + ' V</span> (تلقائي)';
+          'تتدفق الإلكترونات من <span class="chem">' + anode.metal + '</span> إلى <span class="chem">' + cathode.metal + '</span> · الجهد القياسي <span class="chem">E°cell = +' + eCell.toFixed(3) + ' V</span>';
       }
       sel1.addEventListener('change', update);
       sel2.addEventListener('change', update);
@@ -622,10 +523,6 @@
       box.appendChild(controls);
       box.appendChild(readout);
     } else if (simType === 'batteries-compare') {
-      box.appendChild(el('div', { className: 'sim-header' }, [
-        el('h3', { text: 'مقارنة تفاعلية: البطاريات وحماية الفلزات من التآكل' }),
-        el('span', { className: 'page-ref', text: 'اختر النوع' })
-      ]));
       const items = [
         { k: 'الجافة (الخارصين-الكربون)', txt: 'أولية (لا تُشحن) · الأنود: الخارصين Zn · الكاثود غير الفعال: عمود الجرافيت في عجينة MnO₂ وNH₄Cl وZnCl₂ · الجهد: 1.5 V.' },
         { k: 'القلوية والفضة', txt: 'أولية · تستخدم مسحوق الخارصين مع KOH، وبطارية الفضة تستخدم Ag₂O في الساعات وسماعات الأذن.' },
@@ -647,10 +544,6 @@
       box.appendChild(controls);
       box.appendChild(readout);
     } else if (simType === 'electrolysis-cells') {
-      box.appendChild(el('div', { className: 'sim-header' }, [
-        el('h3', { text: 'مستكشف تطبيقات التحليل الكهربائي' }),
-        el('span', { className: 'page-ref', text: 'قارن الأنود والكاثود والنواتج' })
-      ]));
       const items = [
         { k: 'مصهور NaCl (خلية داون)', txt: 'الأنود (+): أكسدة 2Cl⁻ → Cl₂(g) + 2e⁻ | الكاثود (-): اختزال Na⁺ + e⁻ → Na(l) | الناتج: فلز الصوديوم النقي وغاز الكلور.' },
         { k: 'ماء البحر NaCl(aq)', txt: 'لا يترسب الصوديوم لأن اختزال الماء أسهل عند الكاثود فينتج H₂ وNaOH، وعند الأنود يتأكسد الكلوريد إلى Cl₂.' },
@@ -672,315 +565,378 @@
       box.appendChild(controls);
       box.appendChild(readout);
     }
-
-    container.appendChild(box);
+    return box;
   }
 
-  /* ================= 5. QUIZ ENGINE (FORMATIVE + FINAL/TAHSILI) ================= */
-  function renderQuiz(container, questions, options) {
-    const mode = options.mode; // 'formative' | 'final'
-    const lessonId = options.lessonId;
-    const state = {};
-    let submitted = false;
+  function createQuizSlideNode(q, qIdx, totalCount, quizState, quizType, lessonId) {
+    const wrap = el('div');
+    const liveBar = el('div', { className: 'quiz-live-bar' });
+    const scoreLbl = el('strong');
+    const resetBtn = el('button', { type: 'button', className: 'btn btn-sm', text: 'إعادة الاختبار' });
 
-    const headerBar = el('div', { className: 'quiz-header-bar' });
-    const scoreText = el('strong', { text: 'النتيجة: لم يتم التحقق بعد (' + questions.length + ' أسئلة)' });
-    const actions = el('div', { style: 'display:flex; gap:0.5rem; flex-wrap:wrap;' });
-    const submitBtn = el('button', { type: 'button', className: 'btn btn-primary btn-sm', text: mode === 'final' ? 'اعتماد الاختبار وحساب الدرجة' : 'تحقق من الإجابات' });
-    const resetBtn = el('button', { type: 'button', className: 'btn btn-sm', text: 'إعادة المحاولة' });
-    actions.appendChild(submitBtn);
-    actions.appendChild(resetBtn);
-    headerBar.appendChild(scoreText);
-    headerBar.appendChild(actions);
-
-    const validationBanner = el('div', { className: 'quiz-feedback err', hidden: '' });
-    const list = el('div', { className: 'quiz-list' });
-
-    function buildQuestions() {
-      list.innerHTML = '';
-      questions.forEach(function (q, qIdx) {
-        const card = el('div', { className: 'quiz-card', id: mode + '-q-' + qIdx });
-        const head = el('div', { className: 'quiz-q-head' }, [
-          el('span', { className: 'quiz-q-num', text: 'سؤال ' + (qIdx + 1) }),
-          el('span', {
-            className: 'quiz-source-tag' + (q.source && q.source.includes('تحصيلي') ? ' tahsili' : ''),
-            text: q.source || (mode === 'final' ? 'تقويم نهائي' : 'تقويم تكويني')
-          })
-        ]);
-        card.appendChild(head);
-        card.appendChild(el('p', { className: 'quiz-q-text', html: q.q }));
-
-        const optsWrap = el('div', { className: 'quiz-options' });
-        const feedback = el('div', { className: 'quiz-feedback', hidden: '' });
-
-        q.options.forEach(function (optHtml, oIdx) {
-          const btn = el('button', { type: 'button', className: 'quiz-option-btn' });
-          btn.innerHTML = '<span>' + ['أ', 'ب', 'ج', 'د'][oIdx] + ')</span> <span>' + optHtml + '</span>';
-          btn.addEventListener('click', function () {
-            if (submitted && mode === 'final') return;
-            state[qIdx] = oIdx;
-            validationBanner.hidden = true;
-            optsWrap.querySelectorAll('button').forEach(function (b, bIdx) {
-              b.classList.toggle('selected', bIdx === oIdx);
-            });
-            if (mode === 'formative') {
-              const isOk = oIdx === q.answer;
-              optsWrap.querySelectorAll('button').forEach(function (b, bIdx) {
-                b.classList.remove('correct', 'wrong');
-                if (bIdx === q.answer) b.classList.add('correct');
-                else if (bIdx === oIdx && !isOk) b.classList.add('wrong');
-              });
-              feedback.hidden = false;
-              feedback.className = 'quiz-feedback ' + (isOk ? 'ok' : 'err');
-              feedback.innerHTML = (isOk ? '<strong>إجابة صحيحة:</strong> ' : '<strong>حاول مجدداً · التفسير:</strong> ') + q.explain;
-              updateLiveFormativeScore();
-            }
-          });
-          optsWrap.appendChild(btn);
-        });
-
-        card.appendChild(optsWrap);
-        card.appendChild(feedback);
-        list.appendChild(card);
-      });
-    }
-
-    function updateLiveFormativeScore() {
-      let correct = 0;
-      let answered = 0;
-      questions.forEach(function (q, i) {
-        if (state[i] !== undefined) {
-          answered++;
-          if (state[i] === q.answer) correct++;
+    function countCorrect() {
+      let c = 0, a = 0;
+      quizState.questions.forEach(function (item, idx) {
+        if (quizState.answers[idx] !== undefined) {
+          a++;
+          if (quizState.answers[idx] === item.answer) c++;
         }
       });
-      scoreText.textContent = 'تمت الإجابة على ' + answered + ' من ' + questions.length + ' · الصحيح: ' + correct;
+      return { correct: c, answered: a };
     }
 
-    submitBtn.addEventListener('click', function () {
-      const unanswered = questions.filter(function (_, i) { return state[i] === undefined; }).length;
-      if (unanswered > 0) {
-        validationBanner.hidden = false;
-        validationBanner.textContent = 'تبقى ' + unanswered + ' سؤال لم تُختر إجابته بعد. اختر إجابة لكل سؤال ثم اضغط اعتماد.';
-        return;
+    function updateBar() {
+      const res = countCorrect();
+      scoreLbl.textContent = 'النتيجة المباشرة: ' + res.correct + ' / ' + totalCount + ' (أُجيب على ' + res.answered + ')';
+      if (quizType === 'final' && res.answered > 0 && window.CHEM_PORTAL) {
+        window.CHEM_PORTAL.saveLessonScore(lessonId, res.correct, totalCount);
       }
-      validationBanner.hidden = true;
-      submitted = true;
-      let correct = 0;
-      questions.forEach(function (q, qIdx) {
-        const card = document.getElementById(mode + '-q-' + qIdx);
-        const btns = card.querySelectorAll('.quiz-option-btn');
-        const feedback = card.querySelector('.quiz-feedback');
-        const picked = state[qIdx];
-        const isOk = picked === q.answer;
-        if (isOk) correct++;
+    }
 
-        btns.forEach(function (b, oIdx) {
-          b.disabled = (mode === 'final');
-          b.classList.remove('selected', 'correct', 'wrong');
+    const qText = el('p', { className: 'quiz-q-text', html: q.q });
+    const optsWrap = el('div', { className: 'quiz-options' });
+    const feedback = el('div', { className: 'quiz-feedback', hidden: '' });
+
+    function paintQuestion() {
+      const picked = quizState.answers[qIdx];
+      optsWrap.querySelectorAll('button').forEach(function (b, oIdx) {
+        b.classList.remove('correct', 'wrong');
+        if (picked !== undefined) {
           if (oIdx === q.answer) b.classList.add('correct');
-          else if (oIdx === picked && !isOk) b.classList.add('wrong');
-        });
+          else if (oIdx === picked && picked !== q.answer) b.classList.add('wrong');
+        }
+      });
+      if (picked !== undefined) {
+        const isOk = picked === q.answer;
         feedback.hidden = false;
         feedback.className = 'quiz-feedback ' + (isOk ? 'ok' : 'err');
-        feedback.innerHTML = (isOk ? '<strong>صحيح:</strong> ' : '<strong>غير صحيح · التفسير:</strong> ') + q.explain;
-      });
-      const pct = Math.round((correct / questions.length) * 100);
-      scoreText.textContent = 'النتيجة النهائية: ' + correct + ' / ' + questions.length + ' (' + pct + '%)';
-      if (mode === 'final' && window.CHEM_PORTAL) {
-        window.CHEM_PORTAL.saveLessonScore(lessonId, correct, questions.length);
+        feedback.innerHTML = (isOk ? '<strong>إجابة صحيحة! </strong>' : '<strong>إجابة غير صحيحة · التفسير: </strong>') + q.explain;
+      } else {
+        feedback.hidden = true;
       }
+      updateBar();
+    }
+
+    q.options.forEach(function (optHtml, oIdx) {
+      const btn = el('button', { type: 'button', className: 'quiz-option-btn' });
+      btn.innerHTML = '<span>' + ['أ', 'ب', 'ج', 'د'][oIdx] + ')</span> <span>' + optHtml + '</span>';
+      btn.addEventListener('click', function () {
+        quizState.answers[qIdx] = oIdx;
+        paintQuestion();
+      });
+      optsWrap.appendChild(btn);
     });
 
     resetBtn.addEventListener('click', function () {
-      Object.keys(state).forEach(function (k) { delete state[k]; });
-      submitted = false;
-      validationBanner.hidden = true;
-      scoreText.textContent = 'النتيجة: لم يتم التحقق بعد (' + questions.length + ' أسئلة)';
-      buildQuestions();
+      quizState.answers = {};
+      paintQuestion();
     });
 
-    buildQuestions();
-    container.appendChild(headerBar);
-    container.appendChild(validationBanner);
-    container.appendChild(list);
+    liveBar.appendChild(scoreLbl);
+    liveBar.appendChild(resetBtn);
+    wrap.appendChild(liveBar);
+    wrap.appendChild(qText);
+    wrap.appendChild(optsWrap);
+    wrap.appendChild(feedback);
+
+    paintQuestion();
+    return wrap;
   }
 
-  /* ================= 6. RENDER FULL LESSON ================= */
-  function mountLesson(lesson) {
+  function buildSlides(lesson) {
+    const slides = [];
+    const simTitles = {
+      'states-particles': 'محاكاة: حركة الجسيمات (صلب · سائل · غاز)',
+      'graham-gas': 'محاكاة: قانون جراهام للانتشار والتدفق',
+      'imf-compare': 'مستكشف القوى بين الجزيئات ودرجة الغليان',
+      'phase-diagram': 'مستكشف مخطط الطور للماء',
+      'gas-laws': 'محاكاة قوانين الغازات (بويل · شارل · جاي-لوساك)',
+      'ideal-gas': 'حاسبة قانون الغاز المثالي',
+      'gas-stoich': 'حاسبة النسب الحجمية للتفاعلات الغازية',
+      'galvanic-cell': 'محاكاة الخلية الجلفانية وحساب الجهد',
+      'batteries-compare': 'مستكشف البطاريات وحماية الفلزات',
+      'electrolysis-cells': 'مستكشف تطبيقات التحليل الكهربائي'
+    };
+
+    slides.push({
+      sectionId: 'goals',
+      sectionLabel: 'الأهداف والتركيز',
+      title: 'الفكرة الرئيسة والأهداف',
+      render: function () {
+        const frag = document.createDocumentFragment();
+        frag.appendChild(el('div', { className: 'main-idea-box' }, [
+          el('span', { className: 'main-idea-label', text: 'الفكرة الرئيسة' }),
+          el('p', { className: 'main-idea-text', html: lesson.mainIdea })
+        ]));
+        const list = el('ul', { className: 'clean-list' });
+        lesson.objectives.forEach(function (o) { list.appendChild(el('li', { html: o })); });
+        frag.appendChild(el('h3', { style: 'margin:0 0 0.5rem; color:var(--primary);', text: 'أهداف الدرس' }));
+        frag.appendChild(list);
+        return frag;
+      }
+    });
+
+    slides.push({
+      sectionId: 'goals',
+      sectionLabel: 'الأهداف والتركيز',
+      title: 'شريحة التركيز والمفردات الجديدة',
+      render: function () {
+        const frag = document.createDocumentFragment();
+        const revealBox = el('div', { className: 'reveal-box', hidden: '', html: '<strong>التفسير العلمي:</strong> ' + lesson.focus.answer });
+        const revealBtn = el('button', { type: 'button', className: 'btn btn-sm', text: 'اعرض التفسير العلمي' });
+        revealBtn.addEventListener('click', function () {
+          const open = revealBox.hidden;
+          revealBox.hidden = !open;
+          revealBtn.textContent = open ? 'إخفاء التفسير' : 'اعرض التفسير العلمي';
+        });
+        frag.appendChild(el('div', { className: 'focus-card' }, [
+          el('div', { className: 'focus-card-header' }, [
+            el('span', { className: 'focus-badge', text: 'سؤال التهيئة والتركيز' }),
+            revealBtn
+          ]),
+          el('p', { style: 'margin:0; font-weight:700; font-size:1.08rem;', html: lesson.focus.prompt }),
+          revealBox
+        ]));
+        frag.appendChild(el('h3', { style: 'margin:0.5rem 0 0.35rem; color:var(--primary); font-size:1rem;', text: 'المفردات الأساسية' }));
+        const chips = el('div', { className: 'vocab-chips' });
+        lesson.vocab.forEach(function (v) { chips.appendChild(el('span', { className: 'vocab-chip', html: v })); });
+        frag.appendChild(chips);
+        return frag;
+      }
+    });
+
+    if (lesson.simulation) {
+      slides.push({
+        sectionId: 'content',
+        sectionLabel: 'الشرح والتفاعل',
+        title: simTitles[lesson.simulation] || 'محاكاة تفاعلية',
+        render: function () {
+          return createSimulationNode(lesson.simulation);
+        }
+      });
+    }
+
+    lesson.concepts.forEach(function (c) {
+      slides.push({
+        sectionId: 'content',
+        sectionLabel: 'الشرح والتفاعل',
+        title: c.title,
+        render: function () {
+          return el('div', { className: 'concept-slide-body', html: c.bodyHtml });
+        }
+      });
+    });
+
+    if (lesson.workedExample) {
+      slides.push({
+        sectionId: 'content',
+        sectionLabel: 'الشرح والتفاعل',
+        title: 'مثال محلول · دعم وإثراء',
+        render: function () {
+          const frag = document.createDocumentFragment();
+          const ansWrap = el('div', { className: 'reveal-box', hidden: '', html: lesson.workedExample.solutionHtml });
+          const ansBtn = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: 'إظهار خطوات الحل' });
+          ansBtn.addEventListener('click', function () {
+            const open = ansWrap.hidden;
+            ansWrap.hidden = !open;
+            ansBtn.textContent = open ? 'إخفاء الحل' : 'إظهار خطوات الحل';
+          });
+          frag.appendChild(el('div', { className: 'strategy-card' }, [
+            el('div', { style: 'display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.5rem;' }, [
+              el('h4', { style: 'margin:0;', html: lesson.workedExample.title }),
+              ansBtn
+            ]),
+            el('p', { style: 'margin:0;', html: lesson.workedExample.questionHtml }),
+            ansWrap
+          ]));
+
+          const scaff = el('div', { className: 'scaffolding-grid' });
+          const supReveal = el('div', { className: 'reveal-box', hidden: '', html: lesson.support.detail });
+          const supBtn = el('button', { type: 'button', className: 'btn btn-sm', text: 'تلميح' });
+          supBtn.addEventListener('click', function () { supReveal.hidden = !supReveal.hidden; });
+          scaff.appendChild(el('div', { className: 'scaffold-box support' }, [
+            el('div', { className: 'scaffold-head' }, [el('span', { text: 'دعم وتبسيط' }), supBtn]),
+            el('p', { style: 'margin:0;', html: lesson.support.prompt }),
+            supReveal
+          ]));
+
+          const enrReveal = el('div', { className: 'reveal-box', hidden: '', html: lesson.enrichment.detail });
+          const enrBtn = el('button', { type: 'button', className: 'btn btn-sm', text: 'إجابة التحدي' });
+          enrBtn.addEventListener('click', function () { enrReveal.hidden = !enrReveal.hidden; });
+          scaff.appendChild(el('div', { className: 'scaffold-box enrichment' }, [
+            el('div', { className: 'scaffold-head' }, [el('span', { text: 'إثراء وتفكير ناقد' }), enrBtn]),
+            el('p', { style: 'margin:0;', html: lesson.enrichment.prompt }),
+            enrReveal
+          ]));
+          frag.appendChild(scaff);
+          return frag;
+        }
+      });
+    }
+
+    slides.push({
+      sectionId: 'connections',
+      sectionLabel: 'الاستراتيجيات والربط',
+      title: 'استراتيجيات التعلم النشط',
+      render: function () {
+        const grid = el('div', { className: 'strategy-grid' });
+        lesson.strategies.forEach(function (st) {
+          grid.appendChild(el('div', { className: 'strategy-card' }, [
+            el('h4', { html: st.name }),
+            el('p', { style: 'margin:0;', html: st.how })
+          ]));
+        });
+        return grid;
+      }
+    });
+
+    slides.push({
+      sectionId: 'connections',
+      sectionLabel: 'الاستراتيجيات والربط',
+      title: 'الربط بالواقع وأمثلة من الحياة والعلوم الأخرى',
+      render: function () {
+        const grid = el('div', { className: 'strategy-grid' });
+        lesson.lifeLinks.forEach(function (lk) {
+          grid.appendChild(el('div', { className: 'strategy-card' }, [
+            el('h4', { html: lk.tag + ' · ' + lk.title }),
+            el('p', { style: 'margin:0;', html: lk.text })
+          ]));
+        });
+        return grid;
+      }
+    });
+
+    const formativeState = { questions: lesson.formativeQuiz, answers: {} };
+    lesson.formativeQuiz.forEach(function (q, idx) {
+      slides.push({
+        sectionId: 'formative',
+        sectionLabel: 'التقويم التكويني',
+        title: 'تقويم تكويني · سؤال ' + (idx + 1) + ' من ' + lesson.formativeQuiz.length,
+        badge: 'تصحيح فوري',
+        render: function () {
+          return createQuizSlideNode(q, idx, lesson.formativeQuiz.length, formativeState, 'formative', lesson.id);
+        }
+      });
+    });
+
+    if (lesson.tahsiliTips && lesson.tahsiliTips.length) {
+      slides.push({
+        sectionId: 'final',
+        sectionLabel: 'النهائي والتحصيلي',
+        title: 'تنبيهات وقواعد مهمة للتحصيلي',
+        badge: 'ملخص التحصيلي',
+        render: function () {
+          const card = el('div', { className: 'tahsili-summary-card' }, [
+            el('h3', { text: 'أبرز نقاط وتنبيهات التحصيلي لهذا الدرس' })
+          ]);
+          const list = el('ul', { className: 'clean-list' });
+          lesson.tahsiliTips.forEach(function (t) { list.appendChild(el('li', { html: t })); });
+          card.appendChild(list);
+          return card;
+        }
+      });
+    }
+
+    const finalState = { questions: lesson.finalQuiz, answers: {} };
+    lesson.finalQuiz.forEach(function (q, idx) {
+      slides.push({
+        sectionId: 'final',
+        sectionLabel: 'النهائي والتحصيلي',
+        title: 'التقويم النهائي · سؤال ' + (idx + 1) + ' من ' + lesson.finalQuiz.length,
+        badge: q.source || 'أسئلة من التحصيلي',
+        isTahsili: true,
+        render: function () {
+          return createQuizSlideNode(q, idx, lesson.finalQuiz.length, finalState, 'final', lesson.id);
+        }
+      });
+    });
+
+    return slides;
+  }
+
+  function mountLessonDeck(lesson) {
     if (!lesson) return;
-    document.title = lesson.code + ' ' + lesson.title + ' | بوابة الكيمياء التفاعلية';
+    document.title = lesson.code + ' ' + lesson.title + ' | دروس الكيمياء التفاعلية';
 
     const titleEl = document.getElementById('lessonTitle');
     const pagesEl = document.getElementById('lessonPages');
     const backBookEl = document.getElementById('backBookLink');
     if (titleEl) titleEl.textContent = lesson.code + ' ' + lesson.title;
-    if (pagesEl) pagesEl.textContent = lesson.bookTitle + ' · ' + lesson.pages;
+    if (pagesEl) pagesEl.textContent = lesson.pages;
     if (backBookEl) {
       backBookEl.href = '../' + lesson.bookUrl;
-      backBookEl.textContent = 'العودة إلى ' + lesson.bookTitle;
+      backBookEl.textContent = lesson.bookTitle;
     }
 
-    // Tab 1: Objectives, Main Idea, Focus Slide
-    const p1 = document.getElementById('panel-goals');
-    p1.innerHTML = '';
-    p1.appendChild(el('div', { className: 'section-title' }, [
-      el('span', { text: 'الفكرة الرئيسة والأهداف' }),
-      el('span', { className: 'page-ref', text: lesson.pages })
-    ]));
-    p1.appendChild(el('div', { className: 'main-idea-box' }, [
-      el('span', { className: 'main-idea-label', text: 'الفكرة الرئيسة' }),
-      el('p', { className: 'main-idea-text', html: lesson.mainIdea })
-    ]));
+    const slides = buildSlides(lesson);
+    let current = 0;
 
-    const split = el('div', { className: 'split-grid' });
-    const objCard = el('div', { className: 'info-card' }, [
-      el('h3', { text: 'أهداف الدرس' })
-    ]);
-    const objList = el('ul', { className: 'clean-list' });
-    lesson.objectives.forEach(function (o) { objList.appendChild(el('li', { html: o })); });
-    objCard.appendChild(objList);
+    const counterEl = document.getElementById('slideCounter');
+    const stageEl = document.getElementById('slideStage');
+    const dotsEl = document.getElementById('slideDots');
+    const prevBtn = document.getElementById('slidePrevBtn');
+    const nextBtn = document.getElementById('slideNextBtn');
+    const tabBtns = Array.from(document.querySelectorAll('[data-section-tab]'));
 
-    const vocabCard = el('div', { className: 'info-card' }, [
-      el('h3', { text: 'المفردات والمفاهيم الأساسية' })
-    ]);
-    const chips = el('div', { className: 'vocab-chips' });
-    lesson.vocab.forEach(function (v) { chips.appendChild(el('span', { className: 'vocab-chip', html: v })); });
-    vocabCard.appendChild(chips);
+    function renderSlide(idx) {
+      current = Math.max(0, Math.min(slides.length - 1, idx));
+      const s = slides[current];
 
-    split.appendChild(objCard);
-    split.appendChild(vocabCard);
-    p1.appendChild(split);
+      if (counterEl) {
+        counterEl.textContent = (current + 1) + ' / ' + slides.length;
+      }
 
-    const focusCard = el('div', { className: 'focus-card' });
-    const revealBox = el('div', { className: 'reveal-box', hidden: '', html: '<strong>المناقشة المتوقعة:</strong> ' + lesson.focus.answer });
-    const revealBtn = el('button', { type: 'button', className: 'btn btn-sm', text: 'اعرض التفسير العلمي' });
-    revealBtn.addEventListener('click', function () {
-      const opening = revealBox.hidden;
-      revealBox.hidden = !opening;
-      revealBtn.textContent = opening ? 'إخفاء التفسير' : 'اعرض التفسير العلمي';
-    });
-    focusCard.appendChild(el('div', { className: 'focus-card-header' }, [
-      el('span', { className: 'focus-badge', text: 'شريحة التركيز · تهيئة الدرس' }),
-      revealBtn
-    ]));
-    focusCard.appendChild(el('p', { style: 'margin:0; font-weight:700;', html: lesson.focus.prompt }));
-    focusCard.appendChild(revealBox);
-    p1.appendChild(focusCard);
-
-    // Tab 2: Interactive Content + Simulation + Worked Example + Support/Enrichment
-    const p2 = document.getElementById('panel-content');
-    p2.innerHTML = '';
-    p2.appendChild(el('div', { className: 'section-title' }, [
-      el('span', { text: 'المحتوى المركز والتفاعل' }),
-      el('span', { className: 'page-ref', text: 'خلاصة المعلومات المهمة' })
-    ]));
-
-    mountSimulation(p2, lesson.simulation);
-
-    const stack = el('div', { className: 'concepts-stack' });
-    lesson.concepts.forEach(function (c) {
-      const blk = el('div', { className: 'concept-block' });
-      blk.appendChild(el('h3', { html: c.title }));
-      blk.appendChild(el('div', { html: c.bodyHtml }));
-      stack.appendChild(blk);
-    });
-    p2.appendChild(stack);
-
-    if (lesson.workedExample) {
-      const exBox = el('div', { className: 'concept-block', style: 'margin-top:1.15rem;' });
-      const ansWrap = el('div', { className: 'reveal-box', hidden: '', html: lesson.workedExample.solutionHtml });
-      const ansBtn = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: 'إظهار خطوات الحل' });
-      ansBtn.addEventListener('click', function () {
-        const opening = ansWrap.hidden;
-        ansWrap.hidden = !opening;
-        ansBtn.textContent = opening ? 'إخفاء الحل' : 'إظهار خطوات الحل';
+      tabBtns.forEach(function (tb) {
+        const active = tb.getAttribute('data-section-tab') === s.sectionId;
+        tb.setAttribute('aria-selected', String(active));
       });
-      exBox.appendChild(el('div', { style: 'display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.5rem;' }, [
-        el('h3', { style: 'margin:0;', html: 'مثال محلول: ' + lesson.workedExample.title }),
-        ansBtn
-      ]));
-      exBox.appendChild(el('p', { html: lesson.workedExample.questionHtml }));
-      exBox.appendChild(ansWrap);
-      p2.appendChild(exBox);
+
+      if (dotsEl) {
+        dotsEl.innerHTML = '';
+        slides.forEach(function (_, dIdx) {
+          const dot = el('button', {
+            type: 'button',
+            className: 'slide-dot' + (dIdx === current ? ' active' : ''),
+            text: String(dIdx + 1),
+            'aria-label': 'الانتقال إلى الشريحة ' + (dIdx + 1)
+          });
+          dot.addEventListener('click', function () { renderSlide(dIdx); });
+          dotsEl.appendChild(dot);
+        });
+      }
+
+      if (stageEl) {
+        stageEl.innerHTML = '';
+        const topMeta = el('div', { className: 'slide-top-meta' }, [
+          el('span', { className: 'slide-section-pill', text: s.sectionLabel }),
+          el('span', { className: s.isTahsili ? 'quiz-source-tag tahsili' : 'page-ref', text: s.badge || lesson.pages })
+        ]);
+        stageEl.appendChild(topMeta);
+        stageEl.appendChild(el('h2', { className: 'slide-heading', html: s.title }));
+        stageEl.appendChild(s.render());
+      }
+
+      if (prevBtn) prevBtn.disabled = current === 0;
+      if (nextBtn) nextBtn.disabled = current === slides.length - 1;
     }
 
-    const scaff = el('div', { className: 'scaffolding-grid' });
-    const supReveal = el('div', { className: 'reveal-box', hidden: '', html: lesson.support.detail });
-    const supBtn = el('button', { type: 'button', className: 'btn btn-sm', text: 'تلميح' });
-    supBtn.addEventListener('click', function () { supReveal.hidden = !supReveal.hidden; });
-    scaff.appendChild(el('div', { className: 'scaffold-box support' }, [
-      el('div', { className: 'scaffold-head' }, [el('span', { text: 'دعم وتبسيط' }), supBtn]),
-      el('p', { style: 'margin:0;', html: lesson.support.prompt }),
-      supReveal
-    ]));
-
-    const enrReveal = el('div', { className: 'reveal-box', hidden: '', html: lesson.enrichment.detail });
-    const enrBtn = el('button', { type: 'button', className: 'btn btn-sm', text: 'إجابة التحدي' });
-    enrBtn.addEventListener('click', function () { enrReveal.hidden = !enrReveal.hidden; });
-    scaff.appendChild(el('div', { className: 'scaffold-box enrichment' }, [
-      el('div', { className: 'scaffold-head' }, [el('span', { text: 'إثراء وتفكير ناقد' }), enrBtn]),
-      el('p', { style: 'margin:0;', html: lesson.enrichment.prompt }),
-      enrReveal
-    ]));
-    p2.appendChild(scaff);
-
-    // Tab 3: Strategies, Real-life & Cross-science Links
-    const p3 = document.getElementById('panel-connections');
-    p3.innerHTML = '';
-    p3.appendChild(el('div', { className: 'section-title' }, [
-      el('span', { text: 'استراتيجيات التعلم والربط بالواقع والعلوم' })
-    ]));
-    const cGrid = el('div', { className: 'connections-grid' });
-    const stratCol = el('div');
-    stratCol.appendChild(el('h3', { style: 'margin-top:0; color:var(--primary);', text: 'استراتيجيات مقترحة للتدريس والمذاكرة' }));
-    lesson.strategies.forEach(function (st) {
-      stratCol.appendChild(el('div', { className: 'strategy-card' }, [
-        el('h4', { html: st.name }),
-        el('p', { style: 'margin:0;', html: st.how })
-      ]));
+    tabBtns.forEach(function (tb) {
+      tb.addEventListener('click', function () {
+        const secId = tb.getAttribute('data-section-tab');
+        const firstIdx = slides.findIndex(function (s) { return s.sectionId === secId; });
+        if (firstIdx >= 0) renderSlide(firstIdx);
+      });
     });
 
-    const linksCol = el('div');
-    linksCol.appendChild(el('h3', { style: 'margin-top:0; color:var(--primary);', text: 'الربط بالواقع وأمثلة من الحياة والعلوم الأخرى' }));
-    lesson.lifeLinks.forEach(function (lk) {
-      linksCol.appendChild(el('div', { className: 'strategy-card' }, [
-        el('h4', { html: lk.tag + ' · ' + lk.title }),
-        el('p', { style: 'margin:0;', html: lk.text })
-      ]));
+    if (prevBtn) prevBtn.addEventListener('click', function () { renderSlide(current - 1); });
+    if (nextBtn) nextBtn.addEventListener('click', function () { renderSlide(current + 1); });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.target && ['INPUT', 'SELECT', 'TEXTAREA'].includes(e.target.tagName)) return;
+      if (e.key === 'ArrowLeft') renderSlide(current + 1);
+      else if (e.key === 'ArrowRight') renderSlide(current - 1);
     });
-    cGrid.appendChild(stratCol);
-    cGrid.appendChild(linksCol);
-    p3.appendChild(cGrid);
 
-    // Tab 4: Formative Quiz
-    const p4 = document.getElementById('panel-formative');
-    p4.innerHTML = '';
-    p4.appendChild(el('div', { className: 'section-title' }, [
-      el('span', { text: 'التقويم التكويني (أثناء الدرس)' }),
-      el('span', { className: 'page-ref', text: 'تصحيح فوري وتغذية راجعة' })
-    ]));
-    renderQuiz(p4, lesson.formativeQuiz, { mode: 'formative', lessonId: lesson.id });
-
-    // Tab 5: Final & Tahsili Quiz
-    const p5 = document.getElementById('panel-final');
-    p5.innerHTML = '';
-    p5.appendChild(el('div', { className: 'section-title' }, [
-      el('span', { text: 'التقويم النهائي وتجميعات التحصيلي' }),
-      el('span', { className: 'page-ref', text: 'الكتاب المدرسي + تأسيس يلو' })
-    ]));
-    if (lesson.tahsiliTips && lesson.tahsiliTips.length) {
-      const tCard = el('div', { className: 'tahsili-summary-card' }, [
-        el('h3', { text: 'تنبيهات وقواعد التحصيلي (من كتاب تأسيس يلو للكيمياء)' })
-      ]);
-      const tList = el('ul', { className: 'clean-list' });
-      lesson.tahsiliTips.forEach(function (tip) { tList.appendChild(el('li', { html: tip })); });
-      tCard.appendChild(tList);
-      p5.appendChild(tCard);
-    }
-    renderQuiz(p5, lesson.finalQuiz, { mode: 'final', lessonId: lesson.id });
-
-    // Prev / Next Lesson Links
     const navWrap = document.getElementById('lessonPrevNext');
     if (navWrap && window.CHEM_PORTAL) {
       const flat = [];
@@ -993,25 +949,26 @@
       navWrap.innerHTML = '';
       if (idx > 0) {
         const prev = flat[idx - 1];
-        navWrap.appendChild(el('a', { className: 'btn', href: prev.id + '.html', text: 'الدرس السابق: ' + prev.code + ' ' + prev.title }));
+        navWrap.appendChild(el('a', { className: 'btn btn-sm', href: prev.id + '.html', text: 'الدرس السابق: ' + prev.code + ' ' + prev.title }));
       } else {
-        navWrap.appendChild(el('a', { className: 'btn', href: '../index.html', text: 'العودة للصفحة الرئيسية' }));
+        navWrap.appendChild(el('a', { className: 'btn btn-sm', href: '../index.html', text: 'الصفحة الرئيسية' }));
       }
       if (idx >= 0 && idx < flat.length - 1) {
         const next = flat[idx + 1];
-        navWrap.appendChild(el('a', { className: 'btn btn-primary', href: next.id + '.html', text: 'الدرس التالي: ' + next.code + ' ' + next.title }));
+        navWrap.appendChild(el('a', { className: 'btn btn-sm btn-primary', href: next.id + '.html', text: 'الدرس التالي: ' + next.code + ' ' + next.title }));
       } else {
-        navWrap.appendChild(el('a', { className: 'btn btn-primary', href: '../' + lesson.bookUrl, text: 'عرض فهرس ' + lesson.bookTitle }));
+        navWrap.appendChild(el('a', { className: 'btn btn-sm btn-primary', href: '../' + lesson.bookUrl, text: 'فهرس ' + lesson.bookTitle }));
       }
     }
+
+    renderSlide(0);
   }
 
   document.addEventListener('DOMContentLoaded', function () {
     initTimer();
     initWhiteboard();
-    initTabs();
     if (window.CURRENT_LESSON_ID && window.LESSONS_REGISTRY && window.LESSONS_REGISTRY[window.CURRENT_LESSON_ID]) {
-      mountLesson(window.LESSONS_REGISTRY[window.CURRENT_LESSON_ID]);
+      mountLessonDeck(window.LESSONS_REGISTRY[window.CURRENT_LESSON_ID]);
     }
   });
 })();

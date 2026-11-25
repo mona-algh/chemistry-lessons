@@ -1,15 +1,10 @@
-// Renders Home Page (index.html) and Book Pages (chem-2-1.html, chem-3.html) from CHEM_PORTAL
+// Renders simplified Home Page (index.html) and Book Pages (chem-2-1.html, chem-3.html)
 (function () {
   function renderHome() {
     const booksContainer = document.getElementById('homeBooksGrid');
-    const summaryText = document.getElementById('progressSummaryText');
-    const summaryBar = document.getElementById('progressSummaryBar');
     if (!booksContainer || !window.CHEM_PORTAL) return;
 
     const progress = window.CHEM_PORTAL.getProgress();
-    let totalLessons = 0;
-    let completedLessons = 0;
-
     booksContainer.innerHTML = '';
 
     window.CHEM_PORTAL.books.forEach(function (book) {
@@ -19,7 +14,7 @@
       const header = document.createElement('div');
       header.className = 'book-panel-header';
       header.innerHTML =
-        '<div><span class="book-tag">' + book.subtitle + '</span><h2>' + book.title + '</h2></div>' +
+        '<div><h2>' + book.title + '</h2><span class="muted-note">' + book.subtitle + '</span></div>' +
         '<a class="btn btn-sm btn-primary" href="' + book.pageUrl + '">صفحة الكتاب</a>';
       panel.appendChild(header);
 
@@ -36,24 +31,22 @@
         ul.className = 'lesson-list';
 
         ch.lessons.forEach(function (ls) {
-          totalLessons++;
           const rec = progress[ls.id];
-          if (rec) completedLessons++;
-
           const li = document.createElement('li');
           const a = document.createElement('a');
           a.className = 'lesson-item-link';
           a.href = 'lessons/' + ls.id + '.html';
 
-          const statusClass = rec ? 'status-pill done' : 'status-pill';
-          const statusLabel = rec ? ('الدرجة: ' + rec.pct + '%') : 'لم يُختبر بعد';
+          const rightTag = rec
+            ? '<span class="status-pill done">' + rec.pct + '%</span>'
+            : '<span class="chapter-meta">' + ls.pages + '</span>';
 
           a.innerHTML =
             '<span class="lesson-item-main">' +
             '<span class="lesson-code">' + ls.code + '</span>' +
             '<span class="lesson-title-text">' + ls.title + '</span>' +
             '</span>' +
-            '<span class="' + statusClass + '">' + statusLabel + '</span>';
+            rightTag;
 
           li.appendChild(a);
           ul.appendChild(li);
@@ -65,14 +58,6 @@
 
       booksContainer.appendChild(panel);
     });
-
-    if (summaryText && summaryBar) {
-      const pct = totalLessons > 0 ? Math.round((completedLessons / totalLessons) * 100) : 0;
-      summaryBar.style.width = pct + '%';
-      summaryText.textContent = completedLessons === 0
-        ? 'لم تُحل اختبارات نهائية بعد · المتاح حالياً ' + totalLessons + ' دروس تفاعلية.'
-        : 'أنجزت اختبارات ' + completedLessons + ' من أصل ' + totalLessons + ' دروس (' + pct + '%).';
-    }
   }
 
   function renderBookPage() {
@@ -102,8 +87,9 @@
 
       ch.lessons.forEach(function (ls) {
         const rec = progress[ls.id];
-        const statusClass = rec ? 'status-pill done' : 'status-pill';
-        const statusLabel = rec ? ('أفضل درجة: ' + rec.score + '/' + rec.total + ' (' + rec.pct + '%)') : 'لم يُختبر بعد';
+        const statusHtml = rec
+          ? '<span class="status-pill done">النتيجة: ' + rec.score + '/' + rec.total + ' (' + rec.pct + '%)</span>'
+          : '<span class="page-ref">' + ls.pages + '</span>';
 
         const card = document.createElement('article');
         card.className = 'lesson-card';
@@ -111,14 +97,13 @@
           '<div>' +
           '<div class="lesson-card-top">' +
           '<span class="lesson-code">' + ls.code + '</span>' +
-          '<span class="' + statusClass + '">' + statusLabel + '</span>' +
+          statusHtml +
           '</div>' +
           '<h3>' + ls.title + '</h3>' +
           '<p>' + ls.mainIdea + '</p>' +
           '</div>' +
-          '<div style="display:flex; justify-content:space-between; align-items:center; gap:0.5rem;">' +
-          '<span class="page-ref">' + ls.pages + '</span>' +
-          '<a class="btn btn-primary btn-sm" href="lessons/' + ls.id + '.html">افتح الدرس التفاعلي</a>' +
+          '<div style="display:flex; justify-content:flex-end; align-items:center;">' +
+          '<a class="btn btn-primary btn-sm" href="lessons/' + ls.id + '.html">عرض شرائح الدرس</a>' +
           '</div>';
         grid.appendChild(card);
       });
