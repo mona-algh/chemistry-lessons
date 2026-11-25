@@ -29,7 +29,7 @@
     const presetBtns = document.querySelectorAll('[data-timer-mins]');
     if (!display || !toggleBtn || !resetBtn) return;
 
-    let baseSeconds = 35 * 60;
+    let baseSeconds = 40 * 60;
     let remaining = baseSeconds;
     let intervalId = null;
 
@@ -91,7 +91,7 @@
     const ctx = canvas.getContext('2d');
     let active = false;
     let drawing = false;
-    let color = '#1D5A70';
+    let color = '#1D5FD6';
     let eraser = false;
     const strokes = [];
     let currentStroke = null;
@@ -196,10 +196,25 @@
     if (!simType) return null;
     const box = el('div', { className: 'sim-box' });
 
+    function themePalette() {
+      const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      return {
+        dark: dark,
+        primary: dark ? '#5BA4FF' : '#1D5FD6',
+        secondary: dark ? '#4FD18B' : '#0B7A43',
+        accent: dark ? '#FF9A5C' : '#B44308',
+        ink: dark ? '#F0F5FF' : '#18223C',
+        muted: dark ? '#A9B8D8' : '#4A5674',
+        wall: dark ? '#415A8C' : '#A9B8DB',
+        surface: dark ? '#15213B' : '#FFFFFF',
+        tint: dark ? 'rgba(91,164,255,0.16)' : 'rgba(29,95,214,0.1)'
+      };
+    }
+
     if (simType === 'states-particles') {
       const controls = el('div', { className: 'sim-controls' });
       const canvasWrap = el('div', { className: 'sim-canvas-wrap' });
-      const canvas = el('canvas', { width: '520', height: '210' });
+      const canvas = el('canvas', { width: '640', height: '230' });
       const readout = el('div', { className: 'sim-readout' });
       canvasWrap.appendChild(canvas);
       canvasWrap.appendChild(readout);
@@ -208,27 +223,30 @@
 
       let mode = 'solid';
       const modes = {
-        solid: { label: 'صلب', desc: 'صلب: الجسيمات متقاربة جداً ومرتبة بانتظام، وتهتز في أماكن ثابتة لقوة التجاذب.' },
-        liquid: { label: 'سائل', desc: 'سائل: الجسيمات متقاربة لكنها تنزلق فوق بعضها فتأخذ شكل الوعاء وتحتفظ بحجم ثابت.' },
-        gas: { label: 'غاز', desc: 'غاز: الجسيمات متباعدة جداً وتتحرك عشوائياً بسرعة في خطوط مستقيمة وتنتشر لتملأ الوعاء.' }
+        solid: { label: 'صلب (اهتزاز ثابت)', desc: 'صلب: الجسيمات متقاربة جداً ومرتبة بانتظام، وتهتز في أماكن ثابتة لقوة التجاذب.' },
+        liquid: { label: 'سائل (انزلاق وانسياب)', desc: 'سائل: الجسيمات متقاربة لكنها تنزلق فوق بعضها فتأخذ شكل الوعاء وتحتفظ بحجم ثابت.' },
+        gas: { label: 'غاز (انتشار سريع)', desc: 'غاز: الجسيمات متباعدة جداً وتتحرك عشوائياً بسرعة في خطوط مستقيمة وتنتشر لتملأ الوعاء.' },
+        viscosity: { label: 'تجربة اللزوجة (بارد مقابل ساخن)', desc: 'بارد (يمين): لزوجة عالية فينساب ببطء؛ ساخن (يسار): طاقة حركية أعلى فينساب بسرعة.' }
       };
       const particles = [];
       for (let i = 0; i < 36; i++) {
         particles.push({
-          gx: (i % 6) * 28 + 190,
-          gy: Math.floor(i / 6) * 24 + 45,
-          x: Math.random() * 440 + 40,
-          y: Math.random() * 140 + 35,
-          vx: (Math.random() - 0.5) * 3.5,
-          vy: (Math.random() - 0.5) * 3.5,
+          gx: (i % 6) * 32 + 240,
+          gy: Math.floor(i / 6) * 26 + 44,
+          x: Math.random() * 540 + 50,
+          y: Math.random() * 145 + 35,
+          vx: (Math.random() - 0.5) * 4.2,
+          vy: (Math.random() - 0.5) * 4.2,
           phase: Math.random() * Math.PI * 2
         });
       }
+      let dropCold = 34, dropHot = 34;
       const btns = {};
       Object.keys(modes).forEach(function (k) {
         const b = el('button', { type: 'button', className: 'btn btn-sm', text: modes[k].label });
         b.addEventListener('click', function () {
           mode = k;
+          if (k === 'viscosity') { dropCold = 34; dropHot = 34; }
           Object.keys(btns).forEach(function (key) { btns[key].classList.toggle('btn-primary', key === mode); });
           readout.textContent = modes[mode].desc;
         });
@@ -243,56 +261,87 @@
       function tick() {
         if (!document.body.contains(canvas)) return;
         t += 0.08;
+        const pal = themePalette();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        ctx.strokeStyle = isDark ? '#3B506E' : '#B8C5D4';
-        ctx.lineWidth = 2;
-        ctx.strokeRect(10, 10, canvas.width - 20, canvas.height - 20);
 
-        particles.forEach(function (p, idx) {
-          let px, py;
-          if (mode === 'solid') {
-            px = p.gx + Math.sin(t * 2 + p.phase) * 1.8;
-            py = p.gy + Math.cos(t * 2 + p.phase) * 1.8;
-          } else if (mode === 'liquid') {
-            p.x += Math.sin(t + p.phase) * 0.9;
-            p.y += Math.cos(t * 0.8 + p.phase) * 0.6;
-            if (p.x < 35) p.x = 485;
-            if (p.x > 485) p.x = 35;
-            if (p.y < 105) p.y = 105 + (idx % 5) * 18;
-            if (p.y > 188) p.y = 188;
-            px = p.x;
-            py = p.y;
-          } else {
-            p.x += p.vx;
-            p.y += p.vy;
-            if (p.x < 24 || p.x > canvas.width - 24) p.vx *= -1;
-            if (p.y < 24 || p.y > canvas.height - 24) p.vy *= -1;
-            px = p.x;
-            py = p.y;
-          }
+        if (mode === 'viscosity') {
+          dropHot += 1.65;
+          dropCold += 0.42;
+          if (dropHot > 195) dropHot = 34;
+          if (dropCold > 195) dropCold = 34;
+
+          ctx.strokeStyle = pal.wall;
+          ctx.lineWidth = 3;
+          ctx.strokeRect(120, 24, 110, 186);
+          ctx.strokeRect(410, 24, 110, 186);
+
+          ctx.fillStyle = pal.accent;
           ctx.beginPath();
-          ctx.arc(px, py, 9, 0, Math.PI * 2);
-          ctx.fillStyle = isDark ? '#5DA7C2' : '#1D5A70';
+          ctx.arc(175, dropHot, 15, 0, Math.PI * 2);
           ctx.fill();
-          ctx.strokeStyle = isDark ? '#A5B4C7' : '#FFFFFF';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-        });
+          ctx.fillRect(170, 26, 10, Math.max(0, dropHot - 26));
+
+          ctx.fillStyle = pal.primary;
+          ctx.beginPath();
+          ctx.arc(465, dropCold, 15, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillRect(460, 26, 10, Math.max(0, dropCold - 26));
+
+          ctx.fillStyle = pal.ink;
+          ctx.font = 'bold 15px Tajawal, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('سائل ساخن (لزوجة أقل)', 175, 222);
+          ctx.fillText('سائل بارد (لزوجة عالية)', 465, 222);
+        } else {
+          ctx.strokeStyle = pal.wall;
+          ctx.lineWidth = 2.5;
+          ctx.strokeRect(16, 12, canvas.width - 32, canvas.height - 24);
+
+          particles.forEach(function (p, idx) {
+            let px, py;
+            if (mode === 'solid') {
+              px = p.gx + Math.sin(t * 2 + p.phase) * 2.2;
+              py = p.gy + Math.cos(t * 2 + p.phase) * 2.2;
+            } else if (mode === 'liquid') {
+              p.x += Math.sin(t + p.phase) * 1.1;
+              p.y += Math.cos(t * 0.8 + p.phase) * 0.7;
+              if (p.x < 40) p.x = canvas.width - 40;
+              if (p.x > canvas.width - 40) p.x = 40;
+              if (p.y < 115) p.y = 115 + (idx % 5) * 18;
+              if (p.y > 200) p.y = 200;
+              px = p.x;
+              py = p.y;
+            } else {
+              p.x += p.vx;
+              p.y += p.vy;
+              if (p.x < 30 || p.x > canvas.width - 30) p.vx *= -1;
+              if (p.y < 26 || p.y > canvas.height - 26) p.vy *= -1;
+              px = p.x;
+              py = p.y;
+            }
+            ctx.beginPath();
+            ctx.arc(px, py, 9.5, 0, Math.PI * 2);
+            ctx.fillStyle = mode === 'gas' ? pal.accent : mode === 'liquid' ? pal.secondary : pal.primary;
+            ctx.fill();
+            ctx.strokeStyle = pal.surface;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+          });
+        }
         requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
     } else if (simType === 'graham-gas') {
-      const controls = el('div', { className: 'sim-controls' });
       const gases = [
-        { name: 'الهيليوم He (4 g/mol)', m: 4 },
-        { name: 'الميثان CH₄ (16 g/mol)', m: 16 },
-        { name: 'الأمونيا NH₃ (17 g/mol)', m: 17 },
-        { name: 'النيتروجين N₂ (28 g/mol)', m: 28 },
-        { name: 'الأكسجين O₂ (32 g/mol)', m: 32 },
-        { name: 'كلوريد الهيدروجين HCl (36.5 g/mol)', m: 36.5 },
-        { name: 'ثاني أكسيد الكربون CO₂ (44 g/mol)', m: 44 }
+        { name: 'الهيليوم He (4.0)', short: 'He', m: 4.0 },
+        { name: 'الميثان CH₄ (16.0)', short: 'CH₄', m: 16.0 },
+        { name: 'الأمونيا NH₃ (17.0)', short: 'NH₃', m: 17.0 },
+        { name: 'النيتروجين N₂ (28.0)', short: 'N₂', m: 28.0 },
+        { name: 'الأكسجين O₂ (32.0)', short: 'O₂', m: 32.0 },
+        { name: 'كلوريد الهيدروجين HCl (36.5)', short: 'HCl', m: 36.5 },
+        { name: 'ثاني أكسيد الكربون CO₂ (44.0)', short: 'CO₂', m: 44.0 }
       ];
+      const controls = el('div', { className: 'sim-controls' });
       const selA = el('select', { className: 'btn btn-sm', 'aria-label': 'الغاز الأول A' });
       const selB = el('select', { className: 'btn btn-sm', 'aria-label': 'الغاز الثاني B' });
       gases.forEach(function (g, i) {
@@ -301,42 +350,153 @@
       });
       selA.value = '2';
       selB.value = '5';
+      const launchBtn = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: 'إطلاق الغازين في الأنبوب' });
       controls.appendChild(selA);
       controls.appendChild(selB);
+      controls.appendChild(launchBtn);
+
+      const tubeWrap = el('div', { className: 'sim-tube-wrap' });
+      const tube = el('div', { className: 'sim-tube' });
+      const barA = el('div', { className: 'sim-tube-a' });
+      const barB = el('div', { className: 'sim-tube-b' });
+      const ring = el('div', { className: 'sim-tube-ring', hidden: '' });
+      tube.appendChild(barA);
+      tube.appendChild(barB);
+      tube.appendChild(ring);
+      tubeWrap.appendChild(tube);
+
       const readout = el('div', { className: 'sim-readout' });
-      function update() {
+      let animId = 0;
+
+      function runTube(animate) {
+        cancelAnimationFrame(animId);
         const gA = gases[Number(selA.value)];
         const gB = gases[Number(selB.value)];
+        const vA = 1 / Math.sqrt(gA.m);
+        const vB = 1 / Math.sqrt(gB.m);
+        const fracA = vA / (vA + vB);
         const ratio = Math.sqrt(gB.m / gA.m);
-        readout.innerHTML = 'نسبة معدل انتشار <span class="chem">A / B = √(' + gB.m + ' / ' + gA.m + ') = ' + ratio.toFixed(2) + '</span> · ' +
-          (ratio > 1 ? 'الغاز A أسرع بمقدار ' + ratio.toFixed(2) + ' مرة لأنه أخف.' : ratio < 1 ? 'الغاز B أسرع لأن كتلته المولية أقل.' : 'متساويان في معدل الانتشار.');
+        barA.textContent = gA.short;
+        barB.textContent = gB.short;
+        ring.hidden = true;
+
+        function finishText() {
+          readout.innerHTML = 'نسبة الانتشار <span class="chem">r(A)/r(B) = √(' + gB.m + ' / ' + gA.m + ') = ' + ratio.toFixed(2) + '</span> · يلتقيان عند <span class="chem">' + Math.round(fracA * 100) + '%</span> من جهة ' + gA.short + ' (' +
+            (ratio > 1 ? gA.short + ' أسرع لأنه أخف' : ratio < 1 ? gB.short + ' أسرع لأنه أخف' : 'سرعتهما متساوية') + ').';
+        }
+
+        if (!animate) {
+          barA.style.width = (fracA * 100) + '%';
+          barB.style.width = ((1 - fracA) * 100) + '%';
+          ring.style.left = (fracA * 100) + '%';
+          ring.hidden = false;
+          finishText();
+          return;
+        }
+        const t0 = performance.now();
+        const dur = 1800;
+        readout.textContent = 'تندفع جسيمات الغازين من طرفي الأنبوب...';
+        function step(now) {
+          if (!document.body.contains(tube)) return;
+          const k = Math.min(1, (now - t0) / dur);
+          barA.style.width = (fracA * k * 100) + '%';
+          barB.style.width = ((1 - fracA) * k * 100) + '%';
+          if (k < 1) {
+            animId = requestAnimationFrame(step);
+          } else {
+            ring.style.left = (fracA * 100) + '%';
+            ring.hidden = false;
+            finishText();
+          }
+        }
+        animId = requestAnimationFrame(step);
       }
-      selA.addEventListener('change', update);
-      selB.addEventListener('change', update);
-      update();
+
+      selA.addEventListener('change', function () { runTube(true); });
+      selB.addEventListener('change', function () { runTube(true); });
+      launchBtn.addEventListener('click', function () { runTube(true); });
+      runTube(false);
+
       box.appendChild(controls);
+      box.appendChild(tubeWrap);
       box.appendChild(readout);
     } else if (simType === 'imf-compare') {
       const items = [
-        { label: 'CH₄ (الميثان)', m: '16.0 g/mol', bp: '-164 °C', force: 'قوى تشتت ضعيفة (جزيء غير قطبي) لذلك يوجد غازاً في درجة حرارة الغرفة.' },
-        { label: 'HCl (كلوريد الهيدروجين)', m: '36.5 g/mol', bp: '-85 °C', force: 'قوى ثنائية قطبية دائمة بين الجزيئات القطبية + قوى تشتت.' },
-        { label: 'NH₃ (الأمونيا)', m: '17.0 g/mol', bp: '-33.4 °C', force: 'روابط هيدروجينية (N-H)، لكنها أضعف من روابط الماء لأن كهروسالبية N أقل من O.' },
-        { label: 'H₂O (الماء)', m: '18.0 g/mol', bp: '100 °C', force: 'روابط هيدروجينية قوية ومتعددة (O-H)، تفسر بقاء الماء سائلاً رغم صغر كتلته المولية.' }
+        { label: 'CH₄ (الميثان)', m: '16.0 g/mol', bp: '-164 °C', strength: 1, tag: 'تشتت ضعيفة', force: 'قوى تشتت ضعيفة (جزيء غير قطبي) فتتبخر جزيئاته بسهولة ويكون غازاً في حرارة الغرفة.' },
+        { label: 'HCl (كلوريد الهيدروجين)', m: '36.5 g/mol', bp: '-85 °C', strength: 2, tag: 'ثنائية قطبية', force: 'تجاذب ثنائي القطب بين الجزيئات القطبية + تشتت، فتزيد طاقة الترابط ودرجة الغليان.' },
+        { label: 'NH₃ (الأمونيا)', m: '17.0 g/mol', bp: '-33.4 °C', strength: 3, tag: 'روابط هيدروجينية', force: 'روابط هيدروجينية (N-H) قوية نسبياً لكنها أضعف من روابط الماء.' },
+        { label: 'H₂O (الماء)', m: '18.0 g/mol', bp: '100 °C', strength: 4, tag: 'شبكة هيدروجينية قوية', force: 'روابط هيدروجينية قوية ومتعددة (O-H)، تفسر بقاء الماء سائلاً وارتفاع درجة غليانه.' }
       ];
+      let curIdx = 3;
       const controls = el('div', { className: 'sim-controls' });
+      const canvasWrap = el('div', { className: 'sim-canvas-wrap' });
+      const canvas = el('canvas', { width: '620', height: '190' });
       const readout = el('div', { className: 'sim-readout' });
-      items.forEach(function (it, i) {
-        const b = el('button', { type: 'button', className: 'btn btn-sm' + (i === 3 ? ' btn-primary' : ''), text: it.label });
-        b.addEventListener('click', function () {
-          controls.querySelectorAll('button').forEach(function (btn) { btn.classList.remove('btn-primary'); });
-          b.classList.add('btn-primary');
-          readout.innerHTML = 'الكتلة المولية: <span class="chem">' + it.m + '</span> | درجة الغليان: <span class="chem">' + it.bp + '</span> : ' + it.force;
+      canvasWrap.appendChild(canvas);
+      canvasWrap.appendChild(readout);
+      box.appendChild(controls);
+      box.appendChild(canvasWrap);
+
+      function selectItem(idx) {
+        curIdx = idx;
+        controls.querySelectorAll('button').forEach(function (btn, bIdx) {
+          btn.classList.toggle('btn-primary', bIdx === idx);
         });
+        const it = items[idx];
+        readout.innerHTML = 'الكتلة المولية: <span class="chem">' + it.m + '</span> | الغليان: <span class="chem">' + it.bp + '</span> : ' + it.force;
+      }
+      items.forEach(function (it, i) {
+        const b = el('button', { type: 'button', className: 'btn btn-sm', text: it.label });
+        b.addEventListener('click', function () { selectItem(i); });
         controls.appendChild(b);
       });
-      readout.innerHTML = 'الكتلة المولية: <span class="chem">' + items[3].m + '</span> | درجة الغليان: <span class="chem">' + items[3].bp + '</span> : ' + items[3].force;
-      box.appendChild(controls);
-      box.appendChild(readout);
+      selectItem(3);
+
+      const ctx = canvas.getContext('2d');
+      let t = 0;
+      function drawIMF() {
+        if (!document.body.contains(canvas)) return;
+        const it = items[curIdx];
+        const pal = themePalette();
+        const vib = (5 - it.strength) * 3.8;
+        t += 0.07;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (let row = 0; row < 2; row++) {
+          for (let col = 0; col < 3; col++) {
+            const bx = 135 + col * 175 + Math.sin(t + row + col) * vib;
+            const by = 58 + row * 72 + Math.cos(t * 1.1 + col) * (vib * 0.7);
+            if (col < 2) {
+              const nx = 135 + (col + 1) * 175 + Math.sin(t + row + col + 1) * vib;
+              const ny = 58 + row * 72 + Math.cos(t * 1.1 + col + 1) * (vib * 0.7);
+              ctx.save();
+              ctx.setLineDash(it.strength >= 3 ? [] : [6, 5]);
+              ctx.lineWidth = it.strength * 1.4;
+              ctx.strokeStyle = it.strength >= 3 ? pal.secondary : it.strength === 2 ? pal.primary : pal.muted;
+              ctx.beginPath();
+              ctx.moveTo(bx + 20, by);
+              ctx.lineTo(nx - 20, ny);
+              ctx.stroke();
+              ctx.restore();
+            }
+            ctx.beginPath();
+            ctx.arc(bx, by, 18, 0, Math.PI * 2);
+            ctx.fillStyle = it.strength >= 3 ? pal.primary : pal.accent;
+            ctx.fill();
+            ctx.fillStyle = pal.surface;
+            ctx.font = 'bold 12px Tajawal, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(it.label.split(' ')[0], bx, by);
+          }
+        }
+        ctx.fillStyle = pal.ink;
+        ctx.font = 'bold 14px Tajawal, sans-serif';
+        ctx.textBaseline = 'alphabetic';
+        ctx.fillText('قوة الترابط: ' + it.tag + '  |  درجة الغليان: ' + it.bp, canvas.width / 2, 178);
+        requestAnimationFrame(drawIMF);
+      }
+      requestAnimationFrame(drawIMF);
     } else if (simType === 'phase-diagram') {
       const controls = el('div', { className: 'sim-controls' });
       const tInput = el('input', { type: 'range', min: '-20', max: '400', value: '25', 'aria-label': 'درجة الحرارة بالسيليزية' });
@@ -346,7 +506,16 @@
       controls.appendChild(el('label', { text: 'الحرارة (°C): ' }, [tInput, tLbl]));
       controls.appendChild(el('label', { text: 'الضغط (atm): ' }, [pInput, pLbl]));
       const presetRow = el('div', { className: 'sim-controls' });
+      const canvasWrap = el('div', { className: 'sim-canvas-wrap' });
+      const canvas = el('canvas', { width: '620', height: '190' });
       const readout = el('div', { className: 'sim-readout' });
+      canvasWrap.appendChild(canvas);
+      canvasWrap.appendChild(readout);
+
+      let phaseState = 'liquid';
+      const pts = Array.from({ length: 24 }, function (_, i) {
+        return { gx: 90 + (i % 6) * 26, gy: 52 + Math.floor(i / 6) * 24, x: 75 + Math.random() * 160, y: 55 + Math.random() * 95, vx: (Math.random() - 0.5) * 4, vy: (Math.random() - 0.5) * 4, ph: i };
+      });
 
       function evaluate() {
         const T = Number(tInput.value);
@@ -355,15 +524,20 @@
         pLbl.textContent = ' ' + P + ' atm';
         let msg = '';
         if (Math.abs(T - 0.01) < 1 && P < 0.5) {
-          msg = 'قرب النقطة الثلاثية للماء (0.01°C, 0.006 atm): توجد الحالات الثلاث معاً (صلب وسائل وبخار).';
+          phaseState = 'triple';
+          msg = 'قرب النقطة الثلاثية للماء (0.01°C, 0.006 atm): تتزن الحالات الثلاث معاً (صلب وسائل وبخار).';
         } else if (T >= 373.99 && P >= 217.75) {
-          msg = 'فوق النقطة الحرجة (373.99°C, 217.75 atm): لا يمكن إسالة البخار بزيادة الضغط.';
+          phaseState = 'critical';
+          msg = 'فوق النقطة الحرجة (373.99°C, 217.75 atm): مائع فوق حرج لا يمكن إسالته بزيادة الضغط.';
         } else if (T < 0) {
-          msg = 'الحالة الصلبة (جليد): الجسيمات مقيدة بروابط هيدروجينية مرتبة.';
+          phaseState = 'solid';
+          msg = 'الحالة الصلبة (جليد): الجسيمات مقيدة في شبكة بلورية مفتوحة بروابط هيدروجينية.';
         } else if (P >= 1 && T >= 0 && T < 100) {
-          msg = 'الحالة السائلة (ماء): ضغط البخار أقل من الضغط الخارجي.';
+          phaseState = 'liquid';
+          msg = 'الحالة السائلة (ماء): ضغط البخار أقل من الضغط الخارجي وتنساب الجسيمات.';
         } else {
-          msg = 'الحالة الغازية (بخار ماء): طاقة الجسيمات كافية للتغلب على قوى التجاذب.';
+          phaseState = 'gas';
+          msg = 'الحالة الغازية (بخار ماء): طاقة الجسيمات عالية فتتغلب على قوى التجاذب وتتباعد.';
         }
         readout.textContent = msg;
       }
@@ -386,7 +560,88 @@
       evaluate();
       box.appendChild(controls);
       box.appendChild(presetRow);
-      box.appendChild(readout);
+      box.appendChild(canvasWrap);
+
+      const ctx = canvas.getContext('2d');
+      let tm = 0;
+      function drawPhase() {
+        if (!document.body.contains(canvas)) return;
+        tm += 0.08;
+        const pal = themePalette();
+        const T = Number(tInput.value);
+        const P = Number(pInput.value);
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Left: animated particle chamber
+        ctx.strokeStyle = pal.wall;
+        ctx.lineWidth = 2.5;
+        ctx.strokeRect(30, 18, 250, 154);
+        pts.forEach(function (p) {
+          let px, py;
+          if (phaseState === 'solid') {
+            px = p.gx + Math.sin(tm * 2 + p.ph) * 1.6;
+            py = p.gy + Math.cos(tm * 2 + p.ph) * 1.6;
+          } else if (phaseState === 'liquid' || phaseState === 'triple') {
+            p.x += Math.sin(tm + p.ph) * 1.0;
+            p.y += Math.cos(tm * 0.9 + p.ph) * 0.8;
+            if (p.x < 46) p.x = 264;
+            if (p.x > 264) p.x = 46;
+            if (p.y < 88) p.y = 95;
+            if (p.y > 160) p.y = 155;
+            px = p.x; py = p.y;
+          } else {
+            const sp = phaseState === 'critical' ? 2.1 : 1.4;
+            p.x += p.vx * sp;
+            p.y += p.vy * sp;
+            if (p.x < 42 || p.x > 268) p.vx *= -1;
+            if (p.y < 30 || p.y > 160) p.vy *= -1;
+            px = p.x; py = p.y;
+          }
+          ctx.beginPath();
+          ctx.arc(px, py, 7, 0, Math.PI * 2);
+          ctx.fillStyle = phaseState === 'solid' ? pal.primary : (phaseState === 'gas' || phaseState === 'critical') ? pal.accent : pal.secondary;
+          ctx.fill();
+        });
+
+        // Right: Phase diagram curves + live dot
+        const ox = 335, oy = 158, w = 250, h = 135;
+        ctx.strokeStyle = pal.ink;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(ox, oy - h);
+        ctx.lineTo(ox, oy);
+        ctx.lineTo(ox + w, oy);
+        ctx.stroke();
+
+        // Phase lines meeting at triple point (tx, ty)
+        const tx = ox + 55, ty = oy - 34;
+        ctx.strokeStyle = pal.primary;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(ox + 6, oy - 6); ctx.lineTo(tx, ty);
+        ctx.moveTo(tx, ty); ctx.lineTo(tx - 10, oy - h + 8);
+        ctx.moveTo(tx, ty); ctx.quadraticCurveTo(ox + 150, oy - 65, ox + 210, oy - 115);
+        ctx.stroke();
+
+        ctx.fillStyle = pal.muted;
+        ctx.font = 'bold 12px Tajawal, sans-serif';
+        ctx.fillText('صلب', ox + 24, oy - 95);
+        ctx.fillText('سائل', ox + 108, oy - 98);
+        ctx.fillText('بخار', ox + 178, oy - 25);
+
+        const dotX = Math.min(ox + w - 8, Math.max(ox + 8, ox + ((T + 20) / 420) * (w - 16)));
+        const dotY = Math.max(oy - h + 8, Math.min(oy - 8, oy - (P / 230) * (h - 16)));
+        ctx.beginPath();
+        ctx.arc(dotX, dotY, 7 + Math.sin(tm * 2) * 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = pal.accent;
+        ctx.fill();
+        ctx.strokeStyle = pal.surface;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        requestAnimationFrame(drawPhase);
+      }
+      requestAnimationFrame(drawPhase);
     } else if (simType === 'gas-laws') {
       const controls = el('div', { className: 'sim-controls' });
       const lawSel = el('select', { className: 'btn btn-sm', 'aria-label': 'اختر القانون' });
@@ -396,13 +651,13 @@
         { v: 'gay', t: 'قانون جاي-لوساك (ثبوت V): P و T(K) طردياً' }
       ].forEach(function (o) { lawSel.appendChild(el('option', { value: o.v, text: o.t })); });
 
-      const slider = el('input', { type: 'range', min: '1', max: '5', step: '0.5', value: '2', 'aria-label': 'قيمة المتغير المستقل' });
+      const slider = el('input', { type: 'range', min: '1', max: '5', step: '0.25', value: '2', 'aria-label': 'قيمة المتغير المستقل' });
       const sliderVal = el('span', { className: 'page-ref' });
       controls.appendChild(lawSel);
       controls.appendChild(el('label', { text: 'المتغير: ' }, [slider, sliderVal]));
 
       const canvasWrap = el('div', { className: 'sim-canvas-wrap' });
-      const canvas = el('canvas', { width: '480', height: '150' });
+      const canvas = el('canvas', { width: '620', height: '195' });
       const readout = el('div', { className: 'sim-readout' });
       canvasWrap.appendChild(canvas);
       canvasWrap.appendChild(readout);
@@ -410,86 +665,213 @@
       box.appendChild(canvasWrap);
 
       const ctx = canvas.getContext('2d');
+      const gPts = Array.from({ length: 28 }, function () {
+        return { u: Math.random(), v: Math.random(), a: Math.random() * Math.PI * 2 };
+      });
+      let state = { p: 2, v: 5, tK: 300, cylW: 260 };
+
       function update() {
         const law = lawSel.value;
         const x = Number(slider.value);
         let p = 1, v = 10, tK = 300;
         if (law === 'boyle') {
           p = x; v = 10 / p;
-          sliderVal.textContent = ' P = ' + p.toFixed(1) + ' atm';
+          sliderVal.textContent = ' P = ' + p.toFixed(2) + ' atm';
           readout.innerHTML = 'قانون بويل: <span class="chem">P₁V₁ = P₂V₂ = 10 atm·L</span> ← الحجم الجديد <span class="chem">V = ' + v.toFixed(2) + ' L</span>';
         } else if (law === 'charles') {
-          tK = x * 150; v = (tK / 150) * 3;
+          tK = Math.round(x * 150); v = (tK / 150) * 2.4;
           sliderVal.textContent = ' T = ' + tK + ' K';
           readout.innerHTML = 'قانون شارل: <span class="chem">V₁/T₁ = V₂/T₂</span> ← الحجم عند ' + tK + ' K يساوي <span class="chem">' + v.toFixed(1) + ' L</span>';
         } else {
-          tK = x * 150; p = (tK / 150) * 1.5; v = 6;
+          tK = Math.round(x * 150); p = (tK / 150) * 1.5; v = 6;
           sliderVal.textContent = ' T = ' + tK + ' K';
           readout.innerHTML = 'جاي-لوساك: <span class="chem">P₁/T₁ = P₂/T₂</span> ← الضغط عند ' + tK + ' K يساوي <span class="chem">' + p.toFixed(2) + ' atm</span> (الحجم ثابت)';
         }
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        const cylW = Math.min(380, Math.max(80, v * 28));
-        ctx.strokeStyle = isDark ? '#5DA7C2' : '#1D5A70';
-        ctx.lineWidth = 3;
-        ctx.strokeRect(40, 25, 390, 95);
-        ctx.fillStyle = isDark ? 'rgba(93,167,194,0.2)' : 'rgba(29,90,112,0.14)';
-        ctx.fillRect(42, 27, cylW, 91);
-        ctx.fillStyle = isDark ? '#E5A84B' : '#B4690E';
-        ctx.fillRect(40 + cylW, 25, 14, 95);
-        ctx.fillStyle = isDark ? '#E9EFF6' : '#182230';
-        ctx.font = 'bold 14px Tajawal, sans-serif';
-        ctx.fillText('P = ' + p.toFixed(2) + ' atm   |   V = ' + v.toFixed(2) + ' L   |   T = ' + tK + ' K', 50, 140);
+        state = { p: p, v: v, tK: tK, cylW: Math.min(480, Math.max(95, v * 44)) };
       }
       lawSel.addEventListener('change', update);
       slider.addEventListener('input', update);
       update();
+
+      function animateCylinder() {
+        if (!document.body.contains(canvas)) return;
+        const pal = themePalette();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const x0 = 40, y0 = 24, ch = 122, cw = state.cylW;
+        ctx.fillStyle = pal.tint;
+        ctx.fillRect(x0, y0, cw, ch);
+        ctx.strokeStyle = pal.primary;
+        ctx.lineWidth = 3.5;
+        ctx.beginPath();
+        ctx.moveTo(x0 + 500, y0);
+        ctx.lineTo(x0, y0);
+        ctx.lineTo(x0, y0 + ch);
+        ctx.lineTo(x0 + 500, y0 + ch);
+        ctx.stroke();
+
+        // Metallic moving piston + rod
+        ctx.fillStyle = pal.accent;
+        ctx.fillRect(x0 + cw, y0 - 4, 14, ch + 8);
+        ctx.fillRect(x0 + cw + 14, y0 + ch / 2 - 5, Math.max(20, 520 - cw), 10);
+
+        const heat = Math.min(1, Math.max(0, (state.tK - 150) / 600));
+        const speed = 0.008 * Math.sqrt(state.tK / 300);
+        gPts.forEach(function (pt) {
+          pt.u += Math.cos(pt.a) * speed * (320 / cw);
+          pt.v += Math.sin(pt.a) * speed * 1.8;
+          if (pt.u < 0) { pt.u = -pt.u; pt.a = Math.PI - pt.a; }
+          if (pt.u > 1) { pt.u = 2 - pt.u; pt.a = Math.PI - pt.a; }
+          if (pt.v < 0) { pt.v = -pt.v; pt.a = -pt.a; }
+          if (pt.v > 1) { pt.v = 2 - pt.v; pt.a = -pt.a; }
+          ctx.beginPath();
+          ctx.arc(x0 + 10 + pt.u * (cw - 20), y0 + 10 + pt.v * (ch - 20), 6.5, 0, Math.PI * 2);
+          ctx.fillStyle = heat > 0.45 ? pal.accent : pal.primary;
+          ctx.fill();
+        });
+
+        ctx.fillStyle = pal.ink;
+        ctx.font = 'bold 15px Tajawal, sans-serif';
+        ctx.fillText('P = ' + state.p.toFixed(2) + ' atm   |   V = ' + state.v.toFixed(2) + ' L   |   T = ' + state.tK + ' K', 42, 178);
+        requestAnimationFrame(animateCylinder);
+      }
+      requestAnimationFrame(animateCylinder);
     } else if (simType === 'ideal-gas') {
       const controls = el('div', { className: 'sim-controls' });
-      const pIn = el('input', { type: 'number', step: '0.1', value: '1.5', className: 'btn btn-sm', style: 'width:90px', 'aria-label': 'الضغط atm' });
-      const vIn = el('input', { type: 'number', step: '0.5', value: '3.0', className: 'btn btn-sm', style: 'width:90px', 'aria-label': 'الحجم L' });
-      const tIn = el('input', { type: 'number', step: '5', value: '27', className: 'btn btn-sm', style: 'width:90px', 'aria-label': 'الحرارة C' });
+      const pIn = el('input', { type: 'number', step: '0.2', min: '0.2', max: '10', value: '1.5', className: 'btn btn-sm', style: 'width:90px', 'aria-label': 'الضغط atm' });
+      const vIn = el('input', { type: 'number', step: '0.5', min: '1', max: '15', value: '3.0', className: 'btn btn-sm', style: 'width:90px', 'aria-label': 'الحجم L' });
+      const tIn = el('input', { type: 'number', step: '10', min: '-150', max: '400', value: '27', className: 'btn btn-sm', style: 'width:90px', 'aria-label': 'الحرارة C' });
       controls.appendChild(el('label', { text: 'P (atm): ' }, [pIn]));
       controls.appendChild(el('label', { text: 'V (L): ' }, [vIn]));
       controls.appendChild(el('label', { text: 'T (°C): ' }, [tIn]));
+      const canvasWrap = el('div', { className: 'sim-canvas-wrap' });
+      const canvas = el('canvas', { width: '620', height: '175' });
       const readout = el('div', { className: 'sim-readout' });
+      canvasWrap.appendChild(canvas);
+      canvasWrap.appendChild(readout);
+      box.appendChild(controls);
+      box.appendChild(canvasWrap);
+
+      let nMoles = 0.18, tempK = 300, volL = 3;
+      const dots = Array.from({ length: 48 }, function () {
+        return { x: Math.random(), y: Math.random(), vx: (Math.random() - 0.5) * 0.02, vy: (Math.random() - 0.5) * 0.025 };
+      });
       function calc() {
-        const P = parseFloat(pIn.value) || 0;
-        const V = parseFloat(vIn.value) || 0;
+        const P = Math.max(0.1, parseFloat(pIn.value) || 0.5);
+        const V = Math.max(0.5, parseFloat(vIn.value) || 1);
         const Tc = parseFloat(tIn.value);
-        const Tk = (isNaN(Tc) ? 0 : Tc) + 273;
+        const Tk = (isNaN(Tc) ? 27 : Tc) + 273;
         if (Tk <= 0) {
           readout.textContent = 'درجة الحرارة بالكلفن يجب أن تكون أكبر من الصفر المطلق (0 K).';
           return;
         }
-        const n = (P * V) / (0.0821 * Tk);
-        readout.innerHTML = 'بالتحويل <span class="chem">T = ' + Tk + ' K</span> ← عدد المولات <span class="chem">n = PV / RT = ' + n.toFixed(3) + ' mol</span>';
+        volL = V; tempK = Tk;
+        nMoles = (P * V) / (0.0821 * Tk);
+        readout.innerHTML = 'بالتحويل <span class="chem">T = ' + Tk + ' K</span> ← عدد المولات <span class="chem">n = PV / RT = ' + nMoles.toFixed(3) + ' mol</span>';
       }
       [pIn, vIn, tIn].forEach(function (i) { i.addEventListener('input', calc); });
       calc();
-      box.appendChild(controls);
-      box.appendChild(readout);
+
+      const ctx = canvas.getContext('2d');
+      function drawIdeal() {
+        if (!document.body.contains(canvas)) return;
+        const pal = themePalette();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const boxW = Math.min(540, Math.max(160, volL * 52 + 120));
+        const bx = (canvas.width - boxW) / 2;
+        ctx.fillStyle = pal.tint;
+        ctx.fillRect(bx, 16, boxW, 136);
+        ctx.strokeStyle = pal.primary;
+        ctx.lineWidth = 3;
+        ctx.strokeRect(bx, 16, boxW, 136);
+
+        const activeCount = Math.min(48, Math.max(4, Math.round(nMoles * 65)));
+        const sp = Math.sqrt(Math.max(50, tempK) / 300);
+        for (let i = 0; i < activeCount; i++) {
+          const d = dots[i];
+          d.x += d.vx * sp;
+          d.y += d.vy * sp;
+          if (d.x < 0.03 || d.x > 0.97) d.vx *= -1;
+          if (d.y < 0.06 || d.y > 0.94) d.vy *= -1;
+          ctx.beginPath();
+          ctx.arc(bx + d.x * boxW, 16 + d.y * 136, 6, 0, Math.PI * 2);
+          ctx.fillStyle = tempK > 380 ? pal.accent : pal.secondary;
+          ctx.fill();
+        }
+        ctx.fillStyle = pal.ink;
+        ctx.font = 'bold 14px Tajawal, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('عدد الجسيمات المرئية يتناسب مع n = ' + nMoles.toFixed(3) + ' mol', canvas.width / 2, 168);
+        requestAnimationFrame(drawIdeal);
+      }
+      requestAnimationFrame(drawIdeal);
     } else if (simType === 'gas-stoich') {
       const controls = el('div', { className: 'sim-controls' });
       const n2In = el('input', { type: 'range', min: '1', max: '10', step: '0.5', value: '5', 'aria-label': 'حجم غاز النيتروجين باللتر' });
       const readout = el('div', { className: 'sim-readout' });
+      const canvasWrap = el('div', { className: 'sim-canvas-wrap' });
+      const canvas = el('canvas', { width: '620', height: '165' });
+      canvasWrap.appendChild(canvas);
+      canvasWrap.appendChild(readout);
+
+      let vN2 = 5;
       function update() {
-        const vN2 = Number(n2In.value);
+        vN2 = Number(n2In.value);
         readout.innerHTML = '<span class="chem">' + vN2 + ' L N₂</span> يتفاعل مع <span class="chem">' + (vN2 * 3) + ' L H₂</span> لإنتاج <span class="chem">' + (vN2 * 2) + ' L NH₃</span> (النسبة الحجمية 1 : 3 : 2)';
       }
       n2In.addEventListener('input', update);
       update();
       controls.appendChild(el('label', { text: 'حجم N₂ (باللتر): ' }, [n2In]));
       box.appendChild(controls);
-      box.appendChild(readout);
+      box.appendChild(canvasWrap);
+
+      const ctx = canvas.getContext('2d');
+      let t = 0;
+      function drawStoich() {
+        if (!document.body.contains(canvas)) return;
+        t += 0.06;
+        const pal = themePalette();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const bars = [
+          { x: 48, lbl: 'N₂ (' + vN2 + ' L)', w: 90, count: 4, col: pal.primary },
+          { x: 185, lbl: '3H₂ (' + (vN2 * 3) + ' L)', w: 165, count: 12, col: pal.accent },
+          { x: 425, lbl: '2NH₃ (' + (vN2 * 2) + ' L)', w: 140, count: 8, col: pal.secondary }
+        ];
+        bars.forEach(function (b) {
+          ctx.fillStyle = pal.tint;
+          ctx.fillRect(b.x, 22, b.w, 108);
+          ctx.strokeStyle = b.col;
+          ctx.lineWidth = 2.5;
+          ctx.strokeRect(b.x, 22, b.w, 108);
+          for (let i = 0; i < b.count; i++) {
+            const mx = b.x + 18 + ((i * 29 + Math.sin(t + i) * 9) % (b.w - 30));
+            const my = 40 + ((i * 23 + Math.cos(t * 1.2 + i) * 8) % 72);
+            ctx.beginPath();
+            ctx.arc(mx, my, 6.5, 0, Math.PI * 2);
+            ctx.fillStyle = b.col;
+            ctx.fill();
+          }
+          ctx.fillStyle = pal.ink;
+          ctx.font = 'bold 14px Tajawal, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(b.lbl, b.x + b.w / 2, 150);
+        });
+        ctx.fillStyle = pal.ink;
+        ctx.font = 'bold 24px Tajawal, sans-serif';
+        ctx.fillText('+', 162, 82);
+        ctx.fillText('→', 388, 82);
+        requestAnimationFrame(drawStoich);
+      }
+      requestAnimationFrame(drawStoich);
     } else if (simType === 'galvanic-cell') {
       const halfCells = [
-        { name: 'Mg²⁺ | Mg', e: -2.372, ion: 'Mg²⁺', metal: 'Mg' },
-        { name: 'Zn²⁺ | Zn', e: -0.762, ion: 'Zn²⁺', metal: 'Zn' },
-        { name: 'Fe²⁺ | Fe', e: -0.447, ion: 'Fe²⁺', metal: 'Fe' },
-        { name: 'Sn²⁺ | Sn', e: -0.137, ion: 'Sn²⁺', metal: 'Sn' },
-        { name: 'Cu²⁺ | Cu', e: +0.342, ion: 'Cu²⁺', metal: 'Cu' },
-        { name: 'Ag⁺ | Ag', e: +0.800, ion: 'Ag⁺', metal: 'Ag' }
+        { name: 'Mg²⁺ | Mg', e: -2.372, ion: 'Mg²⁺', metal: 'Mg', col: '#9BA5B4' },
+        { name: 'Zn²⁺ | Zn', e: -0.762, ion: 'Zn²⁺', metal: 'Zn', col: '#7A8899' },
+        { name: 'Fe²⁺ | Fe', e: -0.447, ion: 'Fe²⁺', metal: 'Fe', col: '#636B78' },
+        { name: 'Sn²⁺ | Sn', e: -0.137, ion: 'Sn²⁺', metal: 'Sn', col: '#A8B0BC' },
+        { name: 'Cu²⁺ | Cu', e: +0.342, ion: 'Cu²⁺', metal: 'Cu', col: '#C87533' },
+        { name: 'Ag⁺ | Ag', e: +0.800, ion: 'Ag⁺', metal: 'Ag', col: '#CBD2DC' }
       ];
       const controls = el('div', { className: 'sim-controls' });
       const sel1 = el('select', { className: 'btn btn-sm', 'aria-label': 'نصف الخلية الأول' });
@@ -500,70 +882,154 @@
       });
       sel1.value = '1';
       sel2.value = '4';
+      let running = true;
+      const runBtn = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: 'إيقاف الدائرة' });
       controls.appendChild(el('label', { text: 'القطب 1: ' }, [sel1]));
       controls.appendChild(el('label', { text: 'القطب 2: ' }, [sel2]));
+      controls.appendChild(runBtn);
+
+      const svgWrap = el('div', { className: 'sim-canvas-wrap' });
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('viewBox', '0 0 640 220');
+      svg.setAttribute('class', 'sim-svg-stage');
       const readout = el('div', { className: 'sim-readout' });
+      svgWrap.appendChild(svg);
+      svgWrap.appendChild(readout);
+      box.appendChild(controls);
+      box.appendChild(svgWrap);
+
       function update() {
         const a = halfCells[Number(sel1.value)];
         const b = halfCells[Number(sel2.value)];
         if (a.metal === b.metal) {
+          svg.innerHTML = '';
           readout.textContent = 'اختر قطبين مختلفين لتكوين خلية جلفانية ذات فرق جهد.';
           return;
         }
         const cathode = a.e >= b.e ? a : b;
         const anode = a.e >= b.e ? b : a;
         const eCell = cathode.e - anode.e;
+        const flowCls = running ? 'anim-wire-flow' : '';
+        svg.innerHTML =
+          '<path d="M160 88 V30 H480 V88" fill="none" stroke="var(--text)" stroke-width="4"/>' +
+          '<path d="M160 88 V30 H480 V88" fill="none" stroke="var(--accent)" stroke-width="4" class="' + flowCls + '"/>' +
+          '<path d="M210 148 V98 H430 V148" fill="none" stroke="var(--primary)" stroke-width="18" stroke-linecap="round" opacity="0.35"/>' +
+          '<text x="320" y="90" text-anchor="middle" font-size="13" font-weight="800" fill="var(--primary)">القنطرة الملحية (حركة الأيونات)</text>' +
+          '<rect x="70" y="112" width="180" height="92" rx="12" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="3"/>' +
+          '<rect x="74" y="135" width="172" height="65" rx="9" fill="var(--accent-bg)"/>' +
+          '<rect x="390" y="112" width="180" height="92" rx="12" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="3"/>' +
+          '<rect x="394" y="135" width="172" height="65" rx="9" fill="var(--surface-tint)"/>' +
+          '<rect x="148" y="84" width="24" height="104" rx="4" fill="' + anode.col + '"/>' +
+          '<rect x="468" y="84" width="24" height="104" rx="4" fill="' + cathode.col + '"/>' +
+          '<text x="160" y="176" text-anchor="middle" font-size="14" font-weight="800" fill="var(--text)">الأنود (-): ' + anode.metal + '</text>' +
+          '<text x="480" y="176" text-anchor="middle" font-size="14" font-weight="800" fill="var(--text)">الكاثود (+): ' + cathode.metal + '</text>' +
+          '<circle cx="320" cy="30" r="24" fill="var(--surface)" stroke="var(--primary)" stroke-width="3"/>' +
+          '<text x="320" y="35" text-anchor="middle" direction="ltr" font-size="13" font-weight="900" fill="var(--primary)">+' + eCell.toFixed(2) + ' V</text>' +
+          (running ? '<circle cx="245" cy="30" r="5" fill="var(--accent)" class="anim-pulse"/><circle cx="395" cy="30" r="5" fill="var(--accent)" class="anim-pulse"/>' : '');
+
         readout.innerHTML =
-          'الأنود (أكسدة): <span class="chem">' + anode.metal + ' → ' + anode.ion + '</span> · الكاثود (اختزال): <span class="chem">' + cathode.ion + ' → ' + cathode.metal + '</span><br>' +
-          'تتدفق الإلكترونات من <span class="chem">' + anode.metal + '</span> إلى <span class="chem">' + cathode.metal + '</span> · الجهد القياسي <span class="chem">E°cell = +' + eCell.toFixed(3) + ' V</span>';
+          'الأنود (أكسدة): <span class="chem">' + anode.metal + ' → ' + anode.ion + '</span> · الكاثود (اختزال): <span class="chem">' + cathode.ion + ' → ' + cathode.metal + '</span> · الجهد القياسي <span class="chem">E°cell = +' + eCell.toFixed(3) + ' V</span>';
       }
+      runBtn.addEventListener('click', function () {
+        running = !running;
+        runBtn.textContent = running ? 'إيقاف الدائرة' : 'تشغيل الدائرة';
+        update();
+      });
       sel1.addEventListener('change', update);
       sel2.addEventListener('change', update);
       update();
-      box.appendChild(controls);
-      box.appendChild(readout);
     } else if (simType === 'batteries-compare') {
       const items = [
-        { k: 'الجافة (الخارصين-الكربون)', txt: 'أولية (لا تُشحن) · الأنود: الخارصين Zn · الكاثود غير الفعال: عمود الجرافيت في عجينة MnO₂ وNH₄Cl وZnCl₂ · الجهد: 1.5 V.' },
-        { k: 'القلوية والفضة', txt: 'أولية · تستخدم مسحوق الخارصين مع KOH، وبطارية الفضة تستخدم Ag₂O في الساعات وسماعات الأذن.' },
-        { k: 'المركم الرصاصي', txt: 'ثانوية (تُشحن) · 6 خلايا × 2V = 12V · الأنود Pb والكاثود PbO₂ في محلول H₂SO₄.' },
-        { k: 'الليثيوم والوقود', txt: 'الليثيوم أخف فلز وأقل جهد اختزال (-3.04V) فيُنتج جهداً عالياً · خلية الوقود (H₂/O₂) تزود بوقود خارجي وتُنتج ماءً نقياً وكهرباء.' }
+        { k: 'الخلية الجافة (1.5V)', mode: 'battery', volt: '1.5 V', title: 'خارصين (أنود) + كربون/MnO₂', txt: 'أولية (لا تُشحن) · الأنود: الخارصين Zn · الكاثود غير الفعال: عمود الجرافيت في عجينة MnO₂ وNH₄Cl وZnCl₂ · الجهد: 1.5 V.' },
+        { k: 'المركم الرصاصي (12V)', mode: 'battery', volt: '12 V', title: '6 خلايا × 2V في H₂SO₄', txt: 'ثانوية (تُشحن) · 6 خلايا × 2V = 12V · الأنود Pb والكاثود PbO₂ في محلول H₂SO₄.' },
+        { k: 'خلية الوقود H₂/O₂', mode: 'fuel', volt: '1.23 V', title: 'وقود H₂ + O₂ → ماء نقي H₂O', txt: 'خلية الوقود (H₂/O₂) تزود بوقود خارجي باستمرار فتُنتج كهرباء وماءً نقياً دون تلوث.' },
+        { k: 'الحماية المهبطية / الجلفنة', mode: 'protect', volt: 'Zn / Mg', title: 'الفلز الأنشط يتأكسد لحماية الحديد Fe', txt: 'يُوصل الحديد بفلز أنشط (المغنيسيوم Mg أو الخارصين Zn) فيتأكسد الفلز المضحي بدلاً من الحديد.' }
       ];
       const controls = el('div', { className: 'sim-controls' });
+      const wrap = el('div', { className: 'sim-canvas-wrap' });
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('viewBox', '0 0 600 165');
+      svg.setAttribute('class', 'sim-svg-stage');
       const readout = el('div', { className: 'sim-readout' });
+      wrap.appendChild(svg);
+      wrap.appendChild(readout);
+      box.appendChild(controls);
+      box.appendChild(wrap);
+
+      function renderBat(idx) {
+        const it = items[idx];
+        controls.querySelectorAll('button').forEach(function (btn, i) { btn.classList.toggle('btn-primary', i === idx); });
+        readout.textContent = it.txt;
+        if (it.mode === 'protect') {
+          svg.innerHTML =
+            '<rect x="90" y="54" width="160" height="60" rx="12" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="3"/>' +
+            '<text x="170" y="90" text-anchor="middle" font-size="16" font-weight="800" fill="var(--accent)">أنود مضحّي (Zn / Mg)</text>' +
+            '<path d="M250 84 H355" stroke="var(--primary)" stroke-width="5" class="anim-wire-flow"/>' +
+            '<rect x="355" y="54" width="160" height="60" rx="12" fill="var(--success-bg)" stroke="var(--success)" stroke-width="3"/>' +
+            '<text x="435" y="90" text-anchor="middle" font-size="16" font-weight="800" fill="var(--success)">أنبوب حديد Fe (محمي)</text>' +
+            '<text x="302" y="68" text-anchor="middle" font-size="13" font-weight="800" fill="var(--primary)">تتدفق الإلكترونات e⁻</text>' +
+            '<text x="300" y="146" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text)">' + it.title + '</text>';
+        } else {
+          svg.innerHTML =
+            '<rect x="115" y="45" width="145" height="75" rx="12" fill="var(--surface-tint)" stroke="var(--primary)" stroke-width="3"/>' +
+            '<rect x="260" y="68" width="12" height="28" rx="3" fill="var(--primary)"/>' +
+            '<text x="187" y="88" text-anchor="middle" font-size="20" font-weight="900" fill="var(--primary)">' + it.volt + '</text>' +
+            '<path d="M272 74 H410 V92 H272" fill="none" stroke="var(--accent)" stroke-width="4" class="anim-wire-flow"/>' +
+            '<circle cx="435" cy="83" r="24" fill="var(--accent-bg)" stroke="var(--accent)" stroke-width="3" class="anim-pulse"/>' +
+            '<text x="435" y="88" text-anchor="middle" font-size="15" font-weight="900" fill="var(--accent)">⚡ حمل</text>' +
+            '<text x="300" y="148" text-anchor="middle" font-size="14" font-weight="700" fill="var(--text)">' + it.title + '</text>';
+        }
+      }
       items.forEach(function (it, i) {
-        const b = el('button', { type: 'button', className: 'btn btn-sm' + (i === 0 ? ' btn-primary' : ''), text: it.k });
-        b.addEventListener('click', function () {
-          controls.querySelectorAll('button').forEach(function (btn) { btn.classList.remove('btn-primary'); });
-          b.classList.add('btn-primary');
-          readout.textContent = it.txt;
-        });
+        const b = el('button', { type: 'button', className: 'btn btn-sm', text: it.k });
+        b.addEventListener('click', function () { renderBat(i); });
         controls.appendChild(b);
       });
-      readout.textContent = items[0].txt;
-      box.appendChild(controls);
-      box.appendChild(readout);
+      renderBat(0);
     } else if (simType === 'electrolysis-cells') {
       const items = [
-        { k: 'مصهور NaCl (خلية داون)', txt: 'الأنود (+): أكسدة 2Cl⁻ → Cl₂(g) + 2e⁻ | الكاثود (-): اختزال Na⁺ + e⁻ → Na(l) | الناتج: فلز الصوديوم النقي وغاز الكلور.' },
-        { k: 'ماء البحر NaCl(aq)', txt: 'لا يترسب الصوديوم لأن اختزال الماء أسهل عند الكاثود فينتج H₂ وNaOH، وعند الأنود يتأكسد الكلوريد إلى Cl₂.' },
-        { k: 'هول-هيروليت (Al)', txt: 'يُستخلص الألومنيوم المنصهر عند الكاثود، وتُعاد تدويره لأنه يستهلك طاقة كهربائية عالية جداً.' },
-        { k: 'تنقية النحاس والطلاء', txt: 'يوضع الفلز النقي (للتنقية) أو الجسم المراد طلاؤه (مثل مفتاح بالفضة) عند الكاثود، والفلز النقي عند الأنود.' }
+        { k: 'مصهور NaCl (خلية داون)', gas: 'Cl₂', prod: 'Na', txt: 'الأنود (+): أكسدة 2Cl⁻ → Cl₂(g) + 2e⁻ | الكاثود (-): اختزال Na⁺ + e⁻ → Na(l) | الناتج: فلز الصوديوم وغاز الكلور.' },
+        { k: 'ماء البحر NaCl(aq)', gas: 'Cl₂ + H₂', prod: 'NaOH', txt: 'لا يترسب الصوديوم لأن اختزال الماء أسهل عند الكاثود فينتج H₂ وNaOH، وعند الأنود يتأكسد الكلوريد إلى Cl₂.' },
+        { k: 'هول-هيروليت (Al)', gas: 'CO₂ / O₂', prod: 'Al', txt: 'يُستخلص الألومنيوم المنصهر عند الكاثود، وتُعاد تدويره لأنه يستهلك طاقة كهربائية عالية جداً.' },
+        { k: 'الطلاء الكهربائي بالفضة', gas: 'Ag⁺', prod: 'Ag', txt: 'يوضع الجسم المراد طلاؤه (مثل مفتاح أو ملعقة) عند الكاثود (-)، وقطب الفضة النقية عند الأنود (+).' }
       ];
       const controls = el('div', { className: 'sim-controls' });
+      const wrap = el('div', { className: 'sim-canvas-wrap' });
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('viewBox', '0 0 600 180');
+      svg.setAttribute('class', 'sim-svg-stage');
       const readout = el('div', { className: 'sim-readout' });
+      wrap.appendChild(svg);
+      wrap.appendChild(readout);
+      box.appendChild(controls);
+      box.appendChild(wrap);
+
+      function renderElec(idx) {
+        const it = items[idx];
+        controls.querySelectorAll('button').forEach(function (btn, i) { btn.classList.toggle('btn-primary', i === idx); });
+        readout.textContent = it.txt;
+        svg.innerHTML =
+          '<path d="M180 70 V26 H420 V70" fill="none" stroke="var(--accent)" stroke-width="4" class="anim-wire-flow"/>' +
+          '<rect x="260" y="12" width="80" height="28" rx="8" fill="var(--primary)"/>' +
+          '<text x="300" y="31" text-anchor="middle" font-size="13" font-weight="800" fill="var(--primary-contrast)">مصدر DC ⚡</text>' +
+          '<rect x="130" y="64" width="340" height="104" rx="14" fill="var(--surface-tint)" stroke="var(--border-strong)" stroke-width="3"/>' +
+          '<rect x="168" y="54" width="24" height="92" rx="4" fill="var(--accent)"/>' +
+          '<rect x="408" y="54" width="24" height="92" rx="4" fill="var(--secondary)"/>' +
+          '<circle cx="180" cy="115" r="5" fill="var(--surface)" class="anim-bubble-1"/>' +
+          '<circle cx="196" cy="126" r="4" fill="var(--surface)" class="anim-bubble-2"/>' +
+          '<circle cx="420" cy="115" r="5" fill="var(--surface)" class="anim-bubble-3"/>' +
+          '<text x="180" y="160" text-anchor="middle" font-size="14" font-weight="800" fill="var(--accent)">الأنود (+): ' + it.gas + '</text>' +
+          '<text x="420" y="160" text-anchor="middle" font-size="14" font-weight="800" fill="var(--secondary)">الكاثود (-): ' + it.prod + '</text>';
+      }
       items.forEach(function (it, i) {
-        const b = el('button', { type: 'button', className: 'btn btn-sm' + (i === 0 ? ' btn-primary' : ''), text: it.k });
-        b.addEventListener('click', function () {
-          controls.querySelectorAll('button').forEach(function (btn) { btn.classList.remove('btn-primary'); });
-          b.classList.add('btn-primary');
-          readout.textContent = it.txt;
-        });
+        const b = el('button', { type: 'button', className: 'btn btn-sm', text: it.k });
+        b.addEventListener('click', function () { renderElec(i); });
         controls.appendChild(b);
       });
-      readout.textContent = items[0].txt;
-      box.appendChild(controls);
-      box.appendChild(readout);
+      renderElec(0);
     }
     return box;
   }
@@ -705,125 +1171,137 @@
       }
     });
 
-    if (lesson.simulation) {
+    const formativeState = { questions: lesson.formativeQuiz || [], answers: {} };
+    const simSlot = (lesson.simulation === 'graham-gas' && lesson.concepts.length > 1) ? 1 : 0;
+    const totalCycles = lesson.concepts.length;
+    const strategies = lesson.strategies || [];
+    const lifeLinks = lesson.lifeLinks || [];
+    const fQuiz = lesson.formativeQuiz || [];
+
+    function pushFormativeSlide(q, idx) {
       slides.push({
         sectionId: 'content',
-        sectionLabel: 'الشرح والتفاعل',
-        title: simTitles[lesson.simulation] || 'محاكاة تفاعلية',
+        sectionLabel: 'تقويم تكويني',
+        title: 'تقويم تكويني · سؤال ' + (idx + 1) + ' من ' + fQuiz.length,
+        badge: 'تحقق من الفهم',
         render: function () {
-          return createSimulationNode(lesson.simulation);
+          return createQuizSlideNode(q, idx, fQuiz.length, formativeState, 'formative', lesson.id);
         }
       });
     }
 
-    lesson.concepts.forEach(function (c) {
+    lesson.concepts.forEach(function (c, cIdx) {
+      const isLast = cIdx === totalCycles - 1;
+
       slides.push({
         sectionId: 'content',
-        sectionLabel: 'الشرح والتفاعل',
+        sectionLabel: 'شرح المفهوم ' + (cIdx + 1),
         title: c.title,
         render: function () {
           return el('div', { className: 'concept-slide-body', html: c.bodyHtml });
         }
       });
-    });
 
-    if (lesson.workedExample) {
-      slides.push({
-        sectionId: 'content',
-        sectionLabel: 'الشرح والتفاعل',
-        title: 'مثال محلول · دعم وإثراء',
-        render: function () {
-          const frag = document.createDocumentFragment();
-          const ansWrap = el('div', { className: 'reveal-box', hidden: '', html: lesson.workedExample.solutionHtml });
-          const ansBtn = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: 'إظهار خطوات الحل' });
-          ansBtn.addEventListener('click', function () {
-            const open = ansWrap.hidden;
-            ansWrap.hidden = !open;
-            ansBtn.textContent = open ? 'إخفاء الحل' : 'إظهار خطوات الحل';
-          });
-          frag.appendChild(el('div', { className: 'strategy-card' }, [
-            el('div', { style: 'display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.5rem;' }, [
-              el('h4', { style: 'margin:0;', html: lesson.workedExample.title }),
-              ansBtn
-            ]),
-            el('p', { style: 'margin:0;', html: lesson.workedExample.questionHtml }),
-            ansWrap
-          ]));
-
-          const scaff = el('div', { className: 'scaffolding-grid' });
-          const supReveal = el('div', { className: 'reveal-box', hidden: '', html: lesson.support.detail });
-          const supBtn = el('button', { type: 'button', className: 'btn btn-sm', text: 'تلميح' });
-          supBtn.addEventListener('click', function () { supReveal.hidden = !supReveal.hidden; });
-          scaff.appendChild(el('div', { className: 'scaffold-box support' }, [
-            el('div', { className: 'scaffold-head' }, [el('span', { text: 'دعم وتبسيط' }), supBtn]),
-            el('p', { style: 'margin:0;', html: lesson.support.prompt }),
-            supReveal
-          ]));
-
-          const enrReveal = el('div', { className: 'reveal-box', hidden: '', html: lesson.enrichment.detail });
-          const enrBtn = el('button', { type: 'button', className: 'btn btn-sm', text: 'إجابة التحدي' });
-          enrBtn.addEventListener('click', function () { enrReveal.hidden = !enrReveal.hidden; });
-          scaff.appendChild(el('div', { className: 'scaffold-box enrichment' }, [
-            el('div', { className: 'scaffold-head' }, [el('span', { text: 'إثراء وتفكير ناقد' }), enrBtn]),
-            el('p', { style: 'margin:0;', html: lesson.enrichment.prompt }),
-            enrReveal
-          ]));
-          frag.appendChild(scaff);
-          return frag;
-        }
-      });
-    }
-
-    slides.push({
-      sectionId: 'connections',
-      sectionLabel: 'الاستراتيجيات والربط',
-      title: 'استراتيجيات التعلم النشط',
-      render: function () {
-        const grid = el('div', { className: 'strategy-grid' });
-        lesson.strategies.forEach(function (st) {
-          grid.appendChild(el('div', { className: 'strategy-card' }, [
-            el('h4', { html: st.name }),
-            el('p', { style: 'margin:0;', html: st.how })
-          ]));
+      if (cIdx === simSlot && lesson.simulation) {
+        slides.push({
+          sectionId: 'content',
+          sectionLabel: 'تجربة تفاعلية متحركة',
+          title: simTitles[lesson.simulation] || 'تجربة تفاعلية متحركة',
+          badge: 'محاكاة حية',
+          render: function () {
+            return createSimulationNode(lesson.simulation);
+          }
         });
-        return grid;
       }
-    });
 
-    slides.push({
-      sectionId: 'connections',
-      sectionLabel: 'الاستراتيجيات والربط',
-      title: 'الربط بالواقع وأمثلة من الحياة والعلوم الأخرى',
-      render: function () {
-        const grid = el('div', { className: 'strategy-grid' });
-        lesson.lifeLinks.forEach(function (lk) {
-          grid.appendChild(el('div', { className: 'strategy-card' }, [
-            el('h4', { html: lk.tag + ' · ' + lk.title }),
-            el('p', { style: 'margin:0;', html: lk.text })
-          ]));
+      const cycleStrategies = isLast ? strategies.slice(cIdx) : (strategies[cIdx] ? [strategies[cIdx]] : []);
+      const cycleLinks = isLast ? lifeLinks.slice(cIdx) : (lifeLinks[cIdx] ? [lifeLinks[cIdx]] : []);
+      if (cycleStrategies.length || cycleLinks.length) {
+        slides.push({
+          sectionId: 'content',
+          sectionLabel: 'استراتيجية وربط بالواقع',
+          title: 'تطبيق عملي وربط بالمفهوم ' + (cIdx + 1),
+          badge: 'نشاط وربط',
+          render: function () {
+            const grid = el('div', { className: 'strategy-grid' });
+            cycleStrategies.forEach(function (st) {
+              grid.appendChild(el('div', { className: 'strategy-card' }, [
+                el('h4', { html: st.name }),
+                el('p', { style: 'margin:0;', html: st.how })
+              ]));
+            });
+            cycleLinks.forEach(function (lk) {
+              grid.appendChild(el('div', { className: 'strategy-card' }, [
+                el('h4', { html: lk.tag + ' · ' + lk.title }),
+                el('p', { style: 'margin:0;', html: lk.text })
+              ]));
+            });
+            return grid;
+          }
         });
-        return grid;
       }
-    });
 
-    const formativeState = { questions: lesson.formativeQuiz, answers: {} };
-    lesson.formativeQuiz.forEach(function (q, idx) {
-      slides.push({
-        sectionId: 'formative',
-        sectionLabel: 'التقويم التكويني',
-        title: 'تقويم تكويني · سؤال ' + (idx + 1) + ' من ' + lesson.formativeQuiz.length,
-        badge: 'تصحيح فوري',
-        render: function () {
-          return createQuizSlideNode(q, idx, lesson.formativeQuiz.length, formativeState, 'formative', lesson.id);
-        }
-      });
+      if (isLast && lesson.workedExample) {
+        slides.push({
+          sectionId: 'content',
+          sectionLabel: 'مثال محلول · دعم وإثراء',
+          title: 'مثال محلول · دعم وإثراء',
+          render: function () {
+            const frag = document.createDocumentFragment();
+            const ansWrap = el('div', { className: 'reveal-box', hidden: '', html: lesson.workedExample.solutionHtml });
+            const ansBtn = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: 'إظهار خطوات الحل' });
+            ansBtn.addEventListener('click', function () {
+              const open = ansWrap.hidden;
+              ansWrap.hidden = !open;
+              ansBtn.textContent = open ? 'إخفاء الحل' : 'إظهار خطوات الحل';
+            });
+            frag.appendChild(el('div', { className: 'strategy-card' }, [
+              el('div', { style: 'display:flex; justify-content:space-between; align-items:center; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.5rem;' }, [
+                el('h4', { style: 'margin:0;', html: lesson.workedExample.title }),
+                ansBtn
+              ]),
+              el('p', { style: 'margin:0;', html: lesson.workedExample.questionHtml }),
+              ansWrap
+            ]));
+
+            const scaff = el('div', { className: 'scaffolding-grid' });
+            const supReveal = el('div', { className: 'reveal-box', hidden: '', html: lesson.support.detail });
+            const supBtn = el('button', { type: 'button', className: 'btn btn-sm', text: 'تلميح' });
+            supBtn.addEventListener('click', function () { supReveal.hidden = !supReveal.hidden; });
+            scaff.appendChild(el('div', { className: 'scaffold-box support' }, [
+              el('div', { className: 'scaffold-head' }, [el('span', { text: 'دعم وتبسيط' }), supBtn]),
+              el('p', { style: 'margin:0;', html: lesson.support.prompt }),
+              supReveal
+            ]));
+
+            const enrReveal = el('div', { className: 'reveal-box', hidden: '', html: lesson.enrichment.detail });
+            const enrBtn = el('button', { type: 'button', className: 'btn btn-sm', text: 'إجابة التحدي' });
+            enrBtn.addEventListener('click', function () { enrReveal.hidden = !enrReveal.hidden; });
+            scaff.appendChild(el('div', { className: 'scaffold-box enrichment' }, [
+              el('div', { className: 'scaffold-head' }, [el('span', { text: 'إثراء وتفكير ناقد' }), enrBtn]),
+              el('p', { style: 'margin:0;', html: lesson.enrichment.prompt }),
+              enrReveal
+            ]));
+            frag.appendChild(scaff);
+            return frag;
+          }
+        });
+      }
+
+      if (isLast) {
+        fQuiz.slice(cIdx).forEach(function (q, offset) {
+          pushFormativeSlide(q, cIdx + offset);
+        });
+      } else if (fQuiz[cIdx]) {
+        pushFormativeSlide(fQuiz[cIdx], cIdx);
+      }
     });
 
     if (lesson.tahsiliTips && lesson.tahsiliTips.length) {
       slides.push({
-        sectionId: 'final',
-        sectionLabel: 'النهائي والتحصيلي',
-        title: 'تنبيهات وقواعد مهمة للتحصيلي',
+        sectionId: 'exit',
+        sectionLabel: 'بطاقة الخروج',
+        title: 'بطاقة الخروج · خلاصة وتنبيهات التحصيلي',
         badge: 'ملخص التحصيلي',
         render: function () {
           const card = el('div', { className: 'tahsili-summary-card' }, [
@@ -840,9 +1318,9 @@
     const finalState = { questions: lesson.finalQuiz, answers: {} };
     lesson.finalQuiz.forEach(function (q, idx) {
       slides.push({
-        sectionId: 'final',
-        sectionLabel: 'النهائي والتحصيلي',
-        title: 'التقويم النهائي · سؤال ' + (idx + 1) + ' من ' + lesson.finalQuiz.length,
+        sectionId: 'exit',
+        sectionLabel: 'بطاقة الخروج',
+        title: 'بطاقة الخروج · سؤال ' + (idx + 1) + ' من ' + lesson.finalQuiz.length,
         badge: q.source || 'أسئلة من التحصيلي',
         isTahsili: true,
         render: function () {

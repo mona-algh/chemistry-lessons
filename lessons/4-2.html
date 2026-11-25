@@ -23,11 +23,11 @@
       </div>
       <div class="header-tools">
         <div class="timer-widget" aria-label="مؤقت الحصة">
-          <span id="timerDisplay" class="timer-display">35:00</span>
+          <span id="timerDisplay" class="timer-display">40:00</span>
           <button id="timerToggleBtn" type="button" class="timer-btn">ابدئي</button>
           <button id="timerResetBtn" type="button" class="timer-btn">إعادة</button>
           <button type="button" class="timer-btn" data-timer-mins="5">5د</button>
-          <button type="button" class="timer-btn" data-timer-mins="15">15د</button>
+          <button type="button" class="timer-btn" data-timer-mins="40">40د</button>
         </div>
         <button id="wbToggleBtn" type="button" class="btn btn-sm" aria-pressed="false">قلم الشرح</button>
         <button id="themeToggleBtn" type="button" class="btn btn-sm" aria-pressed="false">الوضع الليلي</button>
@@ -37,10 +37,10 @@
 
   <canvas id="wbCanvas" class="whiteboard-canvas" aria-hidden="true"></canvas>
   <aside id="wbDock" class="whiteboard-dock" hidden aria-label="أدوات قلم الشرح">
-    <button type="button" class="wb-swatch active" data-wb-color="#1D5A70" style="background:#1D5A70;" aria-label="لون أزرق بترولي"></button>
-    <button type="button" class="wb-swatch" data-wb-color="#925107" style="background:#925107;" aria-label="لون عنبري"></button>
-    <button type="button" class="wb-swatch" data-wb-color="#A63A3A" style="background:#A63A3A;" aria-label="لون أحمر"></button>
-    <button type="button" class="wb-swatch" data-wb-color="#1F6F50" style="background:#1F6F50;" aria-label="لون أخضر"></button>
+    <button type="button" class="wb-swatch active" data-wb-color="#1D5FD6" style="background:#1D5FD6;" aria-label="لون أزرق"></button>
+    <button type="button" class="wb-swatch" data-wb-color="#B44308" style="background:#B44308;" aria-label="لون برتقالي"></button>
+    <button type="button" class="wb-swatch" data-wb-color="#B92B27" style="background:#B92B27;" aria-label="لون أحمر"></button>
+    <button type="button" class="wb-swatch" data-wb-color="#0B7A43" style="background:#0B7A43;" aria-label="لون أخضر"></button>
     <button id="wbEraserBtn" type="button" class="wb-tool-btn">ممحاة</button>
     <button id="wbUndoBtn" type="button" class="wb-tool-btn">تراجع</button>
     <button id="wbClearBtn" type="button" class="wb-tool-btn">مسح</button>
@@ -50,10 +50,8 @@
   <main class="deck-shell">
     <div class="tabs-nav" role="tablist" aria-label="أقسام الشرائح">
       <button type="button" class="tab-btn" role="tab" data-section-tab="goals" aria-selected="true">الأهداف والتركيز</button>
-      <button type="button" class="tab-btn" role="tab" data-section-tab="content" aria-selected="false">الشرح والتفاعل</button>
-      <button type="button" class="tab-btn" role="tab" data-section-tab="connections" aria-selected="false">الاستراتيجيات والربط</button>
-      <button type="button" class="tab-btn" role="tab" data-section-tab="formative" aria-selected="false">التقويم التكويني</button>
-      <button type="button" class="tab-btn" role="tab" data-section-tab="final" aria-selected="false">النهائي والتحصيلي</button>
+      <button type="button" class="tab-btn" role="tab" data-section-tab="content" aria-selected="false">تسلسل الدرس والتفاعل</button>
+      <button type="button" class="tab-btn" role="tab" data-section-tab="exit" aria-selected="false">بطاقة الخروج</button>
     </div>
 
     <div class="slide-dots-row">

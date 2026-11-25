@@ -1,71 +1,71 @@
-/* Soft Academic Chemistry Portal & Slide Deck Stylesheet (RTL Arabic, Light + Dark) */
+/* Cheerful Bright Classroom Chemistry Portal & Slide Deck Stylesheet (RTL Arabic, Light + Dark) */
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Tajawal:wght@400;500;700;800&display=swap');
 
 :root {
-  --bg: #F6F7F9;
-  --stage-backdrop: #EBF0F5;
+  --bg: #F5F7FC;
+  --stage-backdrop: #E9EEF8;
   --surface: #FFFFFF;
-  --surface-muted: #ECEFF4;
-  --surface-tint: #EBF3F6;
-  --border: #D9E1EA;
-  --border-strong: #B8C5D4;
+  --surface-muted: #EEF2FA;
+  --surface-tint: #E6F0FD;
+  --border: #D5DDF0;
+  --border-strong: #A9B8DB;
 
-  --text: #182230;
-  --text-muted: #4A586E;
+  --text: #18223C;
+  --text-muted: #4A5674;
 
-  --primary: #1D5A70;
-  --primary-hover: #164759;
+  --primary: #1D5FD6;
+  --primary-hover: #154BB0;
   --primary-contrast: #FFFFFF;
 
-  --secondary: #497A8F;
-  --accent: #925107;
-  --accent-bg: #FDF5E8;
-  --accent-border: #E8C99B;
+  --secondary: #0B7A43;
+  --accent: #B44308;
+  --accent-bg: #FFF3EC;
+  --accent-border: #F4B999;
 
-  --success: #1F6F50;
-  --success-bg: #EAF6F0;
-  --danger: #A63A3A;
-  --danger-bg: #FCEEEE;
+  --success: #0B7A43;
+  --success-bg: #E5F6EC;
+  --danger: #B92B27;
+  --danger-bg: #FDECEA;
 
-  --shadow-sm: 0 1px 3px rgba(24, 34, 48, 0.06);
-  --shadow-slide: 0 10px 28px rgba(24, 34, 48, 0.08);
-  --shadow-float: 0 8px 24px rgba(24, 34, 48, 0.14);
+  --shadow-sm: 0 2px 6px rgba(29, 95, 214, 0.07);
+  --shadow-slide: 0 12px 32px rgba(24, 34, 60, 0.09);
+  --shadow-float: 0 8px 24px rgba(24, 34, 60, 0.16);
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
   --font-sans: 'Tajawal', 'IBM Plex Sans Arabic', 'Segoe UI', Tahoma, sans-serif;
 }
 
 [data-theme="dark"] {
-  --bg: #0F1622;
-  --stage-backdrop: #0A1019;
-  --surface: #162030;
-  --surface-muted: #1E2B3F;
-  --surface-tint: #182C3A;
-  --border: #28374D;
-  --border-strong: #3B506E;
+  --bg: #0E172A;
+  --stage-backdrop: #09101E;
+  --surface: #15213B;
+  --surface-muted: #1D2C4D;
+  --surface-tint: #193059;
+  --border: #2B3D63;
+  --border-strong: #415A8C;
 
-  --text: #E9EFF6;
-  --text-muted: #A5B4C7;
+  --text: #F0F5FF;
+  --text-muted: #A9B8D8;
 
-  --primary: #5DA7C2;
-  --primary-hover: #73B8D1;
-  --primary-contrast: #0B1520;
+  --primary: #5BA4FF;
+  --primary-hover: #7AB6FF;
+  --primary-contrast: #081226;
 
-  --secondary: #75A7BD;
-  --accent: #E5A84B;
-  --accent-bg: #2B2316;
-  --accent-border: #6E5328;
+  --secondary: #4FD18B;
+  --accent: #FF9A5C;
+  --accent-bg: #2E1F19;
+  --accent-border: #7A4B31;
 
-  --success: #58B88C;
-  --success-bg: #142B22;
-  --danger: #E07A7A;
-  --danger-bg: #301A1C;
+  --success: #4FD18B;
+  --success-bg: #133022;
+  --danger: #F07B78;
+  --danger-bg: #361B1D;
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.25);
-  --shadow-slide: 0 12px 32px rgba(0, 0, 0, 0.4);
-  --shadow-float: 0 10px 28px rgba(0, 0, 0, 0.45);
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.28);
+  --shadow-slide: 0 14px 36px rgba(0, 0, 0, 0.42);
+  --shadow-float: 0 10px 28px rgba(0, 0, 0, 0.48);
 }
 
 *, *::before, *::after {
@@ -80,6 +80,10 @@ body {
   margin: 0;
   font-family: var(--font-sans);
   background-color: var(--bg);
+  background-image:
+    radial-gradient(circle at 8% 12%, rgba(29, 95, 214, 0.08) 0%, transparent 32%),
+    radial-gradient(circle at 92% 18%, rgba(11, 122, 67, 0.07) 0%, transparent 30%),
+    radial-gradient(circle at 88% 88%, rgba(180, 67, 8, 0.06) 0%, transparent 28%);
   color: var(--text);
   line-height: 1.7;
   min-height: 100vh;
@@ -911,16 +915,17 @@ button, input, select {
 }
 
 .quiz-q-text {
-  font-weight: 700;
-  font-size: 1.15rem;
-  margin: 0 0 1rem;
-  line-height: 1.6;
+  font-weight: 800;
+  font-size: clamp(1.28rem, 2.2vw, 1.62rem);
+  margin: 0 0 1.1rem;
+  line-height: 1.55;
+  color: var(--text);
 }
 
 .quiz-source-tag {
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   font-weight: 700;
-  padding: 0.18rem 0.6rem;
+  padding: 0.22rem 0.7rem;
   border-radius: var(--radius-sm);
   background: var(--surface-muted);
   color: var(--text-muted);
@@ -935,29 +940,30 @@ button, input, select {
 .quiz-options {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.75rem;
+  gap: 0.85rem;
 }
 
 .quiz-option-btn {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
+  gap: 0.75rem;
   text-align: right;
-  min-height: 52px;
-  padding: 0.7rem 1rem;
-  border: 1.5px solid var(--border);
+  min-height: 60px;
+  padding: 0.8rem 1.15rem;
+  border: 2px solid var(--border);
   border-radius: var(--radius-md);
   background: var(--bg);
   color: var(--text);
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: clamp(1.06rem, 1.45vw, 1.24rem);
+  font-weight: 700;
   cursor: pointer;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.12s ease;
 }
 
 .quiz-option-btn:hover:not(:disabled) {
   border-color: var(--primary);
   background: var(--surface-tint);
+  transform: translateY(-1px);
 }
 
 .quiz-option-btn.correct {
@@ -974,9 +980,10 @@ button, input, select {
 
 .quiz-feedback {
   margin-top: 1rem;
-  padding: 0.85rem 1.05rem;
+  padding: 0.9rem 1.15rem;
   border-radius: var(--radius-sm);
-  font-size: 0.98rem;
+  font-size: 1.08rem;
+  font-weight: 600;
   border: 1px solid var(--border);
 }
 
@@ -1157,8 +1164,8 @@ button, input, select {
     max-width: 100%;
     width: 100%;
     margin: 0;
-    padding: 0.65rem 5.25rem 0.65rem;
-    gap: 0.55rem;
+    padding: 0.45rem 4.35rem 0.45rem;
+    gap: 0.45rem;
     overflow: hidden;
     align-items: center;
   }
@@ -1168,19 +1175,19 @@ button, input, select {
   .slide-stage,
   .lesson-footer-nav {
     width: 100%;
-    max-width: 1060px;
+    max-width: min(1360px, 100%);
   }
 
   .tabs-nav {
     flex-shrink: 0;
     justify-content: center;
-    padding: 0.1rem 0;
+    padding: 0.05rem 0;
   }
 
   .tab-btn {
     min-height: 36px;
-    padding: 0.3rem 0.85rem;
-    font-size: 0.86rem;
+    padding: 0.3rem 1.05rem;
+    font-size: 0.92rem;
   }
 
   .slide-dots-row {
@@ -1199,7 +1206,8 @@ button, input, select {
     min-height: 0;
     overflow-y: auto;
     scrollbar-width: thin;
-    padding: 1.35rem 2rem;
+    padding: 1.55rem 2.35rem;
+    border-width: 1.5px;
   }
 
   .slide-top-meta {
@@ -1207,48 +1215,53 @@ button, input, select {
   }
 
   .slide-heading {
-    margin: 0 0 0.75rem;
-    font-size: clamp(1.22rem, 2.05vw, 1.62rem);
+    margin: 0 0 0.85rem;
+    font-size: clamp(1.38rem, 2.2vw, 1.85rem);
+  }
+
+  .concept-slide-body {
+    font-size: 1.12rem;
+    line-height: 1.82;
   }
 
   .main-idea-box {
-    padding: 0.9rem 1.2rem;
-    margin-bottom: 0.85rem;
+    padding: 1rem 1.35rem;
+    margin-bottom: 0.95rem;
   }
 
   .focus-card {
-    padding: 0.95rem 1.2rem;
-    margin-bottom: 0.8rem;
+    padding: 1.05rem 1.35rem;
+    margin-bottom: 0.85rem;
   }
 
   .scaffolding-grid {
-    margin-top: 0.7rem;
-    gap: 0.7rem;
+    margin-top: 0.75rem;
+    gap: 0.8rem;
   }
 
   .scaffold-box {
-    padding: 0.75rem 0.95rem;
-    font-size: 0.94rem;
+    padding: 0.8rem 1.05rem;
+    font-size: 0.98rem;
   }
 
   .quiz-live-bar {
-    padding: 0.5rem 0.85rem;
-    margin-bottom: 0.7rem;
+    padding: 0.55rem 0.95rem;
+    margin-bottom: 0.85rem;
   }
 
   .quiz-q-text {
-    margin: 0 0 0.7rem;
-    font-size: 1.08rem;
+    margin: 0 0 0.95rem;
+    font-size: clamp(1.32rem, 2.25vw, 1.68rem);
   }
 
   .quiz-options {
-    gap: 0.6rem;
+    gap: 0.75rem;
   }
 
   .quiz-option-btn {
-    min-height: 46px;
-    padding: 0.55rem 0.9rem;
-    font-size: 0.96rem;
+    min-height: 60px;
+    padding: 0.75rem 1.1rem;
+    font-size: clamp(1.08rem, 1.45vw, 1.26rem);
   }
 
   .slide-arrows-bar {
@@ -1263,29 +1276,138 @@ button, input, select {
 
   #slidePrevBtn {
     position: fixed;
-    right: 1.25rem;
-    bottom: 1.15rem;
+    right: 0.75rem;
+    bottom: 1rem;
     z-index: 40;
   }
 
   #slideNextBtn {
     position: fixed;
-    left: 1.25rem;
-    bottom: 1.15rem;
+    left: 0.75rem;
+    bottom: 1rem;
     z-index: 40;
   }
 
   .lesson-footer-nav {
     flex-shrink: 0;
-    padding-top: 0.4rem;
+    padding-top: 0.35rem;
   }
 
   .lesson-footer-nav .btn-sm {
-    min-height: 34px;
-    padding: 0.25rem 0.75rem;
+    min-height: 32px;
+    padding: 0.22rem 0.75rem;
     font-size: 0.82rem;
   }
 }
+
+/* ==================== ANIMATED SIMULATIONS & LAB STAGE ==================== */
+.sim-tube-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.sim-tube {
+  position: relative;
+  height: 46px;
+  border: 2.5px solid var(--border-strong);
+  border-radius: 23px;
+  background: var(--surface);
+  overflow: hidden;
+  direction: ltr;
+}
+
+.sim-tube-a,
+.sim-tube-b {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.86rem;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.sim-tube-a {
+  left: 0;
+  background: linear-gradient(90deg, #1D5FD6, rgba(29, 95, 214, 0.45));
+}
+
+.sim-tube-b {
+  right: 0;
+  background: linear-gradient(270deg, #B44308, rgba(180, 67, 8, 0.45));
+}
+
+.sim-tube-ring {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  width: 14px;
+  margin-left: -7px;
+  background: #FFFFFF;
+  border: 2.5px solid var(--secondary);
+  border-radius: 8px;
+  box-shadow: 0 0 12px rgba(11, 122, 67, 0.55);
+}
+
+.sim-svg-stage {
+  width: 100%;
+  max-width: 660px;
+  height: auto;
+  display: block;
+}
+
+.sim-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.sim-pill {
+  background: var(--surface-tint);
+  color: var(--primary);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.2rem 0.85rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+@keyframes chemFlow {
+  0% { stroke-dashoffset: 32; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes chemPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.55; transform: scale(1.06); }
+}
+
+@keyframes chemRise {
+  0% { transform: translateY(0); opacity: 0.9; }
+  100% { transform: translateY(-48px); opacity: 0; }
+}
+
+.anim-wire-flow {
+  stroke-dasharray: 8 8;
+  animation: chemFlow 0.9s linear infinite;
+}
+
+.anim-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: chemPulse 1.6s ease-in-out infinite;
+}
+
+.anim-bubble-1 { animation: chemRise 1.7s ease-in infinite; }
+.anim-bubble-2 { animation: chemRise 2.1s ease-in 0.5s infinite; }
+.anim-bubble-3 { animation: chemRise 1.9s ease-in 1.0s infinite; }
 
 @media (max-width: 900px) {
   .books-layout,

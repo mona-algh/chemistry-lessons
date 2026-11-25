@@ -1,31 +1,32 @@
-# DESIGN.md — بوابة دروس الكيمياء التفاعلية
+# DESIGN.md : بوابة دروس الكيمياء التفاعلية
 
 ## Design Read
-Reading this as: Interactive Arabic Chemistry Lessons Portal & Tabbed Classroom Workspace for secondary students and teachers (كيمياء 2-1 وكيمياء 3), in a Soft Academic ("أكاديمي ناعم") visual language, dial **ENERGY 1 / RHYTHM 2 / MOTION 1**.
+Interactive Arabic Chemistry Lessons Portal & Fixed Slide-Deck Classroom Workspace for secondary students and teachers (كيمياء 2-1 وكيمياء 3), in a cheerful bright classroom visual language ("مشرق ومبهج"), dial **ENERGY 2 / RHYTHM 2 / MOTION 2**.
 
 ## Palette (R-29: 2 core colors + 1 accent + neutrals)
 - **Light Mode (Default)**:
-  - Page Background: `#F6F7F9` (warm academic off-white)
+  - Page Background: `#F5F7FC` (warm sunlit off-white)
+  - Stage Backdrop: `#E9EEF8` (soft airy sky backdrop behind slide cards)
   - Card Surface: `#FFFFFF`
-  - Muted Surface: `#ECEFF4`
-  - Primary Text: `#182230` (contrast > 13:1 on white)
-  - Secondary Text: `#4A586E` (contrast > 6.5:1 on white)
-  - Core 1 (Academic Petrol/Teal): `#1D5A70` (active tabs, primary buttons, key headings)
-  - Core 2 (Soft Slate Blue): `#497A8F` (secondary interactive states, structural borders)
-  - Accent (Warm Ochre): `#925107` (focal badges: الفكرة الرئيسة, تنبيه التحصيلي, active timer)
+  - Muted Surface: `#EEF2FA`
+  - Primary Text: `#18223C` (contrast > 14:1 on white)
+  - Secondary Text: `#4A5674` (contrast > 6.8:1 on surface and bg)
+  - Core 1 (Vibrant Cobalt Blue): `#1D5FD6` (active tabs, primary buttons, key headings)
+  - Core 2 (Fresh Emerald Green): `#0B7A43` (success states, interactive confirmations, secondary badges)
+  - Accent (Warm Coral Amber): `#B44308` (focal highlights: الفكرة الرئيسة, بطاقة الخروج, active simulation pills)
 - **Dark Mode (`[data-theme="dark"]`)**:
-  - Page Background: `#0F1622`
-  - Card Surface: `#162030`
-  - Muted Surface: `#1E2B3F`
-  - Primary Text: `#E9EFF6`
-  - Secondary Text: `#A5B4C7`
-  - Core 1: `#5DA7C2`
-  - Core 2: `#3E7C94`
-  - Accent: `#E5A84B`
+  - Page Background: `#0E172A`
+  - Stage Backdrop: `#09101E`
+  - Card Surface: `#15213B`
+  - Muted Surface: `#1D2C4D`
+  - Primary Text: `#F0F5FF`
+  - Secondary Text: `#A9B8D8`
+  - Core 1: `#5BA4FF`
+  - Core 2: `#4FD18B`
+  - Accent: `#FF9A5C`
 
-## Purpose Decisions (R-31)
-- **Why this color palette?**: Soft slate-teal and warm off-white reduce eye strain during classroom projection and long reading sessions, while warm ochre highlights focal pedagogical markers (main idea & Tahsili tips) without neon or purple AI-slop gradients.
-- **Why this layout?**: Top bar hosts lesson context, classroom timer, whiteboard toggle, and theme switcher; 5 focused tabs segment pedagogy (الأهداف والتركيز، المحتوى التفاعلي، استراتيجيات وربط، تقويم تكويني، التقويم النهائي والتحصيلي) to match the user's request for tabs and keep each view scannable.
-- **Why this typography?**: `Tajawal` with `IBM Plex Sans Arabic` fallback for crisp RTL Arabic readability, paired with `tabular-nums` and isolated `dir="ltr"` chemical equation spans so subscripts/superscripts never scramble in RTL context.
-- **Why these borders/shadows?**: Subtle 1px structural borders (`#DCE2EA` / `#28374D`) and minimal elevation only on the floating whiteboard toolbar and sticky header, avoiding uniform heavy drop shadows.
-- **Why these simulations & icons?**: Custom interactive HTML5 Canvas/SVG chemistry models (particle motion, phase diagram, gas piston laws, galvanic cell flow, electrolysis) directly visualize lesson concepts instead of decorative stock icons.
+## Purpose Decisions
+- **Why this color palette?**: Bright sunlit surfaces with cobalt blue, emerald green, and warm coral replace muted gray-slate tones so classroom projection feels energetic, clear, and inviting while keeping strict WCAG AA >= 4.5:1 legibility in both Light and Dark mode.
+- **Why this layout?**: Full-height fixed slide deck (`100vh`) with wide smartboard-ready stage (`max-width: 1360px`), 40-minute classroom timer, floating whiteboard pen dock, edge corner navigation arrows, and 3 streamlined sections (`الأهداف والتركيز`, `تسلسل الدرس والتفاعل`, `بطاقة الخروج`).
+- **Why this pedagogical sequence?**: Interleaves each concept immediately with its animated experiment, learning strategy, real-life link, and formative question before advancing to the next concept, culminating in `بطاقة الخروج` (Tahsili tips & exit questions).
+- **Why live animations?**: All 10 lessons feature live HTML5 Canvas / SVG chemistry animations (Graham diffusion tube, IMF boiling/springs, kinetic states & viscosity race, phase diagram chamber, animated piston gas laws, ideal gas particle expansion, Haber volume reaction, galvanic electron/ion flow, battery & cathodic protection, and electrolysis bubbles/plating).
