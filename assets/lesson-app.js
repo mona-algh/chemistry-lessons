@@ -194,6 +194,10 @@
 
   function createSimulationNode(simType) {
     if (!simType) return null;
+    if (window.CHEM_VIRTUAL_LABS && typeof window.CHEM_VIRTUAL_LABS.createLab === 'function') {
+      const upgraded = window.CHEM_VIRTUAL_LABS.createLab(simType);
+      if (upgraded) return upgraded;
+    }
     const box = el('div', { className: 'sim-box' });
 
     function themePalette() {
@@ -1189,6 +1193,37 @@
       }
     });
 
+    if (lesson.studentHook) {
+      slides.push({
+        sectionId: 'goals',
+        tone: 'hook',
+        sectionLabel: 'تهيئة من حياة الطالبة',
+        title: 'تهيئة من حياتك اليومية',
+        badge: 'اربطيها بحياتك',
+        render: function () {
+          const hk = lesson.studentHook;
+          const ansBox = el('div', { className: 'reveal-box', hidden: '', html: '<strong>التفسير العلمي:</strong> ' + hk.answer });
+          const ansBtn = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: 'اكتشفي التفسير' });
+          ansBtn.addEventListener('click', function () {
+            const open = ansBox.hidden;
+            ansBox.hidden = !open;
+            ansBtn.textContent = open ? 'إخفاء التفسير' : 'اكتشفي التفسير';
+          });
+          return el('div', { className: 'hook-hero-card' }, [
+            el('p', { className: 'hook-scenario', html: hk.scenario }),
+            el('div', { className: 'hook-question-box' }, [
+              el('div', { className: 'focus-card-header' }, [
+                el('span', { className: 'focus-badge', text: 'توقعي وفكري' }),
+                ansBtn
+              ]),
+              el('p', { style: 'margin:0; font-weight:800; font-size:1.12rem;', html: hk.question }),
+              ansBox
+            ])
+          ]);
+        }
+      });
+    }
+
     slides.push({
       sectionId: 'goals',
       tone: 'goals',
@@ -1241,24 +1276,47 @@
 
     lesson.concepts.forEach(function (c, cIdx) {
       const isLast = cIdx === totalCycles - 1;
+      const illusHtml = window.CHEM_ILLUSTRATIONS && window.CHEM_ILLUSTRATIONS[lesson.id + '-' + cIdx];
 
       slides.push({
         sectionId: 'content',
         tone: 'concept',
         sectionLabel: 'شرح المفهوم ' + (cIdx + 1),
         title: c.title,
+        badge: illusHtml ? 'شرح + رسم توضيحي' : lesson.pages,
         render: function () {
-          return el('div', { className: 'concept-slide-body', html: c.bodyHtml });
+          const bodyNode = el('div', { className: 'concept-slide-body', html: c.bodyHtml });
+          if (!illusHtml) return bodyNode;
+          return el('div', { className: 'concept-split' }, [
+            bodyNode,
+            el('div', { className: 'concept-visual-card' }, [
+              el('div', { html: illusHtml }),
+              el('span', { className: 'muted-note', style: 'font-size:0.84rem; font-weight:700;', text: 'رسم توضيحي للمفهوم' })
+            ])
+          ]);
         }
       });
+
+      if (cIdx === 0 && window.CHEM_VIDEOS && typeof window.CHEM_VIDEOS.createPlayer === 'function') {
+        slides.push({
+          sectionId: 'content',
+          tone: 'video',
+          sectionLabel: 'فيديو تفاعلي متحرك',
+          title: 'عرض فيديو تفاعلي: الظواهر والمصطلحات',
+          badge: 'فيديو تفاعلي',
+          render: function () {
+            return window.CHEM_VIDEOS.createPlayer(lesson);
+          }
+        });
+      }
 
       if (cIdx === simSlot && lesson.simulation) {
         slides.push({
           sectionId: 'content',
-          tone: 'sim',
-          sectionLabel: 'تجربة تفاعلية متحركة',
-          title: simTitles[lesson.simulation] || 'تجربة تفاعلية متحركة',
-          badge: 'محاكاة حية',
+          tone: 'lab',
+          sectionLabel: 'المعمل الافتراضي والتجربة',
+          title: 'المعمل الافتراضي: ' + (simTitles[lesson.simulation] || 'تجربة تفاعلية'),
+          badge: 'مختبر تفاعلي',
           render: function () {
             return createSimulationNode(lesson.simulation);
           }
@@ -1266,26 +1324,42 @@
       }
 
       const cycleStrategies = isLast ? strategies.slice(cIdx) : (strategies[cIdx] ? [strategies[cIdx]] : []);
+      if (cycleStrategies.length) {
+        slides.push({
+          sectionId: 'content',
+          tone: 'strategy',
+          sectionLabel: 'استراتيجية التعلم النشط',
+          title: 'استراتيجية التعلم النشط · المفهوم ' + (cIdx + 1),
+          badge: 'خطوات واضحة للطالبة',
+          render: function () {
+            const grid = el('div', { className: 'spotlight-grid' });
+            cycleStrategies.forEach(function (st) {
+              grid.appendChild(el('div', { className: 'strategy-spotlight-card' }, [
+                el('span', { className: 'discovery-tag', text: 'استراتيجية صفية' }),
+                el('h4', { html: st.name }),
+                el('p', { html: '<strong>آلية التطبيق:</strong> ' + st.how })
+              ]));
+            });
+            return grid;
+          }
+        });
+      }
+
       const cycleLinks = isLast ? lifeLinks.slice(cIdx) : (lifeLinks[cIdx] ? [lifeLinks[cIdx]] : []);
-      if (cycleStrategies.length || cycleLinks.length) {
+      if (cycleLinks.length) {
         slides.push({
           sectionId: 'content',
           tone: 'link',
-          sectionLabel: 'استراتيجية وربط بالواقع',
-          title: 'تطبيق عملي وربط بالمفهوم ' + (cIdx + 1),
-          badge: 'نشاط وربط',
+          sectionLabel: 'الربط بالواقع والعلوم الأخرى',
+          title: 'الربط بالواقع والعلوم الأخرى · المفهوم ' + (cIdx + 1),
+          badge: 'تطبيق حياتي وعلمي',
           render: function () {
-            const grid = el('div', { className: 'strategy-grid' });
-            cycleStrategies.forEach(function (st) {
-              grid.appendChild(el('div', { className: 'strategy-card' }, [
-                el('h4', { html: st.name }),
-                el('p', { style: 'margin:0;', html: st.how })
-              ]));
-            });
+            const grid = el('div', { className: 'spotlight-grid' });
             cycleLinks.forEach(function (lk) {
-              grid.appendChild(el('div', { className: 'strategy-card' }, [
-                el('h4', { html: lk.tag + ' · ' + lk.title }),
-                el('p', { style: 'margin:0;', html: lk.text })
+              grid.appendChild(el('div', { className: 'link-spotlight-card' }, [
+                el('span', { className: 'discovery-tag', style: 'color:var(--teal);', html: lk.tag }),
+                el('h4', { html: lk.title }),
+                el('p', { html: lk.text })
               ]));
             });
             return grid;

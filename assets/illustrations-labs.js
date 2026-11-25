@@ -1,0 +1,873 @@
+// Custom Labeled SVG Illustrations, Interactive Animated Video Explainers, and Virtual Labs
+(function () {
+  function el(tag, attrs, children) {
+    const node = document.createElement(tag);
+    if (attrs) {
+      Object.keys(attrs).forEach(function (k) {
+        if (k === 'className') node.className = attrs[k];
+        else if (k === 'html') node.innerHTML = attrs[k];
+        else if (k === 'text') node.textContent = attrs[k];
+        else node.setAttribute(k, attrs[k]);
+      });
+    }
+    if (Array.isArray(children)) {
+      children.forEach(function (c) {
+        if (c) node.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+      });
+    }
+    return node;
+  }
+
+  function themePal() {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    return {
+      dark: dark,
+      primary: dark ? '#5aa9ff' : '#2a7de1',
+      green: dark ? '#34c77b' : '#0b8a4a',
+      coral: dark ? '#ff7c54' : '#e4572e',
+      violet: dark ? '#a78bfa' : '#7c5ce6',
+      teal: dark ? '#3ccad6' : '#0e9aa7',
+      gold: dark ? '#ffc93c' : '#d79b14',
+      ink: dark ? '#f3f6ff' : '#1d2742',
+      muted: dark ? '#aab8d6' : '#5d6886',
+      wall: dark ? '#465d94' : '#cfc7b6',
+      surface: dark ? '#18223b' : '#ffffff',
+      tint: dark ? 'rgba(90,169,255,0.16)' : 'rgba(42,125,225,0.1)'
+    };
+  }
+
+  /* ==================== 1. LABELED SCIENTIFIC ILLUSTRATIONS (SVG) ==================== */
+  const ILLUSTRATIONS = {
+    '6-1-0': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="تصادمات مرنة وحركة عشوائية لجسيمات الغاز">' +
+      '<rect x="20" y="20" width="320" height="165" rx="16" fill="var(--surface-tint)" stroke="var(--primary)" stroke-width="3"/>' +
+      '<circle cx="95" cy="82" r="14" fill="var(--primary)"/><circle cx="210" cy="118" r="14" fill="var(--coral)"/>' +
+      '<circle cx="270" cy="65" r="12" fill="var(--green)"/><circle cx="145" cy="145" r="12" fill="var(--violet)"/>' +
+      '<path d="M112 85 L155 102" stroke="var(--ink)" stroke-width="3" stroke-dasharray="5 4"/><polygon points="158,104 148,96 151,106" fill="var(--ink)"/>' +
+      '<path d="M195 112 L162 94" stroke="var(--coral)" stroke-width="3"/><path d="M260 76 L232 104" stroke="var(--green)" stroke-width="2.5"/>' +
+      '<text x="180" y="206" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ink)">فراغات كبيرة · حركة مستمرة · تصادم مرن</text></svg>',
+
+    '6-1-1': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="الانتشار والتدفق عبر ثقب صغير">' +
+      '<rect x="25" y="45" width="145" height="115" rx="14" fill="var(--coral-l)" stroke="var(--coral)" stroke-width="3"/>' +
+      '<rect x="190" y="45" width="145" height="115" rx="14" fill="var(--surface)" stroke="var(--primary)" stroke-width="3"/>' +
+      '<rect x="166" y="92" width="28" height="22" fill="var(--bg)"/>' +
+      '<circle cx="70" cy="80" r="8" fill="var(--coral)"/><circle cx="105" cy="120" r="8" fill="var(--coral)"/><circle cx="135" cy="95" r="8" fill="var(--coral)"/>' +
+      '<path d="M148 103 H230" stroke="var(--primary)" stroke-width="3" class="anim-wire-flow"/><circle cx="248" cy="103" r="8" fill="var(--primary)"/>' +
+      '<text x="97" y="34" text-anchor="middle" font-size="13" font-weight="800" fill="var(--coral)">تركيز مرتفع</text>' +
+      '<text x="262" y="34" text-anchor="middle" font-size="13" font-weight="800" fill="var(--primary)">تدفق عبر ثقب ضيق</text>' +
+      '<text x="180" y="195" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ink)">الغاز الأخف يتدفق وينتشر بسرعة أكبر</text></svg>',
+
+    '6-1-2': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="البارومتر والمانومتر وقانون دالتون">' +
+      '<rect x="35" y="140" width="95" height="32" rx="8" fill="var(--gold-l)" stroke="var(--gold)" stroke-width="2.5"/>' +
+      '<rect x="74" y="28" width="18" height="122" rx="9" fill="var(--surface)" stroke="var(--ink)" stroke-width="2.5"/>' +
+      '<rect x="77" y="58" width="12" height="92" fill="var(--muted)"/>' +
+      '<text x="82" y="196" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ink)">البارومتر (760 mmHg)</text>' +
+      '<circle cx="235" cy="90" r="36" fill="var(--surface-tint)" stroke="var(--primary)" stroke-width="3"/>' +
+      '<path d="M268 102 V155 Q292 175 314 155 V75" fill="none" stroke="var(--ink)" stroke-width="10" stroke-linecap="round"/>' +
+      '<path d="M276 138 V155 Q292 169 314 155 V105" fill="none" stroke="var(--coral)" stroke-width="6"/>' +
+      '<text x="275" y="196" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ink)">المانومتر (الغاز المحصور)</text></svg>',
+
+    '6-2-0': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="الفرق بين القوى داخل الجزيء والقوى بين الجزيئات">' +
+      '<rect x="30" y="42" width="120" height="62" rx="18" fill="var(--surface)" stroke="var(--primary)" stroke-width="2.5"/>' +
+      '<circle cx="62" cy="73" r="16" fill="var(--primary)"/><circle cx="118" cy="73" r="11" fill="var(--coral)"/>' +
+      '<line x1="78" y1="73" x2="107" y2="73" stroke="var(--ink)" stroke-width="5"/>' +
+      '<rect x="210" y="42" width="120" height="62" rx="18" fill="var(--surface)" stroke="var(--primary)" stroke-width="2.5"/>' +
+      '<circle cx="242" cy="73" r="16" fill="var(--primary)"/><circle cx="298" cy="73" r="11" fill="var(--coral)"/>' +
+      '<line x1="258" y1="73" x2="287" y2="73" stroke="var(--ink)" stroke-width="5"/>' +
+      '<line x1="154" y1="73" x2="206" y2="73" stroke="var(--green)" stroke-width="4" stroke-dasharray="6 5"/>' +
+      '<text x="90" y="132" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ink)">رابطة تساهمية قوية</text>' +
+      '<text x="180" y="164" text-anchor="middle" font-size="13" font-weight="800" fill="var(--green)">قوى بين الجزيئات (تحدد الغليان)</text></svg>',
+
+    '6-2-1': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="مقارنة التشتت وثنائية القطب والرابطة الهيدروجينية">' +
+      '<rect x="24" y="28" width="94" height="140" rx="14" fill="var(--surface-muted)" stroke="var(--muted)" stroke-width="2"/>' +
+      '<text x="71" y="62" text-anchor="middle" font-size="14" font-weight="900" fill="var(--ink)">تشتت لندن</text>' +
+      '<text x="71" y="96" text-anchor="middle" font-size="12" font-weight="700" fill="var(--muted)">أقطاب لحظية</text>' +
+      '<text x="71" y="128" text-anchor="middle" font-size="13" font-weight="800" fill="var(--primary)">CH₄ · I₂</text>' +
+      '<rect x="133" y="28" width="94" height="140" rx="14" fill="var(--surface-tint)" stroke="var(--primary)" stroke-width="2"/>' +
+      '<text x="180" y="62" text-anchor="middle" font-size="14" font-weight="900" fill="var(--primary)">ثنائية القطب</text>' +
+      '<text x="180" y="96" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">δ⁺ ← δ⁻ دائمة</text>' +
+      '<text x="180" y="128" text-anchor="middle" font-size="13" font-weight="800" fill="var(--primary)">HCl</text>' +
+      '<rect x="242" y="28" width="94" height="140" rx="14" fill="var(--green-l)" stroke="var(--green)" stroke-width="2.5"/>' +
+      '<text x="289" y="62" text-anchor="middle" font-size="14" font-weight="900" fill="var(--green)">هيدروجينية</text>' +
+      '<text x="289" y="96" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">H مع F, O, N</text>' +
+      '<text x="289" y="128" text-anchor="middle" font-size="13" font-weight="800" fill="var(--green)">H₂O · NH₃</text>' +
+      '<path d="M40 194 H316" stroke="var(--coral)" stroke-width="3"/><polygon points="324,194 312,188 312,200" fill="var(--coral)"/>' +
+      '<text x="180" y="213" text-anchor="middle" font-size="13" font-weight="800" fill="var(--coral)">تزداد قوة التجاذب ودرجة الغليان ←</text></svg>',
+
+    '6-3-0': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="تقعر سطح الماء وتحدب الزئبق بفعل التماسك والتلاصق">' +
+      '<rect x="52" y="34" width="84" height="146" rx="10" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>' +
+      '<path d="M55 82 Q94 114 133 82 L133 176 L55 176 Z" fill="var(--surface-tint)" stroke="var(--primary)" stroke-width="3"/>' +
+      '<text x="94" y="204" text-anchor="middle" font-size="13" font-weight="800" fill="var(--primary)">الماء: التلاصق أكبر (مقعر)</text>' +
+      '<rect x="224" y="34" width="84" height="146" rx="10" fill="var(--surface)" stroke="var(--ink)" stroke-width="3"/>' +
+      '<path d="M227 98 Q266 64 305 98 L305 176 L227 176 Z" fill="var(--surface-muted)" stroke="var(--coral)" stroke-width="3"/>' +
+      '<text x="266" y="204" text-anchor="middle" font-size="13" font-weight="800" fill="var(--coral)">الزئبق: التماسك أكبر (محدب)</text></svg>',
+
+    '6-3-1': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="أنواع وحدة البناء البلورية الثلاثة">' +
+      '<g transform="translate(22,36)"><rect x="10" y="24" width="60" height="60" fill="none" stroke="var(--primary)" stroke-width="2.5"/><rect x="28" y="8" width="60" height="60" fill="none" stroke="var(--primary)" stroke-width="2" stroke-dasharray="4 3"/><circle cx="10" cy="24" r="5" fill="var(--primary)"/><circle cx="70" cy="24" r="5" fill="var(--primary)"/><circle cx="10" cy="84" r="5" fill="var(--primary)"/><circle cx="70" cy="84" r="5" fill="var(--primary)"/><text x="48" y="114" text-anchor="middle" font-size="12" font-weight="800" fill="var(--ink)">مكعب بسيط</text></g>' +
+      '<g transform="translate(132,36)"><rect x="10" y="24" width="60" height="60" fill="none" stroke="var(--violet)" stroke-width="2.5"/><rect x="28" y="8" width="60" height="60" fill="none" stroke="var(--violet)" stroke-width="2" stroke-dasharray="4 3"/><circle cx="49" cy="46" r="8" fill="var(--coral)"/><text x="48" y="114" text-anchor="middle" font-size="12" font-weight="800" fill="var(--ink)">مركزي الجسم</text></g>' +
+      '<g transform="translate(242,36)"><rect x="10" y="24" width="60" height="60" fill="none" stroke="var(--green)" stroke-width="2.5"/><rect x="28" y="8" width="60" height="60" fill="none" stroke="var(--green)" stroke-width="2" stroke-dasharray="4 3"/><circle cx="40" cy="54" r="6" fill="var(--green)"/><circle cx="70" cy="54" r="5" fill="var(--green)"/><circle cx="40" cy="24" r="5" fill="var(--green)"/><text x="48" y="114" text-anchor="middle" font-size="12" font-weight="800" fill="var(--ink)">مركزي الوجه</text></g>' +
+      '<text x="180" y="196" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ink)">أصغر ترتيب للذرات يحمل تماثل الشبكة البلورية</text></svg>',
+
+    '6-4-0': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="التحولات الستة الماصة والطاردة للحرارة">' +
+      '<rect x="22" y="75" width="76" height="44" rx="12" fill="var(--surface-tint)" stroke="var(--primary)" stroke-width="2.5"/><text x="60" y="102" text-anchor="middle" font-size="15" font-weight="900" fill="var(--primary)">صلب</text>' +
+      '<rect x="142" y="75" width="76" height="44" rx="12" fill="var(--green-l)" stroke="var(--green)" stroke-width="2.5"/><text x="180" y="102" text-anchor="middle" font-size="15" font-weight="900" fill="var(--green)">سائل</text>' +
+      '<rect x="262" y="75" width="76" height="44" rx="12" fill="var(--coral-l)" stroke="var(--coral)" stroke-width="2.5"/><text x="300" y="102" text-anchor="middle" font-size="15" font-weight="900" fill="var(--coral)">غاز</text>' +
+      '<path d="M98 70 Q180 26 262 70" fill="none" stroke="var(--coral)" stroke-width="3"/><text x="180" y="36" text-anchor="middle" font-size="12" font-weight="800" fill="var(--coral)">ماصة للحرارة: انصهار · تبخر · تسامي ←</text>' +
+      '<path d="M262 124 Q180 168 98 124" fill="none" stroke="var(--primary)" stroke-width="3"/><text x="180" y="176" text-anchor="middle" font-size="12" font-weight="800" fill="var(--primary)">→ طاردة للحرارة: تكاثف · تجمد · ترسب</text></svg>',
+
+    '6-4-1': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="مخطط الطور والنقطة الثلاثية والنقطة الحرجة">' +
+      '<line x1="48" y1="26" x2="48" y2="178" stroke="var(--ink)" stroke-width="3"/>' +
+      '<line x1="48" y1="178" x2="328" y2="178" stroke="var(--ink)" stroke-width="3"/>' +
+      '<line x1="60" y1="170" x2="128" y2="132" stroke="var(--primary)" stroke-width="3"/>' +
+      '<line x1="128" y1="132" x2="112" y2="34" stroke="var(--primary)" stroke-width="3"/>' +
+      '<path d="M128 132 Q225 102 275 52" fill="none" stroke="var(--coral)" stroke-width="3"/>' +
+      '<circle cx="128" cy="132" r="7" fill="var(--green)"/><text x="150" y="152" font-size="12" font-weight="800" fill="var(--green)">النقطة الثلاثية</text>' +
+      '<circle cx="275" cy="52" r="7" fill="var(--coral)"/><text x="260" y="38" text-anchor="middle" font-size="12" font-weight="800" fill="var(--coral)">النقطة الحرجة</text>' +
+      '<text x="82" y="75" font-size="13" font-weight="800" fill="var(--primary)">صلب</text>' +
+      '<text x="172" y="75" font-size="13" font-weight="800" fill="var(--teal)">سائل</text>' +
+      '<text x="255" y="145" font-size="13" font-weight="800" fill="var(--coral)">غاز</text></svg>',
+
+    '7-1-0': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="علاقات بويل وشارل وجاي لوساك">' +
+      '<rect x="20" y="25" width="98" height="145" rx="12" fill="var(--surface-tint)" stroke="var(--primary)" stroke-width="2.5"/>' +
+      '<text x="69" y="54" text-anchor="middle" font-size="14" font-weight="900" fill="var(--primary)">بويل</text>' +
+      '<path d="M40 135 Q55 82 98 72" fill="none" stroke="var(--primary)" stroke-width="3.5"/>' +
+      '<text x="69" y="156" text-anchor="middle" font-size="12" font-weight="800" fill="var(--ink)">P و V عكسياً</text>' +
+      '<rect x="131" y="25" width="98" height="145" rx="12" fill="var(--green-l)" stroke="var(--green)" stroke-width="2.5"/>' +
+      '<text x="180" y="54" text-anchor="middle" font-size="14" font-weight="900" fill="var(--green)">شارل</text>' +
+      '<line x1="150" y1="132" x2="210" y2="75" stroke="var(--green)" stroke-width="3.5"/>' +
+      '<text x="180" y="156" text-anchor="middle" font-size="12" font-weight="800" fill="var(--ink)">V و T(K) طردياً</text>' +
+      '<rect x="242" y="25" width="98" height="145" rx="12" fill="var(--coral-l)" stroke="var(--coral)" stroke-width="2.5"/>' +
+      '<text x="291" y="54" text-anchor="middle" font-size="14" font-weight="900" fill="var(--coral)">جاي-لوساك</text>' +
+      '<line x1="262" y1="132" x2="320" y2="75" stroke="var(--coral)" stroke-width="3.5"/>' +
+      '<text x="291" y="156" text-anchor="middle" font-size="12" font-weight="800" fill="var(--ink)">P و T(K) طردياً</text></svg>',
+
+    '7-2-0': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="الحجم المولاري للغازات عند STP يساوي 22.4 لتر">' +
+      '<rect x="35" y="42" width="110" height="110" rx="14" fill="var(--surface-tint)" stroke="var(--primary)" stroke-width="3"/>' +
+      '<text x="90" y="88" text-anchor="middle" font-size="18" font-weight="900" fill="var(--primary)">1 mol He</text>' +
+      '<text x="90" y="116" text-anchor="middle" font-size="14" font-weight="800" fill="var(--ink)">22.4 L (STP)</text>' +
+      '<text x="180" y="102" text-anchor="middle" font-size="24" font-weight="900" fill="var(--green)">=</text>' +
+      '<rect x="215" y="42" width="110" height="110" rx="14" fill="var(--green-l)" stroke="var(--green)" stroke-width="3"/>' +
+      '<text x="270" y="88" text-anchor="middle" font-size="18" font-weight="900" fill="var(--green)">1 mol CO₂</text>' +
+      '<text x="270" y="116" text-anchor="middle" font-size="14" font-weight="800" fill="var(--ink)">22.4 L (STP)</text>' +
+      '<text x="180" y="192" text-anchor="middle" font-size="12.5" font-weight="800" fill="var(--ink)">الحجوم المتساوية تحوي العدد نفسه من الجسيمات</text></svg>',
+
+    '7-2-1': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="مثلث قانون الغاز المثالي PV=nRT">' +
+      '<rect x="40" y="34" width="280" height="68" rx="16" fill="var(--primary)"/><text x="180" y="76" text-anchor="middle" font-size="26" font-weight="900" fill="#fff" direction="ltr">P V = n R T</text>' +
+      '<rect x="40" y="122" width="130" height="62" rx="12" fill="var(--gold-l)" stroke="var(--gold)" stroke-width="2"/><text x="105" y="158" text-anchor="middle" font-size="15" font-weight="900" fill="var(--ink)" direction="ltr">M = mRT / PV</text>' +
+      '<rect x="190" y="122" width="130" height="62" rx="12" fill="var(--teal-l)" stroke="var(--teal)" stroke-width="2"/><text x="255" y="158" text-anchor="middle" font-size="15" font-weight="900" fill="var(--ink)" direction="ltr">D = MP / RT</text></svg>',
+
+    '7-2-2': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="الغاز المثالي مقابل الغاز الحقيقي عند الضغط المرتفع">' +
+      '<rect x="24" y="36" width="142" height="122" rx="14" fill="var(--green-l)" stroke="var(--green)" stroke-width="2.5"/>' +
+      '<circle cx="60" cy="75" r="5" fill="var(--green)"/><circle cx="122" cy="118" r="5" fill="var(--green)"/>' +
+      '<text x="95" y="180" text-anchor="middle" font-size="13" font-weight="800" fill="var(--green)">مثالي: ضغط منخفض وحرارة عالية</text>' +
+      '<rect x="194" y="36" width="142" height="122" rx="14" fill="var(--coral-l)" stroke="var(--coral)" stroke-width="2.5"/>' +
+      '<circle cx="242" cy="96" r="14" fill="var(--coral)"/><circle cx="282" cy="100" r="14" fill="var(--coral)"/>' +
+      '<line x1="256" y1="98" x2="268" y2="98" stroke="var(--ink)" stroke-width="3" stroke-dasharray="3 3"/>' +
+      '<text x="265" y="180" text-anchor="middle" font-size="13" font-weight="800" fill="var(--coral)">حقيقي: يزداد الحجم والتجاذب</text></svg>',
+
+    '7-3-0': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="النسبة الحجمية 1 الى 3 الى 2 لتكون الأمونيا">' +
+      '<rect x="22" y="54" width="60" height="84" rx="10" fill="var(--surface-tint)" stroke="var(--primary)" stroke-width="3"/><text x="52" y="102" text-anchor="middle" font-size="15" font-weight="900" fill="var(--primary)">1 L N₂</text>' +
+      '<text x="96" y="104" text-anchor="middle" font-size="22" font-weight="900" fill="var(--ink)">+</text>' +
+      '<rect x="110" y="36" width="96" height="102" rx="10" fill="var(--coral-l)" stroke="var(--coral)" stroke-width="3"/><text x="158" y="96" text-anchor="middle" font-size="15" font-weight="900" fill="var(--coral)">3 L H₂</text>' +
+      '<text x="226" y="104" text-anchor="middle" font-size="24" font-weight="900" fill="var(--ink)">→</text>' +
+      '<rect x="246" y="45" width="90" height="93" rx="10" fill="var(--green-l)" stroke="var(--green)" stroke-width="3"/><text x="291" y="98" text-anchor="middle" font-size="15" font-weight="900" fill="var(--green)">2 L NH₃</text>' +
+      '<text x="180" y="186" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ink)">المعاملات الموزونة تمثل نسب المولات ونسب الحجوم للغازات</text></svg>',
+
+    '7-3-1': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="خطوات حساب الكتلة والحجم بالغاز المثالي">' +
+      '<rect x="20" y="64" width="92" height="58" rx="12" fill="var(--gold-l)" stroke="var(--gold)" stroke-width="2.5"/><text x="66" y="98" text-anchor="middle" font-size="14" font-weight="900" fill="var(--ink)">كتلة / حجم A</text>' +
+      '<text x="126" y="100" text-anchor="middle" font-size="22" font-weight="900" fill="var(--primary)">→</text>' +
+      '<rect x="138" y="64" width="84" height="58" rx="12" fill="var(--surface-tint)" stroke="var(--primary)" stroke-width="2.5"/><text x="180" y="98" text-anchor="middle" font-size="14" font-weight="900" fill="var(--primary)">نسبة مولية</text>' +
+      '<text x="236" y="100" text-anchor="middle" font-size="22" font-weight="900" fill="var(--green)">→</text>' +
+      '<rect x="248" y="64" width="92" height="58" rx="12" fill="var(--green-l)" stroke="var(--green)" stroke-width="2.5"/><text x="294" y="98" text-anchor="middle" font-size="14" font-weight="900" fill="var(--green)">PV = nRT</text>' +
+      '<text x="180" y="176" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ink)">خريطة الحل من المعطى إلى حجم الغاز عند أي ظروف T و P</text></svg>',
+
+    '4-1-0': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="الخلية الجلفانية ومكوناتها">' +
+      '<path d="M90 78 V32 H270 V78" fill="none" stroke="var(--ink)" stroke-width="4"/>' +
+      '<path d="M90 78 V32 H270 V78" fill="none" stroke="var(--coral)" stroke-width="3" class="anim-wire-flow"/>' +
+      '<circle cx="180" cy="32" r="18" fill="var(--surface)" stroke="var(--primary)" stroke-width="3"/><text x="180" y="37" text-anchor="middle" font-size="13" font-weight="900" fill="var(--primary)">V</text>' +
+      '<path d="M122 128 V86 H238 V128" fill="none" stroke="var(--violet)" stroke-width="14" stroke-linecap="round" opacity="0.4"/>' +
+      '<rect x="40" y="102" width="104" height="80" rx="10" fill="var(--coral-l)" stroke="var(--border-strong)" stroke-width="2.5"/>' +
+      '<rect x="216" y="102" width="104" height="80" rx="10" fill="var(--surface-tint)" stroke="var(--border-strong)" stroke-width="2.5"/>' +
+      '<rect x="82" y="74" width="16" height="88" rx="3" fill="#7a8899"/><rect x="262" y="74" width="16" height="88" rx="3" fill="#c87533"/>' +
+      '<text x="90" y="204" text-anchor="middle" font-size="13" font-weight="900" fill="var(--coral)">الأنود (-): أكسدة</text>' +
+      '<text x="270" y="204" text-anchor="middle" font-size="13" font-weight="900" fill="var(--primary)">الكاثود (+): اختزال</text></svg>',
+
+    '4-1-1': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="سلسلة جهود الاختزال القياسية وحساب جهد الخلية">' +
+      '<rect x="40" y="28" width="280" height="46" rx="12" fill="var(--primary)"/><text x="180" y="57" text-anchor="middle" font-size="17" font-weight="900" fill="#fff" direction="ltr">E°cell = E°cathode - E°anode</text>' +
+      '<rect x="40" y="92" width="130" height="72" rx="12" fill="var(--green-l)" stroke="var(--green)" stroke-width="2.5"/>' +
+      '<text x="105" y="122" text-anchor="middle" font-size="15" font-weight="900" fill="var(--green)">E°cell &gt; 0</text>' +
+      '<text x="105" y="146" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ink)">تفاعل تلقائي ✓</text>' +
+      '<rect x="190" y="92" width="130" height="72" rx="12" fill="var(--coral-l)" stroke="var(--coral)" stroke-width="2.5"/>' +
+      '<text x="255" y="122" text-anchor="middle" font-size="15" font-weight="900" fill="var(--coral)">E°cell &lt; 0</text>' +
+      '<text x="255" y="146" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ink)">غير تلقائي ✗</text></svg>',
+
+    '4-2-0': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="الفرق بين البطاريات الأولية والثانوية">' +
+      '<rect x="26" y="42" width="144" height="128" rx="16" fill="var(--gold-l)" stroke="var(--gold)" stroke-width="2.5"/>' +
+      '<text x="98" y="76" text-anchor="middle" font-size="15" font-weight="900" fill="var(--accent)">أولية (لا تُشحن)</text>' +
+      '<text x="98" y="110" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">الجافة · القلوية · الفضة</text>' +
+      '<text x="98" y="140" text-anchor="middle" font-size="12" font-weight="700" fill="var(--muted)">تفاعل غير عكسي</text>' +
+      '<rect x="190" y="42" width="144" height="128" rx="16" fill="var(--green-l)" stroke="var(--green)" stroke-width="2.5"/>' +
+      '<text x="262" y="76" text-anchor="middle" font-size="15" font-weight="900" fill="var(--green)">ثانوية (تُشحن)</text>' +
+      '<text x="262" y="110" text-anchor="middle" font-size="13" font-weight="700" fill="var(--ink)">المركم الرصاصي · الليثيوم</text>' +
+      '<text x="262" y="140" text-anchor="middle" font-size="12" font-weight="700" fill="var(--muted)">تفاعل عكسي بالشحن ↻</text></svg>',
+
+    '4-2-1': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="حماية الحديد بالجلفنة والأنود المضحي">' +
+      '<rect x="38" y="64" width="115" height="62" rx="12" fill="var(--coral-l)" stroke="var(--coral)" stroke-width="3"/>' +
+      '<text x="95" y="100" text-anchor="middle" font-size="14" font-weight="900" fill="var(--coral)">أنود مضحّي Mg/Zn</text>' +
+      '<path d="M153 95 H208" stroke="var(--primary)" stroke-width="5" class="anim-wire-flow"/>' +
+      '<rect x="208" y="64" width="115" height="62" rx="12" fill="var(--green-l)" stroke="var(--green)" stroke-width="3"/>' +
+      '<text x="265" y="100" text-anchor="middle" font-size="14" font-weight="900" fill="var(--green)">حديد محمي Fe</text>' +
+      '<text x="180" y="172" text-anchor="middle" font-size="12.5" font-weight="800" fill="var(--ink)">يتأكسد الفلز الأنشط بدلاً من الحديد لحمايته</text></svg>',
+
+    '4-3-0': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="خلية التحليل الكهربائي القسرية بمصدر تيار خارجي">' +
+      '<rect x="135" y="18" width="90" height="32" rx="8" fill="var(--coral)"/><text x="180" y="39" text-anchor="middle" font-size="13" font-weight="900" fill="#fff">تيار DC خارجي</text>' +
+      '<path d="M135 34 H92 V78 M225 34 H268 V78" fill="none" stroke="var(--ink)" stroke-width="3.5"/>' +
+      '<rect x="52" y="72" width="256" height="106" rx="14" fill="var(--surface-tint)" stroke="var(--primary)" stroke-width="2.5"/>' +
+      '<rect x="84" y="62" width="18" height="86" rx="3" fill="var(--coral)"/><rect x="258" y="62" width="18" height="86" rx="3" fill="var(--green)"/>' +
+      '<text x="93" y="198" text-anchor="middle" font-size="13" font-weight="900" fill="var(--coral)">الأنود (+): أكسدة</text>' +
+      '<text x="267" y="198" text-anchor="middle" font-size="13" font-weight="900" fill="var(--green)">الكاثود (-): اختزال</text></svg>',
+
+    '4-3-1': '<svg viewBox="0 0 360 220" class="concept-svg" role="img" aria-label="الطلاء الكهربائي واستخلاص الصوديوم والألومنيوم">' +
+      '<rect x="24" y="42" width="96" height="118" rx="14" fill="var(--surface-tint)" stroke="var(--primary)" stroke-width="2"/><text x="72" y="88" text-anchor="middle" font-size="14" font-weight="900" fill="var(--primary)">خلية داون</text><text x="72" y="116" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">Na + Cl₂</text>' +
+      '<rect x="132" y="42" width="96" height="118" rx="14" fill="var(--violet-l)" stroke="var(--violet)" stroke-width="2"/><text x="180" y="88" text-anchor="middle" font-size="14" font-weight="900" fill="var(--violet)">هول-هيروليت</text><text x="180" y="116" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">استخلاص Al</text>' +
+      '<rect x="240" y="42" width="96" height="118" rx="14" fill="var(--gold-l)" stroke="var(--gold)" stroke-width="2"/><text x="288" y="88" text-anchor="middle" font-size="14" font-weight="900" fill="var(--accent)">الطلاء الكهربائي</text><text x="288" y="116" text-anchor="middle" font-size="12" font-weight="700" fill="var(--ink)">طلاء Ag بالكاثود</text></svg>'
+  };
+
+  /* ==================== 2. INTERACTIVE ANIMATED EXPLAINER VIDEOS ==================== */
+  const VIDEOS = {
+    '6-1': {
+      title: 'فيديو تفاعلي: حركة الغاز والانتشار والضغط',
+      scenes: [
+        { label: '1. النظرية الحركية', term: 'التصادم المرن', anim: 'gas-bounce', caption: 'تتحرك جسيمات الغاز باستمرار في خطوط مستقيمة وتتصادم تصادماً مرناً دون فقدان للطاقة الحركية.' },
+        { label: '2. الانتشار والتدفق', term: 'قانون جراهام', anim: 'gas-diffuse', caption: 'الغاز الأخف ذو الكتلة المولية الأقل يندفع وينتشر أسرع عبر الحيز أو عبر الثقوب الضيقة.' },
+        { label: '3. ضغط الغاز', term: 'الضغط الجزيئي', anim: 'gas-pressure', caption: 'كلما زادت اصطدامات الجسيمات بجدار الوعاء ارتفع الضغط المقيس بالبارومتر أو المانومتر.' }
+      ]
+    },
+    '6-2': {
+      title: 'فيديو تفاعلي: كيف تتجاذب الجزيئات وتغلي السوائل؟',
+      scenes: [
+        { label: '1. قوى التشتت', term: 'ثنائية قطبية لحظية', anim: 'imf-dispersion', caption: 'تتحرك السحابة الإلكترونية لحظياً فتنتج أقطاباً مؤقتة ضعيفة تجذب الجزيئات غير القطبية.' },
+        { label: '2. ثنائية القطب', term: 'التجاذب القطبي الدائم', anim: 'imf-dipole', caption: 'يتجاذب الطرف الموجب الجزئي في جزيء قطبي مع الطرف السالب الجزئي في الجزيء المجاور.' },
+        { label: '3. الرابطة الهيدروجينية', term: 'ترابط F, O, N مع H', anim: 'imf-hbond', caption: 'أقوى قوى التجاذب بين الجزيئات، وترفع درجة غليان الماء مقارنة بالمركبات المشابهة.' }
+      ]
+    },
+    '6-3': {
+      title: 'فيديو تفاعلي: من اللزوجة والتوتر السطحي إلى البلورات',
+      scenes: [
+        { label: '1. الميوعة واللزوجة', term: 'اللزوجة', anim: 'liquid-flow', caption: 'انسياب السوائل يقل عند زيادة التجاذب أو انخفاض الحرارة فتزداد مقاومتها للتدفق.' },
+        { label: '2. التوتر السطحي', term: 'التماسك والتلاصق', anim: 'surface-tension', caption: 'تنشدّ جسيمات السطح للداخل والأسفل مكونة غشاءً مرناً يحمل الأجسام الخفيفة.' },
+        { label: '3. البنية البلورية', term: 'وحدة البناء', anim: 'crystal-lattice', caption: 'تترتب جسيمات المواد الصلبة المتبلورة في شبكة ثلاثية الأبعاد متكررة ومنتظمة.' }
+      ]
+    },
+    '6-4': {
+      title: 'فيديو تفاعلي: تحولات الطاقة ومخطط الطور',
+      scenes: [
+        { label: '1. التحولات الماصة', term: 'الانصهار والتبخر والتسامي', anim: 'phase-heat', caption: 'يمتص الجليد والماء حرارة لكسر قوى التجاذب والانتقال إلى الحالة الأعلى طاقة.' },
+        { label: '2. التحولات الطاردة', term: 'التكاثف والتجمد والترسب', anim: 'phase-cool', caption: 'تفقد الجسيمات طاقتها فتتقارب وتنتظم وتطلق حرارة إلى الوسط المحيط.' },
+        { label: '3. النقطتان الثلاثية والحرجة', term: 'النقطة الثلاثية', anim: 'phase-triple', caption: 'عند 0.01°C و0.006 atm تتزن حالات الماء الثلاث معاً في لحظة واحدة.' }
+      ]
+    },
+    '7-1': {
+      title: 'فيديو تفاعلي: سلوك المكبس تحت تأثير الضغط والحرارة',
+      scenes: [
+        { label: '1. قانون بويل', term: 'تناسب عكسي (P × V)', anim: 'boyle-piston', caption: 'عند دفع المكبس يقل الحجم فتتقارب الجسيمات وتزيد التصادمات ويرتفع الضغط.' },
+        { label: '2. قانون شارل', term: 'تناسب طردي (V / T)', anim: 'charles-expand', caption: 'تسخين الغاز يزيد طاقة جسيماته فتدفع المكبس للخارج ويزداد الحجم عند ثبوت الضغط.' },
+        { label: '3. جاي-لوساك', term: 'تناسب طردي (P / T)', anim: 'gay-heat', caption: 'مع تثبيت الحجم يرفع التسخين سرعة التصادمات فيقفز الضغط بحدة (تحذير العبوات المضغوطة).' }
+      ]
+    },
+    '7-2': {
+      title: 'فيديو تفاعلي: مبدأ أفوجادرو والغاز المثالي مقابل الحقيقي',
+      scenes: [
+        { label: '1. مبدأ أفوجادرو', term: '22.4 L لكل 1 mol', anim: 'avogadro-moles', caption: 'مول واحد من أي غاز يشغل الحجم نفسه (22.4 L) عند STP مهما اختلف نوعه.' },
+        { label: '2. الغاز المثالي', term: 'PV = nRT', anim: 'ideal-chamber', caption: 'يربط القانون العام الضغط والحجم والمولات والحرارة في معادلة واحدة دقيقة.' },
+        { label: '3. الحيود الحقيقي', term: 'الضغط العالي والبرودة', anim: 'real-deviation', caption: 'عند الضغط العالي تتقارب الجزيئات وتظهر قوى التجاذب الحقيقية وحجم الجسيمات.' }
+      ]
+    },
+    '7-3': {
+      title: 'فيديو تفاعلي: حسابات الحجوم في التفاعلات الغازية',
+      scenes: [
+        { label: '1. النسب الحجمية', term: 'معاملات المعادلة الموزونة', anim: 'stoich-volumes', caption: 'حجم 1 L من النيتروجين يتفاعل بالضبط مع 3 L هيدروجين لإنتاج 2 L أمونيا.' },
+        { label: '2. تحويل الكتلة للحجم', term: 'خطوة المولات الوسيطة', anim: 'stoich-moles', caption: 'نحوّل كتلة المتفاعل إلى مولات ثم نحسب مولات الغاز ونعوض في PV = nRT.' },
+        { label: '3. تطبيق الأمان (الوسادة الهوائية)', term: 'توليد N₂ السريع', anim: 'airbag-deploy', caption: 'تحلل أزيد الصوديوم يحرر كمية محسوبة بدقة من غاز النيتروجين في أجزاء من الثانية.' }
+      ]
+    },
+    '4-1': {
+      title: 'فيديو تفاعلي: رحلة الإلكترونات والأيونات في الخلية الجلفانية',
+      scenes: [
+        { label: '1. الأكسدة عند الأنود', term: 'الأنود (القطب السالب)', anim: 'galv-anode', caption: 'تفقد ذرات الخارصين Zn إلكتروناتها وتذوب أيونات Zn²⁺ في المحلول فتقل كتلة الشريحة.' },
+        { label: '2. سريان الإلكترونات والقنطرة', term: 'القنطرة الملحية', anim: 'galv-flow', caption: 'تسري الإلكترونات في السلك إلى النحاس بينما تتحرك الأيونات في القنطرة لحفظ التعادل.' },
+        { label: '3. الاختزال عند الكاثود', term: 'الكاثود (القطب الموجب)', anim: 'galv-cathode', caption: 'تكتسب أيونات Cu²⁺ الإلكترونات وتترسب ذرات نحاس صلبة فتزداد كتلة الكاثود.' }
+      ]
+    },
+    '4-2': {
+      title: 'فيديو تفاعلي: كيف تحمي البطاريات والمعادن نفسها؟',
+      scenes: [
+        { label: '1. خلية أولية مقابل ثانوية', term: 'البطارية الثانوية', anim: 'bat-recharge', caption: 'التفاعلات العكسية في بطاريات السيارات والهواتف تسمح بإعادة شحنها مراراً.' },
+        { label: '2. خلية الوقود النظيفة', term: 'وقود H₂ و O₂', anim: 'fuel-cell', caption: 'تتفاعل تغذية مستمرة من الهيدروجين والأكسجين لإنتاج الكهرباء وماء نقي فقط.' },
+        { label: '3. الجلفنة والأنود المضحي', term: 'الحماية المهبطية', anim: 'cathodic-guard', caption: 'يتآكل الخارصين أو المغنيسيوم الأنشط تلقائياً ويمنح إلكتروناته للحديد كي لا يصدأ.' }
+      ]
+    },
+    '4-3': {
+      title: 'فيديو تفاعلي: قسر التفاعل غير التلقائي بالتيار الكهربائي',
+      scenes: [
+        { label: '1. دفع الإلكترونات قسرياً', term: 'التحليل الكهربائي', anim: 'elec-force', caption: 'يجبر مصدر الجهد الكهربائي الإلكترونات على الانتقال في الاتجاه غير التلقائي.' },
+        { label: '2. مصهور NaCl مقابل ماء البحر', term: 'خلية داون', anim: 'elec-nacl', caption: 'مصهور NaCl يُنتج صوديوم نقي وكلور، بينما في ماء البحر يُختزل الماء إلى غاز H₂.' },
+        { label: '3. الطلاء الكهربائي', term: 'الطلاء بالكاثود (-)', anim: 'elec-plate', caption: 'تنجذب أيونات الفلز الموجبة نحو القطعة المراد طلاؤها عند الكاثود وتكسوها بطبقة لامعة.' }
+      ]
+    }
+  };
+
+  function createInteractiveVideoNode(lesson) {
+    const data = VIDEOS[lesson.id] || VIDEOS['6-1'];
+    const wrap = el('div', { className: 'video-player-box' });
+
+    const topBar = el('div', { className: 'video-controls-bar' });
+    const playBtn = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: '⏸ إيقاف مؤقت' });
+    const replayBtn = el('button', { type: 'button', className: 'btn btn-sm', text: '↺ إعادة العرض' });
+    const statusPill = el('span', { className: 'sim-pill', text: 'عرض تفاعلي متحرك' });
+    topBar.appendChild(playBtn);
+    topBar.appendChild(replayBtn);
+    topBar.appendChild(statusPill);
+
+    const stepTabs = el('div', { className: 'video-steps-bar' });
+    const canvasWrap = el('div', { className: 'sim-canvas-wrap' });
+    const canvas = el('canvas', { width: '680', height: '215' });
+    const progTrack = el('div', { className: 'video-progress-track' }, [el('div', { className: 'video-progress-fill' })]);
+    const progFill = progTrack.firstChild;
+    const captionBox = el('div', { className: 'video-caption-box' });
+
+    canvasWrap.appendChild(canvas);
+    canvasWrap.appendChild(progTrack);
+    canvasWrap.appendChild(captionBox);
+    wrap.appendChild(topBar);
+    wrap.appendChild(stepTabs);
+    wrap.appendChild(canvasWrap);
+
+    let sceneIdx = 0;
+    let playing = true;
+    let sceneElapsed = 0;
+    const SCENE_MS = 5500;
+    let lastTs = performance.now();
+
+    const stepBtns = data.scenes.map(function (sc, idx) {
+      const b = el('button', { type: 'button', className: 'btn btn-sm' + (idx === 0 ? ' btn-primary' : ''), text: sc.label });
+      b.addEventListener('click', function () {
+        sceneIdx = idx;
+        sceneElapsed = 0;
+        updateSceneUI();
+      });
+      stepTabs.appendChild(b);
+      return b;
+    });
+
+    function updateSceneUI() {
+      const sc = data.scenes[sceneIdx];
+      stepBtns.forEach(function (b, i) { b.classList.toggle('btn-primary', i === sceneIdx); });
+      captionBox.innerHTML = '<span class="video-term-badge">' + sc.term + '</span> <span>' + sc.caption + '</span>';
+    }
+    updateSceneUI();
+
+    playBtn.addEventListener('click', function () {
+      playing = !playing;
+      playBtn.textContent = playing ? '⏸ إيقاف مؤقت' : '▶ تشغيل العرض';
+      lastTs = performance.now();
+    });
+    replayBtn.addEventListener('click', function () {
+      sceneIdx = 0;
+      sceneElapsed = 0;
+      playing = true;
+      playBtn.textContent = '⏸ إيقاف مؤقت';
+      updateSceneUI();
+    });
+
+    const dots = Array.from({ length: 24 }, function (_, i) {
+      return {
+        x: (i % 6) * 0.12 + 0.14,
+        y: Math.floor(i / 6) * 0.18 + 0.18,
+        vx: (Math.random() - 0.5) * 0.012,
+        vy: (Math.random() - 0.5) * 0.014,
+        ph: i * 0.7
+      };
+    });
+
+    const ctx = canvas.getContext('2d');
+    function frame(now) {
+      if (!document.body.contains(canvas)) return;
+      const dt = Math.min(80, now - lastTs);
+      lastTs = now;
+      if (playing) {
+        sceneElapsed += dt;
+        if (sceneElapsed >= SCENE_MS) {
+          sceneElapsed = 0;
+          sceneIdx = (sceneIdx + 1) % data.scenes.length;
+          updateSceneUI();
+        }
+      }
+      const pct = ((sceneIdx + sceneElapsed / SCENE_MS) / data.scenes.length) * 100;
+      progFill.style.width = Math.min(100, pct) + '%';
+
+      const pal = themePal();
+      const sc = data.scenes[sceneIdx];
+      const W = canvas.width, H = canvas.height;
+      const t = now * 0.004;
+      ctx.clearRect(0, 0, W, H);
+
+      // Draw rich scene-specific phenomenon animation
+      ctx.fillStyle = pal.tint;
+      ctx.fillRect(24, 14, W - 48, H - 28);
+      ctx.strokeStyle = pal.primary;
+      ctx.lineWidth = 2.5;
+      ctx.strokeRect(24, 14, W - 48, H - 28);
+
+      if (sc.anim.indexOf('galv') === 0 || sc.anim.indexOf('elec') === 0 || sc.anim === 'cathodic-guard' || sc.anim === 'fuel-cell') {
+        // Electrochemical animated scene: two electrodes + flowing electron sparks
+        ctx.fillStyle = pal.surface;
+        ctx.fillRect(105, 92, 165, 96);
+        ctx.fillRect(410, 92, 165, 96);
+        ctx.strokeStyle = pal.wall;
+        ctx.strokeRect(105, 92, 165, 96);
+        ctx.strokeRect(410, 92, 165, 96);
+        ctx.fillStyle = pal.coral;
+        ctx.fillRect(172, 62, 24, 108);
+        ctx.fillStyle = pal.green;
+        ctx.fillRect(484, 62, 24, 108);
+        ctx.strokeStyle = pal.ink;
+        ctx.lineWidth = 3;
+        ctx.beginPath();
+        ctx.moveTo(184, 62); ctx.lineTo(184, 34); ctx.lineTo(496, 34); ctx.lineTo(496, 62);
+        ctx.stroke();
+
+        for (let k = 0; k < 5; k++) {
+          const prog = ((t * 0.45 + k * 0.2) % 1);
+          const ex = 184 + prog * 312;
+          ctx.beginPath();
+          ctx.arc(ex, 34, 6.5, 0, Math.PI * 2);
+          ctx.fillStyle = pal.gold;
+          ctx.fill();
+        }
+        ctx.fillStyle = pal.ink;
+        ctx.font = 'bold 14px Tajawal, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('e⁻ حركة الإلكترونات عبر السلك', W / 2, 58);
+      } else if (sc.anim.indexOf('boyle') === 0 || sc.anim.indexOf('charles') === 0 || sc.anim.indexOf('gay') === 0) {
+        // Animated piston oscillation
+        const osc = sc.anim === 'gay-heat' ? 0.52 : (0.42 + Math.sin(t * 0.7) * 0.18);
+        const pw = (W - 140) * osc;
+        ctx.fillStyle = pal.surface;
+        ctx.fillRect(50, 44, pw, 126);
+        ctx.fillStyle = pal.coral;
+        ctx.fillRect(50 + pw, 38, 16, 138);
+        dots.slice(0, 18).forEach(function (d, idx) {
+          const px = 64 + (((d.x * 2 + Math.sin(t * 1.4 + idx)) * 0.5 + 0.5) % 0.85) * (pw - 24);
+          const py = 56 + (((d.y * 2 + Math.cos(t * 1.6 + idx)) * 0.5 + 0.5) % 0.85) * 100;
+          ctx.beginPath();
+          ctx.arc(px, py, 6.5, 0, Math.PI * 2);
+          ctx.fillStyle = sc.anim === 'gay-heat' ? pal.coral : pal.primary;
+          ctx.fill();
+        });
+      } else {
+        // Kinetic / diffusion / phase / IMF particle animation
+        const spd = (sc.anim === 'crystal-lattice' || sc.anim === 'phase-cool') ? 0.22 : 1.15;
+        dots.forEach(function (d, idx) {
+          d.x += d.vx * spd * (playing ? 1 : 0);
+          d.y += d.vy * spd * (playing ? 1 : 0);
+          if (d.x < 0.08 || d.x > 0.92) d.vx *= -1;
+          if (d.y < 0.14 || d.y > 0.86) d.vy *= -1;
+          const px = 24 + (sc.anim === 'crystal-lattice' ? ((idx % 6) * 0.08 + 0.3 + Math.sin(t * 2 + idx) * 0.006) : d.x) * (W - 48);
+          const py = 14 + (sc.anim === 'crystal-lattice' ? (Math.floor(idx / 6) * 0.16 + 0.22 + Math.cos(t * 2 + idx) * 0.006) : d.y) * (H - 28);
+          ctx.beginPath();
+          ctx.arc(px, py, 8.5, 0, Math.PI * 2);
+          ctx.fillStyle = idx % 3 === 0 ? pal.coral : idx % 2 === 0 ? pal.green : pal.primary;
+          ctx.fill();
+        });
+      }
+
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+    return wrap;
+  }
+
+  /* ==================== 3. VIRTUAL LABS (المعمل الافتراضي) ==================== */
+  function createVirtualLabNode(simType) {
+    if (!simType) return null;
+    const box = el('div', { className: 'sim-box' });
+
+    if (simType === 'galvanic-cell') {
+      // Multi-step Galvanic Cell Virtual Lab (inspired by user's Galvanic Cell reference!)
+      const halfCells = [
+        { name: 'Mg²⁺ | Mg', e: -2.372, ion: 'Mg²⁺', metal: 'Mg', col: '#9BA5B4' },
+        { name: 'Zn²⁺ | Zn', e: -0.762, ion: 'Zn²⁺', metal: 'Zn', col: '#7A8899' },
+        { name: 'Fe²⁺ | Fe', e: -0.447, ion: 'Fe²⁺', metal: 'Fe', col: '#636B78' },
+        { name: 'Sn²⁺ | Sn', e: -0.137, ion: 'Sn²⁺', metal: 'Sn', col: '#A8B0BC' },
+        { name: 'Cu²⁺ | Cu', e: +0.342, ion: 'Cu²⁺', metal: 'Cu', col: '#C87533' },
+        { name: 'Ag⁺ | Ag', e: +0.800, ion: 'Ag⁺', metal: 'Ag', col: '#CBD2DC' }
+      ];
+      let builtStep = 6; // Ready immediately for quick projection, plus interactive step rebuild!
+      const controls = el('div', { className: 'sim-controls' });
+      const sel1 = el('select', { className: 'btn btn-sm', 'aria-label': 'نصف الخلية الأول' });
+      const sel2 = el('select', { className: 'btn btn-sm', 'aria-label': 'نصف الخلية الثاني' });
+      halfCells.forEach(function (h, i) {
+        sel1.appendChild(el('option', { value: String(i), text: h.name + ' (' + (h.e >= 0 ? '+' : '') + h.e + ' V)' }));
+        sel2.appendChild(el('option', { value: String(i), text: h.name + ' (' + (h.e >= 0 ? '+' : '') + h.e + ' V)' }));
+      });
+      sel1.value = '1';
+      sel2.value = '4';
+      const bridgeBtn = el('button', { type: 'button', className: 'btn btn-sm', text: 'رفع القنطرة الملحية (اختبار)' });
+      const recordBtn = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: 'سجّلي القراءة بالجدول' });
+      controls.appendChild(el('label', { text: 'القطب 1: ' }, [sel1]));
+      controls.appendChild(el('label', { text: 'القطب 2: ' }, [sel2]));
+      controls.appendChild(bridgeBtn);
+      controls.appendChild(recordBtn);
+
+      const svgWrap = el('div', { className: 'sim-canvas-wrap' });
+      const svgNS = 'http://www.w3.org/2000/svg';
+      const svg = document.createElementNS(svgNS, 'svg');
+      svg.setAttribute('viewBox', '0 0 640 205');
+      svg.setAttribute('class', 'sim-svg-stage');
+      const readout = el('div', { className: 'sim-readout' });
+      const tableWrap = el('div', { className: 'data-table-wrap' });
+      const rows = [];
+
+      svgWrap.appendChild(svg);
+      svgWrap.appendChild(readout);
+      box.appendChild(controls);
+      box.appendChild(svgWrap);
+      box.appendChild(tableWrap);
+
+      let bridgeIn = true;
+      function update() {
+        const a = halfCells[Number(sel1.value)];
+        const b = halfCells[Number(sel2.value)];
+        if (a.metal === b.metal) {
+          svg.innerHTML = '';
+          readout.textContent = 'اختر فلزين مختلفين لتكوين خلية جلفانية ذات فرق جهد.';
+          return;
+        }
+        const cathode = a.e >= b.e ? a : b;
+        const anode = a.e >= b.e ? b : a;
+        const eCell = cathode.e - anode.e;
+        const active = builtStep >= 6 && bridgeIn;
+        const flowCls = active ? 'anim-wire-flow' : '';
+        svg.innerHTML =
+          '<path d="M160 84 V28 H480 V84" fill="none" stroke="var(--text)" stroke-width="4"/>' +
+          (active ? '<path d="M160 84 V28 H480 V84" fill="none" stroke="var(--coral)" stroke-width="4" class="' + flowCls + '"/>' : '') +
+          (bridgeIn ? '<path d="M210 142 V92 H430 V142" fill="none" stroke="var(--violet)" stroke-width="18" stroke-linecap="round" opacity="0.4"/><text x="320" y="85" text-anchor="middle" font-size="13" font-weight="800" fill="var(--violet)">القنطرة الملحية (أيونات متعادلة)</text>' : '<text x="320" y="85" text-anchor="middle" font-size="13" font-weight="800" fill="var(--coral)">القنطرة مرفوعة (الدائرة مفتوحة!)</text>') +
+          '<rect x="70" y="106" width="180" height="86" rx="12" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="3"/>' +
+          '<rect x="74" y="128" width="172" height="60" rx="9" fill="var(--coral-l)"/>' +
+          '<rect x="390" y="106" width="180" height="86" rx="12" fill="var(--surface)" stroke="var(--border-strong)" stroke-width="3"/>' +
+          '<rect x="394" y="128" width="172" height="60" rx="9" fill="var(--surface-tint)"/>' +
+          '<rect x="148" y="80" width="24" height="96" rx="4" fill="' + anode.col + '"/>' +
+          '<rect x="468" y="80" width="24" height="96" rx="4" fill="' + cathode.col + '"/>' +
+          '<text x="160" y="170" text-anchor="middle" font-size="14" font-weight="800" fill="var(--text)">الأنود (-): ' + anode.metal + '</text>' +
+          '<text x="480" y="170" text-anchor="middle" font-size="14" font-weight="800" fill="var(--text)">الكاثود (+): ' + cathode.metal + '</text>' +
+          '<circle cx="320" cy="28" r="24" fill="var(--surface)" stroke="var(--primary)" stroke-width="3"/>' +
+          '<text x="320" y="33" text-anchor="middle" direction="ltr" font-size="13" font-weight="900" fill="var(--primary)">' + (active ? '+' + eCell.toFixed(2) + ' V' : '0.00 V') + '</text>';
+
+        readout.innerHTML = active
+          ? 'الأنود (أكسدة): <span class="chem">' + anode.metal + ' → ' + anode.ion + '</span> · الكاثود (اختزال): <span class="chem">' + cathode.ion + ' → ' + cathode.metal + '</span> · <span class="chem">E°cell = +' + eCell.toFixed(3) + ' V</span>'
+          : 'انقطعت الدائرة الكهربائية برفع القنطرة الملحية فأصبحت قراءة الفولتميتر صفراً!';
+      }
+
+      function renderRows() {
+        if (!rows.length) {
+          tableWrap.innerHTML = '';
+          return;
+        }
+        tableWrap.innerHTML = '<table class="data-table"><thead><tr><th>الخلية (الرمز الاصطلاحي)</th><th>الأنود</th><th>الكاثود</th><th>الجهد القياسي E°cell</th></tr></thead><tbody>' +
+          rows.map(function (r) {
+            return '<tr><td class="chem">' + r.notation + '</td><td>' + r.anode + '</td><td>' + r.cathode + '</td><td class="chem">+' + r.e.toFixed(3) + ' V</td></tr>';
+          }).join('') + '</tbody></table>';
+      }
+
+      bridgeBtn.addEventListener('click', function () {
+        bridgeIn = !bridgeIn;
+        bridgeBtn.textContent = bridgeIn ? 'رفع القنطرة الملحية (اختبار)' : 'إعادة وضع القنطرة الملحية';
+        update();
+      });
+      recordBtn.addEventListener('click', function () {
+        const a = halfCells[Number(sel1.value)];
+        const b = halfCells[Number(sel2.value)];
+        if (a.metal === b.metal || !bridgeIn) return;
+        const cathode = a.e >= b.e ? a : b;
+        const anode = a.e >= b.e ? b : a;
+        if (rows.length >= 4) rows.shift();
+        rows.push({
+          notation: anode.metal + ' | ' + anode.ion + ' || ' + cathode.ion + ' | ' + cathode.metal,
+          anode: anode.metal,
+          cathode: cathode.metal,
+          e: cathode.e - anode.e
+        });
+        renderRows();
+      });
+      sel1.addEventListener('change', update);
+      sel2.addEventListener('change', update);
+      update();
+    } else if (simType === 'states-particles') {
+      const controls = el('div', { className: 'sim-controls' });
+      const canvasWrap = el('div', { className: 'sim-canvas-wrap' });
+      const canvas = el('canvas', { width: '640', height: '215' });
+      const readout = el('div', { className: 'sim-readout' });
+      canvasWrap.appendChild(canvas);
+      canvasWrap.appendChild(readout);
+      box.appendChild(controls);
+      box.appendChild(canvasWrap);
+
+      let mode = 'solid';
+      const modes = {
+        solid: { label: 'صلب (اهتزاز ثابت)', desc: 'صلب: الجسيمات متقاربة جداً ومرتبة بانتظام، وتهتز في أماكن ثابتة لقوة التجاذب.' },
+        liquid: { label: 'سائل (انزلاق وانسياب)', desc: 'سائل: الجسيمات متقاربة لكنها تنزلق فوق بعضها فتأخذ شكل الوعاء وتحتفظ بحجم ثابت.' },
+        gas: { label: 'غاز (انتشار سريع)', desc: 'غاز: الجسيمات متباعدة جداً وتتحرك عشوائياً بسرعة في خطوط مستقيمة وتنتشر لتملأ الوعاء.' },
+        viscosity: { label: 'مختبر اللزوجة (بارد مقابل ساخن)', desc: 'بارد (يمين): لزوجة عالية فينساب ببطء؛ ساخن (يسار): طاقة حركية أعلى فينساب بسرعة.' }
+      };
+      const particles = [];
+      for (let i = 0; i < 36; i++) {
+        particles.push({
+          gx: (i % 6) * 32 + 240,
+          gy: Math.floor(i / 6) * 24 + 40,
+          x: Math.random() * 540 + 50,
+          y: Math.random() * 140 + 35,
+          vx: (Math.random() - 0.5) * 4.2,
+          vy: (Math.random() - 0.5) * 4.2,
+          phase: Math.random() * Math.PI * 2
+        });
+      }
+      let dropCold = 34, dropHot = 34;
+      const btns = {};
+      Object.keys(modes).forEach(function (k) {
+        const b = el('button', { type: 'button', className: 'btn btn-sm', text: modes[k].label });
+        b.addEventListener('click', function () {
+          mode = k;
+          if (k === 'viscosity') { dropCold = 34; dropHot = 34; }
+          Object.keys(btns).forEach(function (key) { btns[key].classList.toggle('btn-primary', key === mode); });
+          readout.textContent = modes[mode].desc;
+        });
+        btns[k] = b;
+        controls.appendChild(b);
+      });
+      btns.solid.classList.add('btn-primary');
+      readout.textContent = modes.solid.desc;
+
+      const ctx = canvas.getContext('2d');
+      let t = 0;
+      function tick() {
+        if (!document.body.contains(canvas)) return;
+        t += 0.08;
+        const pal = themePal();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (mode === 'viscosity') {
+          dropHot += 1.65;
+          dropCold += 0.42;
+          if (dropHot > 180) dropHot = 34;
+          if (dropCold > 180) dropCold = 34;
+          ctx.strokeStyle = pal.wall;
+          ctx.lineWidth = 3;
+          ctx.strokeRect(120, 20, 110, 172);
+          ctx.strokeRect(410, 20, 110, 172);
+          ctx.fillStyle = pal.coral;
+          ctx.beginPath(); ctx.arc(175, dropHot, 15, 0, Math.PI * 2); ctx.fill();
+          ctx.fillRect(170, 22, 10, Math.max(0, dropHot - 22));
+          ctx.fillStyle = pal.primary;
+          ctx.beginPath(); ctx.arc(465, dropCold, 15, 0, Math.PI * 2); ctx.fill();
+          ctx.fillRect(460, 22, 10, Math.max(0, dropCold - 22));
+          ctx.fillStyle = pal.ink;
+          ctx.font = 'bold 14px Tajawal, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('سائل ساخن (لزوجة أقل)', 175, 208);
+          ctx.fillText('سائل بارد (لزوجة عالية)', 465, 208);
+        } else {
+          ctx.strokeStyle = pal.wall;
+          ctx.lineWidth = 2.5;
+          ctx.strokeRect(16, 12, canvas.width - 32, canvas.height - 24);
+          particles.forEach(function (p, idx) {
+            let px, py;
+            if (mode === 'solid') {
+              px = p.gx + Math.sin(t * 2 + p.phase) * 2.2;
+              py = p.gy + Math.cos(t * 2 + p.phase) * 2.2;
+            } else if (mode === 'liquid') {
+              p.x += Math.sin(t + p.phase) * 1.1;
+              p.y += Math.cos(t * 0.8 + p.phase) * 0.7;
+              if (p.x < 40) p.x = canvas.width - 40;
+              if (p.x > canvas.width - 40) p.x = 40;
+              if (p.y < 105) p.y = 105 + (idx % 5) * 17;
+              if (p.y > 186) p.y = 186;
+              px = p.x; py = p.y;
+            } else {
+              p.x += p.vx; p.y += p.vy;
+              if (p.x < 30 || p.x > canvas.width - 30) p.vx *= -1;
+              if (p.y < 26 || p.y > canvas.height - 26) p.vy *= -1;
+              px = p.x; py = p.y;
+            }
+            ctx.beginPath();
+            ctx.arc(px, py, 9.5, 0, Math.PI * 2);
+            ctx.fillStyle = mode === 'gas' ? pal.coral : mode === 'liquid' ? pal.green : pal.primary;
+            ctx.fill();
+            ctx.strokeStyle = pal.surface;
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
+          });
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    } else if (simType === 'graham-gas') {
+      const gases = [
+        { name: 'الهيليوم He (4.0)', short: 'He', m: 4.0 },
+        { name: 'الميثان CH₄ (16.0)', short: 'CH₄', m: 16.0 },
+        { name: 'الأمونيا NH₃ (17.0)', short: 'NH₃', m: 17.0 },
+        { name: 'النيتروجين N₂ (28.0)', short: 'N₂', m: 28.0 },
+        { name: 'الأكسجين O₂ (32.0)', short: 'O₂', m: 32.0 },
+        { name: 'كلوريد الهيدروجين HCl (36.5)', short: 'HCl', m: 36.5 },
+        { name: 'ثاني أكسيد الكربون CO₂ (44.0)', short: 'CO₂', m: 44.0 }
+      ];
+      const controls = el('div', { className: 'sim-controls' });
+      const selA = el('select', { className: 'btn btn-sm', 'aria-label': 'الغاز الأول A' });
+      const selB = el('select', { className: 'btn btn-sm', 'aria-label': 'الغاز الثاني B' });
+      gases.forEach(function (g, i) {
+        selA.appendChild(el('option', { value: String(i), text: 'الغاز A: ' + g.name }));
+        selB.appendChild(el('option', { value: String(i), text: 'الغاز B: ' + g.name }));
+      });
+      selA.value = '2'; selB.value = '5';
+      const launchBtn = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: 'إطلاق الغازين في الأنبوب' });
+      controls.appendChild(selA); controls.appendChild(selB); controls.appendChild(launchBtn);
+
+      const tubeWrap = el('div', { className: 'sim-tube-wrap' });
+      const tube = el('div', { className: 'sim-tube' });
+      const barA = el('div', { className: 'sim-tube-a' });
+      const barB = el('div', { className: 'sim-tube-b' });
+      const ring = el('div', { className: 'sim-tube-ring', hidden: '' });
+      tube.appendChild(barA); tube.appendChild(barB); tube.appendChild(ring);
+      tubeWrap.appendChild(tube);
+
+      const readout = el('div', { className: 'sim-readout' });
+      let animId = 0;
+      function runTube(animate) {
+        cancelAnimationFrame(animId);
+        const gA = gases[Number(selA.value)];
+        const gB = gases[Number(selB.value)];
+        const vA = 1 / Math.sqrt(gA.m), vB = 1 / Math.sqrt(gB.m);
+        const fracA = vA / (vA + vB), ratio = Math.sqrt(gB.m / gA.m);
+        barA.textContent = gA.short; barB.textContent = gB.short; ring.hidden = true;
+        function finishText() {
+          readout.innerHTML = 'نسبة الانتشار <span class="chem">r(A)/r(B) = √(' + gB.m + ' / ' + gA.m + ') = ' + ratio.toFixed(2) + '</span> · يلتقيان عند <span class="chem">' + Math.round(fracA * 100) + '%</span> من جهة ' + gA.short + ' (' +
+            (ratio > 1 ? gA.short + ' أسرع لأنه أخف' : ratio < 1 ? gB.short + ' أسرع لأنه أخف' : 'سرعتهما متساوية') + ').';
+        }
+        if (!animate) {
+          barA.style.width = (fracA * 100) + '%'; barB.style.width = ((1 - fracA) * 100) + '%';
+          ring.style.left = (fracA * 100) + '%'; ring.hidden = false; finishText(); return;
+        }
+        const t0 = performance.now(), dur = 1600;
+        readout.textContent = 'تندفع جسيمات الغازين من طرفي الأنبوب...';
+        function step(now) {
+          if (!document.body.contains(tube)) return;
+          const k = Math.min(1, (now - t0) / dur);
+          barA.style.width = (fracA * k * 100) + '%'; barB.style.width = ((1 - fracA) * k * 100) + '%';
+          if (k < 1) animId = requestAnimationFrame(step);
+          else { ring.style.left = (fracA * 100) + '%'; ring.hidden = false; finishText(); }
+        }
+        animId = requestAnimationFrame(step);
+      }
+      selA.addEventListener('change', function () { runTube(true); });
+      selB.addEventListener('change', function () { runTube(true); });
+      launchBtn.addEventListener('click', function () { runTube(true); });
+      runTube(false);
+      box.appendChild(controls); box.appendChild(tubeWrap); box.appendChild(readout);
+    } else if (simType === 'gas-laws') {
+      const controls = el('div', { className: 'sim-controls' });
+      const lawSel = el('select', { className: 'btn btn-sm', 'aria-label': 'اختر القانون' });
+      [
+        { v: 'boyle', t: 'قانون بويل (ثبوت T): P و V عكسياً' },
+        { v: 'charles', t: 'قانون شارل (ثبوت P): V و T(K) طردياً' },
+        { v: 'gay', t: 'قانون جاي-لوساك (ثبوت V): P و T(K) طردياً' }
+      ].forEach(function (o) { lawSel.appendChild(el('option', { value: o.v, text: o.t })); });
+      const slider = el('input', { type: 'range', min: '1', max: '5', step: '0.25', value: '2', 'aria-label': 'قيمة المتغير المستقل' });
+      const sliderVal = el('span', { className: 'page-ref' });
+      const recBtn = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: 'سجّلي القراءة' });
+      controls.appendChild(lawSel);
+      controls.appendChild(el('label', { text: 'المتغير: ' }, [slider, sliderVal]));
+      controls.appendChild(recBtn);
+
+      const canvasWrap = el('div', { className: 'sim-canvas-wrap' });
+      const canvas = el('canvas', { width: '620', height: '175' });
+      const readout = el('div', { className: 'sim-readout' });
+      const tableWrap = el('div', { className: 'data-table-wrap' });
+      const rows = [];
+      canvasWrap.appendChild(canvas); canvasWrap.appendChild(readout);
+      box.appendChild(controls); box.appendChild(canvasWrap); box.appendChild(tableWrap);
+
+      const ctx = canvas.getContext('2d');
+      const gPts = Array.from({ length: 26 }, function () {
+        return { u: Math.random(), v: Math.random(), a: Math.random() * Math.PI * 2 };
+      });
+      let state = { law: 'boyle', p: 2, v: 5, tK: 300, cylW: 260 };
+
+      function update() {
+        const law = lawSel.value, x = Number(slider.value);
+        let p = 1, v = 10, tK = 300;
+        if (law === 'boyle') {
+          p = x; v = 10 / p;
+          sliderVal.textContent = ' P = ' + p.toFixed(2) + ' atm';
+          readout.innerHTML = 'قانون بويل: <span class="chem">P₁V₁ = P₂V₂ = 10 atm·L</span> ← الحجم الجديد <span class="chem">V = ' + v.toFixed(2) + ' L</span>';
+        } else if (law === 'charles') {
+          tK = Math.round(x * 150); v = (tK / 150) * 2.4;
+          sliderVal.textContent = ' T = ' + tK + ' K';
+          readout.innerHTML = 'قانون شارل: <span class="chem">V₁/T₁ = V₂/T₂</span> ← الحجم عند ' + tK + ' K يساوي <span class="chem">' + v.toFixed(1) + ' L</span>';
+        } else {
+          tK = Math.round(x * 150); p = (tK / 150) * 1.5; v = 6;
+          sliderVal.textContent = ' T = ' + tK + ' K';
+          readout.innerHTML = 'جاي-لوساك: <span class="chem">P₁/T₁ = P₂/T₂</span> ← الضغط عند ' + tK + ' K يساوي <span class="chem">' + p.toFixed(2) + ' atm</span> (الحجم ثابت)';
+        }
+        state = { law: law, p: p, v: v, tK: tK, cylW: Math.min(480, Math.max(95, v * 44)) };
+      }
+      lawSel.addEventListener('change', function () { rows.length = 0; tableWrap.innerHTML = ''; update(); });
+      slider.addEventListener('input', update);
+      recBtn.addEventListener('click', function () {
+        if (rows.length >= 4) rows.shift();
+        const kVal = state.law === 'boyle' ? (state.p * state.v).toFixed(2) : state.law === 'charles' ? (state.v / state.tK).toFixed(4) : (state.p / state.tK).toFixed(4);
+        const kName = state.law === 'boyle' ? 'P × V' : state.law === 'charles' ? 'V ÷ T' : 'P ÷ T';
+        rows.push({ p: state.p.toFixed(2), v: state.v.toFixed(2), t: state.tK, k: kVal });
+        tableWrap.innerHTML = '<table class="data-table"><thead><tr><th>#</th><th>P (atm)</th><th>V (L)</th><th>T (K)</th><th>' + kName + '</th></tr></thead><tbody>' +
+          rows.map(function (r, idx) { return '<tr><td>' + (idx + 1) + '</td><td>' + r.p + '</td><td>' + r.v + '</td><td>' + r.t + '</td><td>' + r.k + '</td></tr>'; }).join('') + '</tbody></table>';
+      });
+      update();
+
+      function animateCylinder() {
+        if (!document.body.contains(canvas)) return;
+        const pal = themePal();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const x0 = 40, y0 = 18, ch = 112, cw = state.cylW;
+        ctx.fillStyle = pal.tint; ctx.fillRect(x0, y0, cw, ch);
+        ctx.strokeStyle = pal.primary; ctx.lineWidth = 3.5;
+        ctx.beginPath(); ctx.moveTo(x0 + 500, y0); ctx.lineTo(x0, y0); ctx.lineTo(x0, y0 + ch); ctx.lineTo(x0 + 500, y0 + ch); ctx.stroke();
+        ctx.fillStyle = pal.coral; ctx.fillRect(x0 + cw, y0 - 4, 14, ch + 8);
+        ctx.fillRect(x0 + cw + 14, y0 + ch / 2 - 5, Math.max(20, 520 - cw), 10);
+        const heat = Math.min(1, Math.max(0, (state.tK - 150) / 600));
+        const speed = 0.008 * Math.sqrt(state.tK / 300);
+        gPts.forEach(function (pt) {
+          pt.u += Math.cos(pt.a) * speed * (320 / cw); pt.v += Math.sin(pt.a) * speed * 1.8;
+          if (pt.u < 0) { pt.u = -pt.u; pt.a = Math.PI - pt.a; }
+          if (pt.u > 1) { pt.u = 2 - pt.u; pt.a = Math.PI - pt.a; }
+          if (pt.v < 0) { pt.v = -pt.v; pt.a = -pt.a; }
+          if (pt.v > 1) { pt.v = 2 - pt.v; pt.a = -pt.a; }
+          ctx.beginPath(); ctx.arc(x0 + 10 + pt.u * (cw - 20), y0 + 10 + pt.v * (ch - 20), 6.5, 0, Math.PI * 2);
+          ctx.fillStyle = heat > 0.45 ? pal.coral : pal.primary; ctx.fill();
+        });
+        ctx.fillStyle = pal.ink; ctx.font = 'bold 14px Tajawal, sans-serif';
+        ctx.fillText('P = ' + state.p.toFixed(2) + ' atm   |   V = ' + state.v.toFixed(2) + ' L   |   T = ' + state.tK + ' K', 42, 160);
+        requestAnimationFrame(animateCylinder);
+      }
+      requestAnimationFrame(animateCylinder);
+    } else if (simType === 'imf-compare' || simType === 'phase-diagram' || simType === 'ideal-gas' || simType === 'gas-stoich' || simType === 'batteries-compare' || simType === 'electrolysis-cells') {
+      return null; // Handled cleanly by existing createSimulationNode fallback in lesson-app.js
+    }
+    return box;
+  }
+
+  window.CHEM_ILLUSTRATIONS = ILLUSTRATIONS;
+  window.CHEM_VIDEOS = {
+    createPlayer: createInteractiveVideoNode
+  };
+  window.CHEM_VIRTUAL_LABS = {
+    createLab: createVirtualLabNode
+  };
+})();
