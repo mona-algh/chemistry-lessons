@@ -1,0 +1,366 @@
+window.LESSONS_REGISTRY = window.LESSONS_REGISTRY || {};
+
+Object.assign(window.LESSONS_REGISTRY, {
+  '7-1': {
+    id: '7-1',
+    code: '7-1',
+    title: 'قوانين الغازات',
+    bookTitle: 'كيمياء 2-1',
+    bookUrl: 'chem-2-1.html',
+    pages: 'ص 262–272',
+    simulation: 'gas-laws',
+    mainIdea: 'إن تغير الضغط أو درجة الحرارة أو الحجم لكمية ثابتة من غاز سيؤثر على المتغيرين الآخرين.',
+    objectives: [
+      'تكتب العلاقة بين الضغط ودرجة الحرارة والحجم لمقدار ثابت من الغاز.',
+      'تطبق قوانين بويل وشارل وجاي-لوساك والقانون العام للغازات على المسائل.'
+    ],
+    vocab: ['قانون بويل', 'الصفر المطلق', 'قانون شارل', 'قانون جاي-لوساك', 'القانون العام للغازات'],
+    focus: {
+      prompt: 'ماذا يحدث لبالون منفوخ إذا غُمر في دلو ماء مثلج، ثم نُقل إلى ماء دافئ؟ ولماذا تنفجر علبة رذاذ مضغوطة إذا أُلقيت في النار؟',
+      answer: 'في البالون (ثبوت الضغط) ينكمش الحجم بالتبريد ويزداد بالتسخين (قانون شارل). أما علبة الرذاذ فحجمها ثابت، ومع التسخين يزداد تصادم الجسيمات فيرتفع الضغط بشدة (قانون جاي-لوساك).'
+    },
+    concepts: [
+      {
+        title: '1. ملخص قوانين الغازات الأربعة (لكمية ثابتة n)',
+        bodyHtml: '<div class="data-table-wrap"><table class="data-table"><thead><tr><th>القانون</th><th>الثابت</th><th>العلاقة والتناسب</th><th>الصيغة الرياضية</th></tr></thead><tbody><tr><td><strong>بويل</strong></td><td>درجة الحرارة (<span class="chem">T</span>)</td><td>عكسي بين <span class="chem">P</span> و <span class="chem">V</span></td><td><span class="chem">P₁V₁ = P₂V₂</span></td></tr><tr><td><strong>شارل</strong></td><td>الضغط (<span class="chem">P</span>)</td><td>طردي بين <span class="chem">V</span> و <span class="chem">T(K)</span></td><td><span class="chem">V₁ / T₁ = V₂ / T₂</span></td></tr><tr><td><strong>جاي-لوساك</strong></td><td>الحجم (<span class="chem">V</span>)</td><td>طردي بين <span class="chem">P</span> و <span class="chem">T(K)</span></td><td><span class="chem">P₁ / T₁ = P₂ / T₂</span></td></tr><tr><td><strong>القانون العام</strong></td><td>كمية الغاز (<span class="chem">n</span>)</td><td>يجمع المتغيرات الثلاثة معاً</td><td><span class="chem">P₁V₁ / T₁ = P₂V₂ / T₂</span></td></tr></tbody></table></div><div class="formula-box">T<sub>K</sub> = T<sub>C</sub> + 273 &nbsp;&nbsp;|&nbsp;&nbsp; الصفر المطلق = 0 K = -273 °C</div>'
+      }
+    ],
+    workedExample: {
+      title: 'تطبيق القانون العام وقانون شارل',
+      questionHtml: '1) عينة غاز حجمها <span class="chem">2.00 L</span> عند ضغط <span class="chem">110 kPa</span> وحرارة <span class="chem">30.0 °C</span>. ارتفعت الحرارة إلى <span class="chem">80.0 °C</span> وزاد الضغط إلى <span class="chem">440 kPa</span>. ما الحجم الجديد؟',
+      solutionHtml: '<p>أولاً نحول للكلفن: <span class="chem">T₁ = 30 + 273 = 303 K</span>، <span class="chem">T₂ = 80 + 273 = 353 K</span>.<br><span class="chem">V₂ = V₁ × (P₁/P₂) × (T₂/T₁) = 2.00 × (110/440) × (353/303) = 0.58 L</span>.</p>'
+    },
+    support: {
+      prompt: 'كيف تتذكر أي قانون تستخدم دون حفظ معادلات كثيرة؟',
+      detail: 'احفظ القانون العام فقط <span class="chem">(P₁V₁/T₁ = P₂V₂/T₂)</span> ثم احذف المتغير الثابت في المسألة؛ وتأكد دائماً من تحويل <span class="chem">°C</span> إلى <span class="chem">K</span> بإضافة 273.'
+    },
+    enrichment: {
+      prompt: 'لماذا لا تكون مضاعفة درجة الحرارة من 25°C إلى 50°C مضاعفة لحجم الغاز؟',
+      detail: 'لأن التناسب الطردي في قانون شارل يتحقق مع مقياس كلفن المطلق وليس السيليزي (<span class="chem">298 K</span> إلى <span class="chem">323 K</span> زيادة طفيفة وليست ضعفاً).'
+    },
+    strategies: [
+      { name: 'استراتيجية «المتغير المحذوف»', how: 'حدد الثابت في السؤال (T أو P أو V) واشطبه من القانون العام لتحصل فوراً على القانون المطلوب.' },
+      { name: 'اختبار المعقولية قبل الحساب', how: 'اسأل نفسك: هل سيزيد الحجم أم ينقص؟ في بويل إذا تضاعف الضغط ينخفض الحجم للنصف.' }
+    ],
+    lifeLinks: [
+      { tag: 'الربط بالعلوم الأخرى', title: 'الأحياء (التنفس وقانون بويل)', text: 'عند الشهيق ينزل الحجاب الحاجز فيزداد حجم الرئتين ويقل الضغط داخلهما فيندفع الهواء للداخل، والعكس عند الزفير.' },
+      { tag: 'الربط بالواقع', title: 'أواني الضغط ومناطيد الهواء الساخن', text: 'في قدر الضغط يثبت الحجم فيرتفع الضغط مع الحرارة ويُطهى الطعام أسرع (جاي-لوساك)؛ وفي المنطاد يتمدد الهواء بالتسخين فتقل كثافته (شارل).' },
+      { tag: 'الربط بالواقع', title: 'بالون الطقس', text: 'يرتفع بالون الطقس لأعلى فيتمدد حجمه بسبب انخفاض الضغط الجوي مع تغير درجة الحرارة (القانون العام).' }
+    ],
+    formativeQuiz: [
+      {
+        q: 'أي القوانين الآتية يمثل علاقة تناسب عكسي؟',
+        options: ['قانون شارل', 'قانون جاي-لوساك', 'قانون بويل', 'مبدأ أفوجادرو'],
+        answer: 2,
+        explain: 'في قانون بويل يتناسب الحجم عكسياً مع الضغط عند ثبوت درجة الحرارة.'
+      },
+      {
+        q: 'درجة الحرارة <span class="chem">35 °C</span> تعادل على مقياس كلفن:',
+        options: ['<span class="chem">238 K</span>', '<span class="chem">308 K</span>', '<span class="chem">273 K</span>', '<span class="chem">373 K</span>'],
+        answer: 1,
+        explain: '<span class="chem">T<sub>K</sub> = 35 + 273 = 308 K</span>.'
+      },
+      {
+        q: 'ما الثابت في قانون جاي-لوساك؟',
+        options: ['الضغط', 'درجة الحرارة', 'الحجم وكمية الغاز', 'الكثافة'],
+        answer: 2,
+        explain: 'يربط قانون جاي-لوساك الضغط بدرجة الحرارة بالكلفن عند ثبوت الحجم وكمية الغاز.'
+      }
+    ],
+    tahsiliTips: [
+      '<strong>تأسيس يلو:</strong> الصفر المطلق (<span class="chem">0 K = -273 °C</span>) هو أقل درجة حرارة ممكنة تصبح عندها طاقة الذرات أقل ما يمكن.',
+      '<strong>تأسيس يلو:</strong> جميع الحسابات التي تحوي درجة حرارة في قوانين الغازات يجب أن تُحوّل أولاً إلى <strong>كلفن</strong>.',
+      '<strong>تأسيس يلو:</strong> بويل (حجاب حاجز)، شارل (بالون)، جاي-لوساك (أواني الضغط).'
+    ],
+    finalQuiz: [
+      {
+        source: 'تحصيلي · تأسيس يلو',
+        q: 'غاز حجمه <span class="chem">42 cm³</span> عند ضغط <span class="chem">90 Pa</span>، ما حجمه الجديد عند ضغط <span class="chem">180 Pa</span> مع ثبات الحرارة؟',
+        options: ['<span class="chem">84 cm³</span>', '<span class="chem">21 cm³</span>', '<span class="chem">42 cm³</span>', '<span class="chem">10.5 cm³</span>'],
+        answer: 1,
+        explain: 'بقانون بويل: ضوعف الضغط فينقص الحجم للنصف <span class="chem">(90 × 42)/180 = 21 cm³</span>.'
+      },
+      {
+        source: 'تحصيلي · تأسيس يلو',
+        q: 'غاز ضغطه <span class="chem">4 atm</span> عند <span class="chem">200 K</span>، فإذا زادت حرارته إلى <span class="chem">450 K</span> بثبوت الحجم، فما ضغطه الجديد؟',
+        options: ['<span class="chem">9 atm</span>', '<span class="chem">1.78 atm</span>', '<span class="chem">8 atm</span>', '<span class="chem">6 atm</span>'],
+        answer: 0,
+        explain: 'بجاي-لوساك: <span class="chem">P₂ = 4 × 450 / 200 = 9 atm</span>.'
+      },
+      {
+        source: 'تحصيلي · تأسيس يلو',
+        q: 'غاز حجمه <span class="chem">10 L</span> عند <span class="chem">240 K</span>، ما حجمه عند <span class="chem">60 K</span> بثبوت الضغط؟',
+        options: ['<span class="chem">40 L</span>', '<span class="chem">2.5 L</span>', '<span class="chem">5 L</span>', '<span class="chem">15 L</span>'],
+        answer: 1,
+        explain: 'بشارل: <span class="chem">V₂ = 10 × 60 / 240 = 2.5 L</span>.'
+      },
+      {
+        source: 'تحصيلي · تأسيس يلو',
+        q: 'غاز حجمه <span class="chem">7 L</span> عند <span class="chem">5 atm</span> و <span class="chem">280 K</span>، ما حجمه عند <span class="chem">4 atm</span> و <span class="chem">320 K</span>؟',
+        options: ['<span class="chem">10 L</span>', '<span class="chem">5 L</span>', '<span class="chem">7.5 L</span>', '<span class="chem">14 L</span>'],
+        answer: 0,
+        explain: 'بالقانون العام: <span class="chem">V₂ = (5 × 7 × 320) / (280 × 4) = 10 L</span>.'
+      },
+      {
+        source: 'اختبار مقنن · الكتاب ص 294',
+        q: 'ملئ منطاد بحجم <span class="chem">5.66 × 10⁶ L</span> عند <span class="chem">25 °C</span>. كم يكون حجمه عند <span class="chem">12 °C</span> بثبوت الضغط؟',
+        options: ['<span class="chem">2.72 × 10⁶ L</span>', '<span class="chem">5.41 × 10⁶ L</span>', '<span class="chem">5.66 × 10⁶ L</span>', '<span class="chem">5.92 × 10⁶ L</span>'],
+        answer: 1,
+        explain: '<span class="chem">T₁ = 298 K, T₂ = 285 K ← V₂ = 5.66×10⁶ × (285/298) ≈ 5.41×10⁶ L</span>.'
+      },
+      {
+        source: 'تحصيلي · تأسيس يلو',
+        q: 'درجة الحرارة <span class="chem">200 K</span> تساوي على المقياس السيليزي:',
+        options: ['<span class="chem">473 °C</span>', '<span class="chem">-73 °C</span>', '<span class="chem">73 °C</span>', '<span class="chem">-200 °C</span>'],
+        answer: 1,
+        explain: '<span class="chem">T<sub>C</sub> = 200 - 273 = -73 °C</span>.'
+      }
+    ]
+  },
+
+  '7-2': {
+    id: '7-2',
+    code: '7-2',
+    title: 'قانون الغاز المثالي',
+    bookTitle: 'كيمياء 2-1',
+    bookUrl: 'chem-2-1.html',
+    pages: 'ص 273–280',
+    simulation: 'ideal-gas',
+    mainIdea: 'يربط قانون الغاز المثالي بين عدد المولات وكل من الضغط ودرجة الحرارة والحجم.',
+    objectives: [
+      'تربط عدد الجسيمات بالحجم مستخدماً مبدأ أفوجادرو.',
+      'تربط كمية الغاز بضغطه ودرجة حرارته وحجمه مستخدماً قانون الغاز المثالي.',
+      'تقارن بين خصائص الغاز الحقيقي والغاز المثالي.'
+    ],
+    vocab: ['مبدأ أفوجادرو', 'الحجم المولاري (22.4 L)', 'الظروف المعيارية STP', 'ثابت الغاز المثالي R', 'قانون الغاز المثالي', 'الغاز الحقيقي'],
+    focus: {
+      prompt: 'لماذا يُنصح بقياس ضغط إطارات السيارة وهي باردة؟ ولماذا يُخزن البروبان في الخزانات مسالاً لا غازاً؟',
+      answer: 'الاحتكاك على الطريق يرفع حرارة الإطار فيزيد الضغط عن القراءة الصحيحة؛ أما الغاز الحقيقي مثل البروبان فيتحول إلى سائل عند الضغط العالي والحرارة المنخفضة فيسهل تخزين كمية كبيرة منه.'
+    },
+    concepts: [
+      {
+        title: '1. مبدأ أفوجادرو والحجم المولاري',
+        bodyHtml: '<p><strong>مبدأ أفوجادرو:</strong> الحجوم المتساوية من الغازات المختلفة تحوي العدد نفسه من الجسيمات عند نفس الضغط ودرجة الحرارة.</p><div class="formula-box">عند STP (0 °C و 1 atm): حجم 1 mol من أي غاز = 22.4 L &nbsp;|&nbsp; V = n × 22.4</div>'
+      },
+      {
+        title: '2. قانون الغاز المثالي والكتلة المولية والكثافة',
+        bodyHtml: '<div class="formula-box">PV = nRT &nbsp;&nbsp;|&nbsp;&nbsp; M = mRT / PV &nbsp;&nbsp;|&nbsp;&nbsp; D = MP / RT</div><p>قيم <span class="chem">R</span>: <span class="chem">0.0821 L·atm/mol·K</span> أو <span class="chem">8.314 L·kPa/mol·K</span> أو <span class="chem">62.4 L·mmHg/mol·K</span>.</p>'
+      },
+      {
+        title: '3. الغاز المثالي مقابل الغاز الحقيقي',
+        bodyHtml: '<p>لا يوجد غاز مثالي تماماً؛ يحيد الغاز الحقيقي عن السلوك المثالي عند <strong>الضغط العالي</strong> و<strong>درجات الحرارة المنخفضة</strong>، وفي الغازات <strong>القطبية</strong> (كبخار الماء) أو ذات <strong>الجسيمات الكبيرة</strong> (كالبيوتان).</p>'
+      }
+    ],
+    workedExample: {
+      title: 'حساب عدد المولات باستخدام قانون الغاز المثالي',
+      questionHtml: 'احسب عدد مولات غاز الأمونيا <span class="chem">NH₃</span> في وعاء حجمه <span class="chem">3.0 L</span> عند <span class="chem">3.00 × 10² K</span> وضغط <span class="chem">1.50 atm</span>.',
+      solutionHtml: '<p><span class="chem">n = PV / RT = (1.50 × 3.0) / (0.0821 × 300) = 0.18 mol</span>.</p>'
+    },
+    support: {
+      prompt: 'كيف تختار قيمة الثابت R الصحيحة بسرعة؟',
+      detail: 'انظر إلى وحدة الضغط في المسألة: إذا كانت <span class="chem">atm</span> اختر <span class="chem">0.0821</span>، وإذا كانت <span class="chem">kPa</span> اختر <span class="chem">8.314</span>، وإذا كانت <span class="chem">mmHg</span> اختر <span class="chem">62.4</span>.'
+    },
+    enrichment: {
+      prompt: 'متى يسلك الغاز الحقيقي سلوكاً أقرب ما يكون للغاز المثالي؟',
+      detail: 'عند رفع درجة الحرارة وتقليل الضغط؛ لأن ذلك يباعد بين الجسيمات ويقلل أثر قوى التجاذب وحجم الجسيمات.'
+    },
+    strategies: [
+      { name: 'استراتيجية الاشتقاق من PV = nRT', how: 'عوض <span class="chem">n = m/M</span> للحصول على الكتلة المولية، وعوض <span class="chem">D = m/V</span> للحصول على الكثافة دون حفظ صيغ منفصلة.' },
+      { name: 'تجربة نموذج طفاية الحريق (ص 278)', how: 'حساب كثافة <span class="chem">CO₂</span> ومقارنتها بالأكسجين لإثبات سبب إحلاله محل الأكسجين وإطفاء اللهب.' }
+    ],
+    lifeLinks: [
+      { tag: 'الربط بالواقع', title: 'طفايات الحريق بـ CO₂', text: 'كثافة <span class="chem">CO₂</span> أكبر من كثافة الأكسجين (<span class="chem">44 g/mol</span> مقابل <span class="chem">32</span>)، فيغطي النار ويمنع الأكسجين مع أثر تبريدي سريع.' },
+      { tag: 'الربط بالواقع', title: 'خزانات النيتروجين السائل والبروبان', text: 'تخزين البروبان مضغوطاً في حالة سائلة يتيح تخزين كمية أكبر بنحو 270 مرة مقارنة بالحالة الغازية.' },
+      { tag: 'الربط بالعلوم الأخرى', title: 'الفيزياء والغذاء (فرقعة الفشار)', text: 'يرتفع ضغط بخار الماء داخل حبة الذرة بالتسخين وفق <span class="chem">PV = nRT</span> حتى تنفجر عند نحو <span class="chem">225 °C</span>.' }
+    ],
+    formativeQuiz: [
+      {
+        q: 'ما حجم <span class="chem">2 mol</span> من أي غاز في الظروف المعيارية (<span class="chem">STP</span>)؟',
+        options: ['<span class="chem">22.4 L</span>', '<span class="chem">44.8 L</span>', '<span class="chem">11.2 L</span>', '<span class="chem">2.0 L</span>'],
+        answer: 1,
+        explain: '<span class="chem">V = n × 22.4 = 2 × 22.4 = 44.8 L</span>.'
+      },
+      {
+        q: 'متى يحيد الغاز الحقيقي عن سلوك الغاز المثالي؟',
+        options: ['عند الضغط المنخفض والحرارة العالية', 'عند الضغط العالي والحرارة المنخفضة', 'عند STP فقط', 'لا يحيد أبداً'],
+        answer: 1,
+        explain: 'عند الضغط العالي تقترب الجسيمات ويظهر حجمها، وعند الحرارة المنخفضة تزداد قوى التجاذب.'
+      },
+      {
+        q: 'تُستخدم المعادلة <span class="chem">D = MP / RT</span> لحساب:',
+        options: ['الكتلة المولية', 'كثافة الغاز', 'ضغط البخار', 'عدد أفوجادرو'],
+        answer: 1,
+        explain: '<span class="chem">D</span> تمثل كثافة الغاز بدلالة كتلته المولية <span class="chem">M</span> والضغط <span class="chem">P</span> والحرارة <span class="chem">T</span>.'
+      }
+    ],
+    tahsiliTips: [
+      '<strong>تأسيس يلو:</strong> الظروف المعيارية للغاز <span class="chem">STP</span> هي <span class="chem">0 °C (273 K)</span> و <span class="chem">1 atm</span>، والحجم المولاري <span class="chem">22.4 L</span>.',
+      '<strong>تأسيس يلو:</strong> الغاز الحقيقي يسلك سلوك الغاز المثالي عند زيادة الحرارة وتقليل الضغط.',
+      '<strong>تأسيس يلو:</strong> الغازات القطبية والكبيرة الجسيمات أكثر ابتعاداً عن السلوك المثالي من الهيليوم.'
+    ],
+    finalQuiz: [
+      {
+        source: 'تحصيلي · تأسيس يلو',
+        q: 'ما حجم وعاء يحوي <span class="chem">2 mol</span> من غاز الأكسجين في الظروف المعيارية <span class="chem">STP</span>؟',
+        options: ['<span class="chem">11.2 L</span>', '<span class="chem">22.4 L</span>', '<span class="chem">44.8 L</span>', '<span class="chem">67.2 L</span>'],
+        answer: 2,
+        explain: '<span class="chem">V = 2 × 22.4 = 44.8 L</span>.'
+      },
+      {
+        source: 'اختبار مقنن · الكتاب ص 294',
+        q: 'في الرسم البياني للغازات عند حرارة منخفضة وضغط مرتفع، أي الغازات يتصرف كغاز مثالي أكثر؟',
+        options: ['الغاز القطبي الكبير', 'الغاز غير القطبي صغير الحجم مثل الهيليوم <span class="chem">He</span>', 'بخار الماء', 'البيوتان <span class="chem">C₄H₁₀</span>'],
+        answer: 1,
+        explain: 'الجسيمات الصغيرة غير القطبية كالهيليوم تملك أضعف قوى تجاذب وأصغر حجم جسيمي فتقترب من السلوك المثالي.'
+      },
+      {
+        source: 'تقويم الكتاب ص 290',
+        q: 'ما الكتلة المولية لغاز كتلته <span class="chem">4 g</span> وحجمه <span class="chem">2 L</span> عند ضغط <span class="chem">2 atm</span> وحرارة <span class="chem">25 °C (298 K)</span>؟',
+        options: ['<span class="chem">24.5 g/mol</span>', '<span class="chem">49.0 g/mol</span>', '<span class="chem">12.2 g/mol</span>', '<span class="chem">32.0 g/mol</span>'],
+        answer: 0,
+        explain: '<span class="chem">M = mRT / PV = (4 × 0.0821 × 298) / (2 × 2) ≈ 24.5 g/mol</span>.'
+      },
+      {
+        source: 'تحصيلي · تأسيس يلو',
+        q: 'يسلك الغاز الحقيقي سلوك الغاز المثالي عند:',
+        options: ['زيادة الضغط وتقليل الحرارة', 'زيادة الحرارة وتقليل الضغط', 'نقصان الحجم جداً', 'التبريد حتى التكاثف'],
+        answer: 1,
+        explain: 'زيادة الحرارة وتقليل الضغط يقللان أثر التجاذب وحجم الجسيمات.'
+      },
+      {
+        source: 'تقويم الكتاب ص 274',
+        q: 'يحتوي إناء على <span class="chem">1000</span> جسيم من الهيليوم، وفي إناء آخر مماثل عند نفس الضغط والحرارة <span class="chem">1000</span> جسيم من الكريبتون. العلاقة بين حجميهما:',
+        options: ['حجم الكريبتون أكبر كثيراً', 'حجم الهيليوم أكبر', 'يشغلان الحجم نفسه', 'يعتمد على الكثافة'],
+        answer: 2,
+        explain: 'وفق مبدأ أفوجادرو، الأعداد المتساوية من الجسيمات تشغل الحجم نفسه عند نفس T و P.'
+      },
+      {
+        source: 'تقويم الكتاب ص 277',
+        q: 'لماذا يُستخدم غاز <span class="chem">CO₂</span> في إطفاء الحرائق بدلاً من غازات أخف من الهواء؟',
+        options: ['لأنه يشتعل ببطء', 'لأن كثافته أكبر من الأكسجين فيحل محله ويعزل اللهب', 'لأنه يرفع الضغط الجوي', 'لأنه ينتج أكسجيناً'],
+        answer: 1,
+        explain: 'لا يشتعل ولا يساعد على الاشتعال وكثافته أكبر من الأكسجين فيغطي مصدر الحريق.'
+      }
+    ]
+  },
+
+  '7-3': {
+    id: '7-3',
+    code: '7-3',
+    title: 'الحسابات المتعلقة بالغازات',
+    bookTitle: 'كيمياء 2-1',
+    bookUrl: 'chem-2-1.html',
+    pages: 'ص 281–285',
+    simulation: 'gas-stoich',
+    mainIdea: 'عندما تتفاعل الغازات فإن المعاملات في المعادلات الكيميائية الموزونة تشير إلى أعداد المولات والحجوم النسبية للغازات.',
+    objectives: [
+      'تحدد النسب الحجمية للغازات المتفاعلة والناتجة مستخدماً المعاملات في المعادلة الموزونة.',
+      'تطبق قوانين الغازات لحساب كميات الغازات المتفاعلة والناتجة (حجم-حجم وحجم-كتلة).'
+    ],
+    vocab: ['المعاملات الكيميائية', 'النسب الحجمية', 'حسابات الحجم-حجم', 'حسابات الحجم-كتلة'],
+    focus: {
+      prompt: 'لصناعة الكيك نحتاج نسباً دقيقة من المكونات؛ فكيف نعرف حجم الأكسجين اللازم لحرق 4 لترات من غاز البروبان <span class="chem">C₃H₈</span> حرقاً كاملاً دون تحويل للكتل؟',
+      answer: 'لأن الحجوم النسبية للغازات عند نفس الضغط والحرارة تساوي تماماً معاملاتها في المعادلة الكيميائية الموزونة!'
+    },
+    concepts: [
+      {
+        title: '1. حسابات حجم - حجم (Volume-Volume)',
+        bodyHtml: '<p>وفق مبدأ أفوجادرو، المعاملات في المعادلة الموزونة للغازات تمثل <strong>عدد المولات</strong> و<strong>النسبة الحجمية</strong> معاً (لا تنطبق الحجوم النسبية على السوائل والمواد الصلبة):</p><div class="formula-box">C₃H₈(g) + 5O₂(g) → 3CO₂(g) + 4H₂O(g) &nbsp;&nbsp;(1L : 5L : 3L : 4L)</div>'
+      },
+      {
+        title: '2. حسابات حجم - كتلة (Volume-Mass)',
+        bodyHtml: '<p>عندما يطلب السؤال <strong>كتلة</strong> مادة متفاعلة أو ناتجة: نحول الحجم إلى مولات أولاً عبر <span class="chem">PV = nRT</span> (أو <span class="chem">22.4 L/mol</span> عند STP)، ثم نستخدم النسبة المولية والكتلة المولية <span class="chem">m = n × M</span>.</p>'
+      }
+    ],
+    workedExample: {
+      title: 'حساب كتلة الأمونيا الناتجة عن حجم معطى من النيتروجين',
+      questionHtml: 'تتفاعل <span class="chem">5.00 L</span> من <span class="chem">N₂</span> مع الهيدروجين لإنتاج الأمونيا وفق <span class="chem">N₂(g) + 3H₂(g) → 2NH₃(g)</span> عند <span class="chem">3.00 atm</span> و <span class="chem">298 K</span>. ما كتلة <span class="chem">NH₃</span> الناتجة؟',
+      solutionHtml: '<p>1) من النسبة الحجمية: <span class="chem">V(NH₃) = 5.00 × (2/1) = 10.0 L</span>.<br>2) بـ <span class="chem">PV=nRT</span>: <span class="chem">n = (3.00 × 10.0) / (0.0821 × 298) = 1.23 mol NH₃</span>.<br>3) الكتلة: <span class="chem">1.23 × 17.04 = 21.0 g NH₃</span>.</p>'
+    },
+    support: {
+      prompt: 'متى نستخدم طريقة المقص مباشرة للحجوم ومتى نحتاج قانون الغاز المثالي؟',
+      detail: 'إذا أعطى حجماً وطلب حجماً عند نفس الظروف ← استخدم معاملات المعادلة (المقص) مباشرة. إذا دخلت الكتلة (جرام) أو اختلفت الظروف ← حول إلى مولات.'
+    },
+    enrichment: {
+      prompt: 'هل تمثل المعاملات في المعادلة الموزونة النسب الحجمية للسوائل والمواد الصلبة؟',
+      detail: 'لا؛ لأن الحجم المولاري يختلف من سائل لآخر ومن صلب لآخر، بينما تشغل مولات الغازات الحجم نفسه تقريباً عند ثبات T و P.'
+    },
+    strategies: [
+      { name: 'استراتيجية «المقص الحجمي السريع»', how: 'ضع الحجم المعلوم أسفل الغاز الأول والمجهول x أسفل الغاز الثاني واضرب تبادلياً بالمعاملات.' },
+      { name: 'خريطة التحويل الثلاثية', how: 'حجم A ← (نسبة حجمية أو PV=nRT) ← مولات A ← (نسبة مولية) ← مولات B ← كتلة B.' }
+    ],
+    lifeLinks: [
+      { tag: 'الربط بالواقع', title: 'مصانع الأسمدة والبوليمرات', text: 'تعتمد مصانع الأمونيا والأسمدة ومصانع البولي إيثيلين على حساب حجوم غازات النيتروجين والإيثين بدقة لتقليل الهدر.' },
+      { tag: 'الربط بالعلوم الأخرى', title: 'الصحة والطب (العلاج بالأكسجين المضغوط HBOT)', text: 'تُستخدم غرف الأكسجين المضغوط (حتى 5–6 أضعاف الضغط العادي) لزيادة الأكسجين المذاب في بلازما الدم وعلاج التسمم بأول أكسيد الكربون والجروح.' },
+      { tag: 'الربط بالعلوم الأخرى', title: 'الزراعة والبيئة', text: 'يُحوّل النيتروجين الجوي صناعياً لأمونيا لتعويض نقص النيتروجين في التربة وزيادة إنتاج المحاصيل.' }
+    ],
+    formativeQuiz: [
+      {
+        q: 'في التفاعل <span class="chem">CH₄(g) + 2O₂(g) → CO₂(g) + 2H₂O(g)</span>، ما حجم <span class="chem">O₂</span> اللازم لحرق <span class="chem">2.36 L</span> من الميثان؟',
+        options: ['<span class="chem">1.18 L</span>', '<span class="chem">2.36 L</span>', '<span class="chem">4.72 L</span>', '<span class="chem">7.08 L</span>'],
+        answer: 2,
+        explain: 'النسبة 1 إلى 2، لذا <span class="chem">2.36 × 2 = 4.72 L</span>.'
+      },
+      {
+        q: 'أي مما يأتي يجب فعله أولاً قبل حساب حجوم الغازات في التفاعل؟',
+        options: ['حساب الكثافة', 'وزن المعادلة الكيميائية', 'قياس الضغط الجوي', 'تبريد الغاز'],
+        answer: 1,
+        explain: 'المعاملات في المعادلة الموزونة هي التي تعطي النسب الحجمية والمولية الصحيحة.'
+      },
+      {
+        q: 'في التفاعل <span class="chem">2F₂(g) + 2H₂O(g) → O₂(g) + 4HF(g)</span>، إذا تفاعل <span class="chem">2 L</span> من <span class="chem">F₂</span>، ما حجم <span class="chem">O₂</span> الناتج؟',
+        options: ['<span class="chem">4 L</span>', '<span class="chem">2 L</span>', '<span class="chem">1 L</span>', '<span class="chem">0.5 L</span>'],
+        answer: 2,
+        explain: 'النسبة الحجمية <span class="chem">2 F₂ : 1 O₂</span>، لذا <span class="chem">2 L</span> تعطي <span class="chem">1 L</span> من الأكسجين.'
+      }
+    ],
+    tahsiliTips: [
+      '<strong>تأسيس يلو:</strong> في مسائل حجم-حجم للغازات استخدم طريقة المقص مباشرة بالمعاملات الموزونة دون حاجة لـ T و P.',
+      '<strong>تأسيس يلو:</strong> تأكد من أن المواد في المعادلة غازات (<span class="chem">g</span>) عند استخدام النسبة الحجمية للمعاملات.'
+    ],
+    finalQuiz: [
+      {
+        source: 'تحصيلي · تأسيس يلو',
+        q: 'ما حجم غاز الأكسجين اللازم لإحراق <span class="chem">4 L</span> من غاز البروبان حرقاً كاملاً وفق <span class="chem">C₃H₈ + 5O₂ → 3CO₂ + 4H₂O</span>؟',
+        options: ['<span class="chem">4 L</span>', '<span class="chem">12 L</span>', '<span class="chem">20 L</span>', '<span class="chem">16 L</span>'],
+        answer: 2,
+        explain: 'المقص: <span class="chem">4 × 5 = 20 L O₂</span>.'
+      },
+      {
+        source: 'تحصيلي · تأسيس يلو',
+        q: 'احسب حجم غاز الأمونيا الناتج عن تفاعل <span class="chem">6 L</span> من النيتروجين مع كمية كافية من الهيدروجين في <span class="chem">N₂ + 3H₂ → 2NH₃</span>:',
+        options: ['<span class="chem">3 L</span>', '<span class="chem">6 L</span>', '<span class="chem">12 L</span>', '<span class="chem">18 L</span>'],
+        answer: 2,
+        explain: 'النسبة <span class="chem">1 N₂ : 2 NH₃</span>، إذن <span class="chem">6 × 2 = 12 L</span>.'
+      },
+      {
+        source: 'تقويم الكتاب ص 282',
+        q: 'ما حجم غاز الهيدروجين اللازم للتفاعل تماماً مع <span class="chem">5.00 L</span> من الأكسجين لإنتاج بخار الماء (<span class="chem">2H₂ + O₂ → 2H₂O</span>)؟',
+        options: ['<span class="chem">2.50 L</span>', '<span class="chem">5.00 L</span>', '<span class="chem">10.0 L</span>', '<span class="chem">20.0 L</span>'],
+        answer: 2,
+        explain: 'كل <span class="chem">1 L</span> من الأكسجين يتفاعل مع <span class="chem">2 L</span> من الهيدروجين ← <span class="chem">10.0 L</span>.'
+      },
+      {
+        source: 'تقويم الكتاب ص 285',
+        q: 'في التفاعل <span class="chem">2F₂(g) + 2H₂O(g) → O₂(g) + 4HF(g)</span>، إذا تفاعل <span class="chem">2 L</span> من الفلور، فما حجم <span class="chem">HF</span> الناتج؟',
+        options: ['<span class="chem">1 L</span>', '<span class="chem">2 L</span>', '<span class="chem">4 L</span>', '<span class="chem">8 L</span>'],
+        answer: 2,
+        explain: 'النسبة <span class="chem">2 F₂ : 4 HF</span> أي الضعف، فينتج <span class="chem">4 L</span> من <span class="chem">HF</span>.'
+      },
+      {
+        source: 'تقويم الكتاب ص 286',
+        q: 'كيف يساعد العلاج بالأكسجين المضغوط (<span class="chem">HBOT</span>) في حالات التسمم بأول أكسيد الكربون؟',
+        options: ['يقلل ضغط الدم', 'يزيد الأكسجين المذاب في بلازما الدم ويطرد CO المرتبط بالهيموجلوبين', 'يحوّل CO إلى ميثان', 'يوقف التنفس'],
+        answer: 1,
+        explain: 'زيادة ضغط الأكسجين النقي ترفع تركيزه في البلازما وتسرّع التخلص من <span class="chem">CO</span>.'
+      },
+      {
+        source: 'تقويم الكتاب ص 291',
+        q: 'لماذا لا يلزم معرفة الضغط والحرارة في مسائل حجم-حجم للغازات داخل وعاء التفاعل نفسه؟',
+        options: ['لأن الضغط والحرارة لا يؤثران في الغازات أبداً', 'لأن الغازات المتفاعلة والناتجة تتأثر بالظروف نفسها بنسبة متساوية', 'لأن الكتل المولية متساوية', 'لأن المعاملات تمثل الكتلة'],
+        answer: 1,
+        explain: 'بعد الخلط تكون الغازات في نفس درجة الحرارة والضغط فتبقى النسبة الحجمية ثابتة.'
+      }
+    ]
+  }
+});

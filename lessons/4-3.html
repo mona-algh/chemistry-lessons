@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>4-3 التحليل الكهربائي | بوابة الكيمياء التفاعلية</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><polygon points='18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5' stroke='%231D5A70' stroke-width='2.4' fill='none'/><circle cx='18' cy='18' r='4.5' fill='%231D5A70'/></svg>">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <script>window.CURRENT_LESSON_ID = '4-3';</script>
+  <script src="../assets/theme.js"></script>
+  <script src="../assets/data/chem3-ch4.js"></script>
+  <script src="../assets/lesson-app.js"></script>
+</head>
+<body>
+  <header class="classroom-bar">
+    <div class="classroom-bar-inner">
+      <div class="lesson-crumb">
+        <a class="btn btn-sm" href="../index.html">الرئيسية</a>
+        <a id="backBookLink" class="btn btn-sm" href="../chem-3.html">كيمياء 3</a>
+        <h1 id="lessonTitle">4-3 التحليل الكهربائي</h1>
+        <span id="lessonPages" class="page-ref">ص 154–158</span>
+      </div>
+      <div class="header-tools">
+        <div class="timer-widget" aria-label="مؤقت الحصة">
+          <span id="timerDisplay" class="timer-display">35:00</span>
+          <button id="timerToggleBtn" type="button" class="timer-btn">ابدئي</button>
+          <button id="timerResetBtn" type="button" class="timer-btn" title="إعادة ضبط المؤقت">إعادة</button>
+          <button type="button" class="timer-btn" data-timer-mins="5">5د</button>
+          <button type="button" class="timer-btn" data-timer-mins="15">15د</button>
+        </div>
+        <button id="wbToggleBtn" type="button" class="btn btn-sm" aria-pressed="false">قلم الشرح</button>
+        <button id="themeToggleBtn" type="button" class="btn btn-sm" aria-pressed="false">الوضع الليلي</button>
+      </div>
+    </div>
+  </header>
+
+  <canvas id="wbCanvas" class="whiteboard-canvas" aria-hidden="true"></canvas>
+  <aside id="wbDock" class="whiteboard-dock" hidden aria-label="أدوات قلم الشرح">
+    <button type="button" class="wb-swatch active" data-wb-color="#1D5A70" style="background:#1D5A70;" aria-label="لون أزرق بترولي"></button>
+    <button type="button" class="wb-swatch" data-wb-color="#B4690E" style="background:#B4690E;" aria-label="لون عنبري"></button>
+    <button type="button" class="wb-swatch" data-wb-color="#A63A3A" style="background:#A63A3A;" aria-label="لون أحمر"></button>
+    <button type="button" class="wb-swatch" data-wb-color="#1F6F50" style="background:#1F6F50;" aria-label="لون أخضر"></button>
+    <button id="wbEraserBtn" type="button" class="wb-tool-btn">ممحاة</button>
+    <button id="wbUndoBtn" type="button" class="wb-tool-btn">تراجع</button>
+    <button id="wbClearBtn" type="button" class="wb-tool-btn">مسح</button>
+    <button id="wbCloseBtn" type="button" class="wb-tool-btn">إغلاق</button>
+  </aside>
+
+  <main class="lesson-workspace">
+    <div class="tabs-nav" role="tablist" aria-label="أقسام الدرس">
+      <button id="tab-goals" class="tab-btn" role="tab" aria-selected="true" aria-controls="panel-goals">الأهداف والتركيز</button>
+      <button id="tab-content" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-content">المحتوى والتفاعل</button>
+      <button id="tab-connections" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-connections">الاستراتيجيات والربط</button>
+      <button id="tab-formative" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-formative">التقويم التكويني</button>
+      <button id="tab-final" class="tab-btn" role="tab" aria-selected="false" aria-controls="panel-final">النهائي والتحصيلي</button>
+    </div>
+
+    <section id="panel-goals" class="lesson-panel" role="tabpanel" aria-labelledby="tab-goals"></section>
+    <section id="panel-content" class="lesson-panel" role="tabpanel" aria-labelledby="tab-content" hidden></section>
+    <section id="panel-connections" class="lesson-panel" role="tabpanel" aria-labelledby="tab-connections" hidden></section>
+    <section id="panel-formative" class="lesson-panel" role="tabpanel" aria-labelledby="tab-formative" hidden></section>
+    <section id="panel-final" class="lesson-panel" role="tabpanel" aria-labelledby="tab-final" hidden></section>
+
+    <nav id="lessonPrevNext" class="lesson-footer-nav" aria-label="التنقل بين الدروس"></nav>
+  </main>
+</body>
+</html>
