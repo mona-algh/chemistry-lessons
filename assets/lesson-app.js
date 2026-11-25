@@ -1083,12 +1083,58 @@
       updateBar();
     }
 
+    function confettiBurst() {
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      let cv = document.getElementById('confettiCanvas');
+      if (!cv) {
+        cv = el('canvas', { id: 'confettiCanvas', className: 'confetti-canvas', 'aria-hidden': 'true' });
+        document.body.appendChild(cv);
+      }
+      cv.width = window.innerWidth;
+      cv.height = window.innerHeight;
+      const cx = cv.getContext('2d');
+      const colors = ['#e4572e', '#ffc93c', '#2a7de1', '#7c5ce6', '#0b8a4a'];
+      const parts = Array.from({ length: 70 }, function (_, i) {
+        return {
+          x: Math.random() * cv.width,
+          y: -15 - Math.random() * cv.height * 0.25,
+          vx: (Math.random() - 0.5) * 5,
+          vy: 2.5 + Math.random() * 4.5,
+          rot: Math.random() * 6.28,
+          sz: 6 + Math.random() * 7,
+          col: colors[i % colors.length]
+        };
+      });
+      function draw() {
+        cx.clearRect(0, 0, cv.width, cv.height);
+        for (let i = parts.length - 1; i >= 0; i--) {
+          const p = parts[i];
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.08;
+          p.rot += 0.12;
+          cx.save();
+          cx.translate(p.x, p.y);
+          cx.rotate(p.rot);
+          cx.fillStyle = p.col;
+          cx.fillRect(-p.sz / 2, -p.sz / 4, p.sz, p.sz / 2);
+          cx.restore();
+          if (p.y > cv.height + 24) parts.splice(i, 1);
+        }
+        if (parts.length > 0) requestAnimationFrame(draw);
+        else cx.clearRect(0, 0, cv.width, cv.height);
+      }
+      requestAnimationFrame(draw);
+    }
+
     q.options.forEach(function (optHtml, oIdx) {
       const btn = el('button', { type: 'button', className: 'quiz-option-btn' });
       btn.innerHTML = '<span>' + ['أ', 'ب', 'ج', 'د'][oIdx] + ')</span> <span>' + optHtml + '</span>';
       btn.addEventListener('click', function () {
+        const firstPick = quizState.answers[qIdx] === undefined;
         quizState.answers[qIdx] = oIdx;
         paintQuestion();
+        if (firstPick && oIdx === q.answer) confettiBurst();
       });
       optsWrap.appendChild(btn);
     });
@@ -1126,6 +1172,7 @@
 
     slides.push({
       sectionId: 'goals',
+      tone: 'goals',
       sectionLabel: 'الأهداف والتركيز',
       title: 'الفكرة الرئيسة والأهداف',
       render: function () {
@@ -1144,6 +1191,7 @@
 
     slides.push({
       sectionId: 'goals',
+      tone: 'goals',
       sectionLabel: 'الأهداف والتركيز',
       title: 'شريحة التركيز والمفردات الجديدة',
       render: function () {
@@ -1160,7 +1208,7 @@
             el('span', { className: 'focus-badge', text: 'سؤال التهيئة والتركيز' }),
             revealBtn
           ]),
-          el('p', { style: 'margin:0; font-weight:700; font-size:1.08rem;', html: lesson.focus.prompt }),
+          el('p', { style: 'margin:0; font-weight:700; font-size:1.15rem;', html: lesson.focus.prompt }),
           revealBox
         ]));
         frag.appendChild(el('h3', { style: 'margin:0.5rem 0 0.35rem; color:var(--primary); font-size:1rem;', text: 'المفردات الأساسية' }));
@@ -1181,6 +1229,7 @@
     function pushFormativeSlide(q, idx) {
       slides.push({
         sectionId: 'content',
+        tone: 'formative',
         sectionLabel: 'تقويم تكويني',
         title: 'تقويم تكويني · سؤال ' + (idx + 1) + ' من ' + fQuiz.length,
         badge: 'تحقق من الفهم',
@@ -1195,6 +1244,7 @@
 
       slides.push({
         sectionId: 'content',
+        tone: 'concept',
         sectionLabel: 'شرح المفهوم ' + (cIdx + 1),
         title: c.title,
         render: function () {
@@ -1205,6 +1255,7 @@
       if (cIdx === simSlot && lesson.simulation) {
         slides.push({
           sectionId: 'content',
+          tone: 'sim',
           sectionLabel: 'تجربة تفاعلية متحركة',
           title: simTitles[lesson.simulation] || 'تجربة تفاعلية متحركة',
           badge: 'محاكاة حية',
@@ -1219,6 +1270,7 @@
       if (cycleStrategies.length || cycleLinks.length) {
         slides.push({
           sectionId: 'content',
+          tone: 'link',
           sectionLabel: 'استراتيجية وربط بالواقع',
           title: 'تطبيق عملي وربط بالمفهوم ' + (cIdx + 1),
           badge: 'نشاط وربط',
@@ -1244,6 +1296,7 @@
       if (isLast && lesson.workedExample) {
         slides.push({
           sectionId: 'content',
+          tone: 'concept',
           sectionLabel: 'مثال محلول · دعم وإثراء',
           title: 'مثال محلول · دعم وإثراء',
           render: function () {
@@ -1297,9 +1350,31 @@
       }
     });
 
+    if (lesson.discovery && lesson.discovery.items && lesson.discovery.items.length) {
+      slides.push({
+        sectionId: 'content',
+        tone: 'discovery',
+        sectionLabel: 'إثراء علمي واكتشافات',
+        title: lesson.discovery.title,
+        badge: 'اكتشافات وعلماء',
+        render: function () {
+          const grid = el('div', { className: 'discovery-grid' });
+          lesson.discovery.items.forEach(function (it) {
+            grid.appendChild(el('div', { className: 'discovery-card', 'data-tone': it.tone || 'violet' }, [
+              el('span', { className: 'discovery-tag', text: it.tag }),
+              el('h4', { html: it.head }),
+              el('p', { html: it.body })
+            ]));
+          });
+          return grid;
+        }
+      });
+    }
+
     if (lesson.tahsiliTips && lesson.tahsiliTips.length) {
       slides.push({
         sectionId: 'exit',
+        tone: 'exit',
         sectionLabel: 'بطاقة الخروج',
         title: 'بطاقة الخروج · خلاصة وتنبيهات التحصيلي',
         badge: 'ملخص التحصيلي',
@@ -1319,6 +1394,7 @@
     lesson.finalQuiz.forEach(function (q, idx) {
       slides.push({
         sectionId: 'exit',
+        tone: 'exit',
         sectionLabel: 'بطاقة الخروج',
         title: 'بطاقة الخروج · سؤال ' + (idx + 1) + ' من ' + lesson.finalQuiz.length,
         badge: q.source || 'أسئلة من التحصيلي',
@@ -1387,6 +1463,7 @@
       if (stageEl) {
         stageEl.innerHTML = '';
         stageEl.scrollTop = 0;
+        stageEl.setAttribute('data-stage-tone', s.tone || 'concept');
         const topMeta = el('div', { className: 'slide-top-meta' }, [
           el('span', { className: 'slide-section-pill', text: s.sectionLabel }),
           el('span', { className: s.isTahsili ? 'quiz-source-tag tahsili' : 'page-ref', text: s.badge || lesson.pages })
