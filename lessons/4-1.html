@@ -1,73 +1,914 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>4-1 الخلايا الجلفانية | دروس الكيمياء التفاعلية</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><polygon points='18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5' stroke='%231D5A70' stroke-width='2.4' fill='none'/><circle cx='18' cy='18' r='4.5' fill='%231D5A70'/></svg>">
-  <link rel="stylesheet" href="../assets/styles.css">
-  <script>window.CURRENT_LESSON_ID = '4-1';</script>
+  <title>4-1 الخلايا الجلفانية | درس متكامل مع معمل افتراضي</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><polygon points='18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5' stroke='%232a7de1' stroke-width='2.4' fill='none'/><circle cx='18' cy='18' r='4.5' fill='%230b8a4a'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
   <script src="../assets/theme.js"></script>
-  <script src="../assets/data/chem3-ch4.js"></script>
-  <script src="../assets/illustrations-labs.js"></script>
-  <script src="../assets/lesson-app.js"></script>
+  <style>
+    :root {
+      --ink: #1d2742; --muted: #5d6886; --bg: #f7f5f0; --card: #ffffff; --soft: #faf8f3; --line: #e6e1d6;
+      --ox: #e4572e; --ox-l: #fdebe5; --red: #2a7de1; --red-l: #e6f0fd; --blue: #2a7de1;
+      --green: #0b8a4a; --green-l: #e5f6ec; --gold: #d79b14; --gold-l: #fff4d6;
+      --violet: #7c5ce6; --violet-l: #efeafe; --teal: #0e9aa7; --teal-l: #e0f6f7;
+    }
+    [data-theme="dark"] {
+      --ink: #f2f5ff; --muted: #aab8d6; --bg: #101729; --card: #18223b; --soft: #1e2a48; --line: #2e3e66;
+      --ox: #ff7c54; --ox-l: #361d17; --red: #5aa9ff; --red-l: #1a2d52; --blue: #5aa9ff;
+      --green: #34c77b; --green-l: #123324; --gold: #ffc93c; --gold-l: #332812;
+      --violet: #a78bfa; --violet-l: #261e47; --teal: #3ccad6; --teal-l: #123238;
+    }
+    * { box-sizing: border-box; }
+    html, body { overflow-x: hidden; }
+    body {
+      margin: 0; font-family: 'Tajawal', sans-serif; color: var(--ink); font-size: 19px; line-height: 1.8;
+      background: var(--bg) radial-gradient(circle at 6% 12%, #ffe2d6 0 120px, transparent 121px),
+        radial-gradient(circle at 95% 45%, #dde9fb 0 150px, transparent 151px),
+        radial-gradient(circle at 3% 85%, #e6f6ec 0 120px, transparent 121px);
+      background-attachment: fixed;
+    }
+    [data-theme="dark"] body {
+      background: var(--bg) radial-gradient(circle at 6% 12%, rgba(228,87,46,.14) 0 140px, transparent 141px),
+        radial-gradient(circle at 95% 45%, rgba(42,125,225,.16) 0 170px, transparent 171px),
+        radial-gradient(circle at 3% 85%, rgba(11,138,74,.14) 0 140px, transparent 141px);
+    }
+    button, input, select { font-family: 'Tajawal', sans-serif; }
+    .portal-strip {
+      max-width: 1260px; margin: 0 auto; padding: 10px 18px 0;
+      display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+    }
+    .portal-links { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .pbtn {
+      display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 6px 14px;
+      border-radius: 12px; border: 2px solid var(--line); background: var(--card); color: var(--ink);
+      font-weight: 800; font-size: 15px; text-decoration: none; cursor: pointer;
+    }
+    .pbtn:hover { border-color: var(--blue); }
+    .pbtn.primary { background: var(--blue); border-color: var(--blue); color: #fff; }
+    .wrap { max-width: 1260px; margin: 0 auto; padding: 12px 18px 90px 84px; }
+    sub, sup { font-size: .7em; line-height: 0; }
+
+    /* cover header */
+    .cover {
+      border-radius: 24px;
+      background: linear-gradient(120deg, #0b8a4a 0%, #0e9aa7 40%, #2a7de1 100%);
+      color: #fff; padding: 16px 24px; display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+      box-shadow: 0 10px 26px rgba(42,125,225,.22); position: relative; overflow: hidden;
+    }
+    .cover h1 { margin: 0; font-size: clamp(24px, 3vw, 34px); font-weight: 900; line-height: 1.3; }
+    .cover .sub { font-size: 16px; opacity: .95; }
+    .cls { margin-inline-start: auto; display: flex; gap: 8px; flex-wrap: wrap; position: relative; z-index: 2; }
+    .cls button {
+      border: 2px solid rgba(255,255,255,.75); background: transparent; color: #fff;
+      font-weight: 800; font-size: 16px; border-radius: 12px; padding: 3px 14px; cursor: pointer; min-height: 38px;
+    }
+    .cls button.on { background: #fff; color: #0b8a4a; }
+    .cls span { outline: none; direction: ltr; unicode-bidi: isolate; display: inline-block; }
+
+    /* sticky nav + timer + battery */
+    .nav {
+      position: sticky; top: 8px; z-index: 40; margin: 12px 0 18px;
+      background: var(--card); border: 2px solid var(--line); border-radius: 22px;
+      padding: 10px 12px; box-shadow: 0 8px 20px rgba(0,0,0,.08);
+    }
+    .tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+    .tab {
+      flex: 1; min-width: 102px; border: none; border-radius: 16px; padding: 7px 8px 5px;
+      background: var(--soft); color: var(--muted); font-weight: 900; font-size: 16px;
+      cursor: pointer; position: relative; transition: .2s; line-height: 1.3; min-height: 54px;
+    }
+    .tab .e { display: block; font-size: 21px; }
+    .tab small { display: block; font-size: 12px; font-weight: 700; opacity: .85; }
+    .tab.on { background: var(--c); color: #fff; transform: translateY(-2px); box-shadow: 0 6px 14px rgba(0,0,0,.15); }
+    .tab.done:after { content: "✓"; position: absolute; top: 4px; left: 8px; font-size: 13px; color: var(--green); }
+    .tab.on.done:after { color: #fff; }
+    .tab.live { outline: 3px solid var(--gold); outline-offset: 1px; }
+    .ctrl { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+    .clock { font-size: 27px; font-weight: 900; font-variant-numeric: tabular-nums; color: var(--green); min-width: 84px; direction: ltr; }
+    .clock.warn { color: var(--gold); } .clock.over { color: var(--ox); animation: blink 1s infinite; }
+    .tb {
+      border: none; border-radius: 12px; padding: 7px 14px; min-height: 40px; font-weight: 800; font-size: 15px;
+      cursor: pointer; background: var(--green); color: #fff;
+    }
+    .tb.sec { background: var(--soft); color: var(--ink); border: 1.5px solid var(--line); }
+    .tb.mic { background: linear-gradient(135deg, #e4572e, #ff9a3d); color: #fff; }
+    .batt { display: flex; align-items: center; gap: 6px; font-weight: 900; font-size: 17px; }
+    .bshell { width: 68px; height: 26px; border: 3px solid var(--ink); border-radius: 7px; padding: 2px; position: relative; background: var(--card); }
+    .bshell::after { content: ''; position: absolute; left: -7px; top: 6px; width: 5px; height: 10px; background: var(--ink); border-radius: 2px; }
+    .bshell i { display: block; height: 100%; width: 0; border-radius: 3px; transition: width .5s, background .5s; margin-inline-start: auto; }
+    .pts { margin-inline-start: auto; background: linear-gradient(135deg, #ffc93c, #ff9a3d); color: #5a3200; border-radius: 999px; padding: 3px 16px; font-weight: 900; font-size: 18px; }
+    .pts.bump { animation: bump .5s; }
+    .tbar { height: 8px; border-radius: 6px; background: var(--soft); margin-top: 8px; overflow: hidden; }
+    .tbar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #e4572e, #d79b14, #0b8a4a, #2a7de1, #7c5ce6); transition: width 1s linear; }
+
+    /* panels & cards */
+    .panel { display: none; position: relative; animation: slide .35s ease; }
+    .panel.on { display: block; }
+    .card {
+      background: var(--card); border-radius: 24px; padding: 20px 24px; margin-bottom: 18px;
+      border-top: 8px solid var(--c, var(--blue)); box-shadow: 0 4px 16px rgba(0,0,0,.06);
+    }
+    .ph { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+    .ph .ic { width: 48px; height: 48px; border-radius: 16px; background: var(--c, var(--blue)); color: #fff; display: grid; place-items: center; font-size: 24px; flex: none; }
+    .ph h2 { margin: 0; font-size: clamp(21px, 2.4vw, 27px); font-weight: 900; }
+    .book { margin-inline-start: auto; background: var(--gold-l); color: var(--ink); border: 2px solid var(--gold); border-radius: 999px; padding: 2px 14px; font-size: 15px; font-weight: 800; white-space: nowrap; }
+    .lead { font-size: 20px; font-weight: 800; margin: 6px 0 10px; }
+    .next { display: flex; justify-content: center; margin: 6px 0 12px; gap: 12px; flex-wrap: wrap; }
+    .big {
+      border: none; background: var(--c, var(--blue)); color: #fff; font-weight: 900; font-size: 18px;
+      border-radius: 16px; padding: 10px 24px; min-height: 46px; cursor: pointer; box-shadow: 0 6px 14px rgba(0,0,0,.12); transition: .2s;
+    }
+    .big:hover { transform: translateY(-2px); }
+    .big.ghost { background: var(--card); color: var(--c, var(--ink)); border: 2px solid var(--c, var(--ink)); box-shadow: none; }
+    .goal { display: flex; align-items: center; gap: 12px; background: var(--gold-l); border-radius: 14px; padding: 9px 14px; font-weight: 800; font-size: 18px; margin-bottom: 8px; }
+    .goal b { width: 32px; height: 32px; border-radius: 10px; background: var(--gold); color: #fff; display: grid; place-items: center; flex: none; }
+    .dbox { border-radius: 18px; padding: 14px 20px; margin: 10px 0; text-align: center; font-family: 'Amiri', serif; font-size: 24px; line-height: 1.9; font-weight: 700; }
+    .d3 { background: linear-gradient(135deg, #0b8a4a, #14a85e); color: #fff; }
+    .d2 { background: var(--red-l); color: var(--ink); border: 2px solid var(--blue); }
+    .dbox .h { display: block; font-family: 'Tajawal'; font-size: 15px; font-weight: 900; opacity: .92; }
+
+    /* hook & demos */
+    .demo { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; justify-content: center; }
+    .dsvg { flex: 0 1 280px; max-width: 300px; direction: ltr; }
+    .dside { flex: 1 1 360px; display: flex; flex-direction: column; gap: 10px; }
+    .dobs { background: var(--soft); border: 2px dashed var(--line); border-radius: 14px; padding: 10px 14px; font-size: 19px; font-weight: 800; }
+    .dobs.on { border: 2px solid var(--green); background: var(--green-l); animation: pop .4s; }
+    .tip { background: var(--ox-l); border-right: 6px solid var(--ox); border-radius: 14px; padding: 10px 16px; font-weight: 700; font-size: 18px; margin-top: 10px; }
+    .qrow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; background: var(--card); border: 2px solid var(--line); border-radius: 16px; padding: 8px 14px; margin-bottom: 8px; font-size: 19px; font-weight: 700; }
+    .qrow select { border: 2px solid var(--line); border-radius: 10px; padding: 4px 10px; font: 800 18px 'Tajawal'; background: var(--card); color: var(--ink); min-height: 40px; max-width: 100%; }
+    .qrow .chk { border: none; background: var(--ox); color: #fff; border-radius: 10px; padding: 5px 14px; font-weight: 900; cursor: pointer; min-height: 40px; }
+    .qrow.ok { border-color: var(--green); background: var(--green-l); }
+    .qrow.no { border-color: var(--ox); background: var(--ox-l); animation: shake .4s; }
+    .qrow .fb { min-width: 24px; font-size: 20px; }
+
+    /* cell SVG + reveals */
+    .csvg { direction: ltr; width: 100%; max-width: 740px; display: block; margin: 0 auto; }
+    .csvg .glow { filter: drop-shadow(0 0 8px #ffc93c) drop-shadow(0 0 4px #ff9a3d); }
+    .reveal4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 12px 0; }
+    .rv { all: unset; box-sizing: border-box; cursor: pointer; border: 3px solid var(--c); border-radius: 18px; padding: 10px 14px; font-weight: 900; font-size: 21px; color: var(--c); background: var(--card); text-align: center; }
+    .rv span { display: block; max-height: 0; overflow: hidden; transition: max-height .45s; font-size: 17px; color: var(--ink); font-weight: 700; line-height: 1.7; }
+    .rv.open { background: var(--soft); }
+    .rv.open span { max-height: 220px; margin-top: 6px; }
+    .rv code, .exq code { direction: ltr; unicode-bidi: isolate; display: inline-block; font: 800 17px Tajawal; background: var(--violet-l); color: var(--ink); border-radius: 8px; padding: 1px 8px; }
+    .mnem { background: linear-gradient(135deg, #1d2742, #33426b); color: #fff; border-radius: 18px; padding: 12px 18px; text-align: center; font-size: 21px; font-weight: 800; }
+    .mnem span { color: #ffc93c; font-size: 26px; }
+    .mnem small { display: block; font-size: 16px; opacity: .88; }
+    .formula { text-align: center; font-size: clamp(22px, 3vw, 32px); font-weight: 900; background: linear-gradient(135deg, #1d2742, #33426b); color: #ffc93c; border-radius: 18px; padding: 10px; margin-bottom: 10px; }
+    .exq { background: var(--soft); border-radius: 14px; padding: 10px 14px; margin: 10px 0; font-weight: 800; font-size: 19px; text-align: center; }
+    .steps { display: flex; flex-direction: column; gap: 8px; }
+    .st { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; background: var(--soft); border: 2px dashed var(--line); border-radius: 14px; padding: 8px 14px; font-size: 19px; }
+    .st .l { font-weight: 800; min-width: 150px; }
+    .st .a { filter: blur(8px); transition: filter .35s; cursor: pointer; user-select: none; color: var(--c, var(--blue)); font-weight: 900; font-size: 21px; }
+    .st.open { border-style: solid; border-color: var(--c, var(--blue)); background: var(--card); }
+    .st.open .a { filter: none; }
+    .st button { margin-inline-start: auto; border: none; background: var(--c, var(--blue)); color: #fff; border-radius: 10px; padding: 4px 12px; font-weight: 800; cursor: pointer; min-height: 36px; }
+    .st.open button { display: none; }
+    .watan { background: linear-gradient(135deg, #0b8a4a, #14a85e); color: #fff; border-radius: 18px; padding: 14px 18px; margin-bottom: 14px; }
+    .watan .wh { font-size: 22px; font-weight: 900; }
+    .watan .tb { background: #fff; color: #0b8a4a; }
+    .wa { display: none; margin-inline-start: 10px; font-weight: 900; font-size: 19px; background: rgba(255,255,255,.22); border-radius: 10px; padding: 2px 12px; }
+    .wa.show { display: inline-block; animation: pop .4s; }
+
+    /* Virtual Lab */
+    .safety { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .safety span { background: var(--gold-l); border: 2px solid var(--gold); border-radius: 999px; padding: 3px 12px; font-weight: 800; font-size: 16px; }
+    .labwrap { display: flex; gap: 16px; flex-wrap: wrap; align-items: flex-start; }
+    .lsteps { flex: 0 1 320px; display: flex; flex-direction: column; gap: 8px; }
+    .lt2 { font-weight: 900; font-size: 19px; color: var(--violet); }
+    .lstep { all: unset; box-sizing: border-box; cursor: pointer; background: var(--violet); color: #fff; border-radius: 14px; padding: 10px 14px; font-weight: 800; font-size: 18px; box-shadow: 0 4px 0 #5b3fd1; transition: .2s; min-height: 44px; }
+    .lstep:disabled { background: var(--soft); color: var(--muted); box-shadow: none; cursor: default; }
+    .lstep.done { background: var(--green-l); color: var(--green); box-shadow: none; }
+    .lstep.done::after { content: ' ✔'; }
+    .lstep:not(:disabled):not(.done) { animation: pulse 1.4s infinite; }
+    .lright { flex: 1 1 480px; }
+    .lmsg { text-align: center; font-size: 20px; font-weight: 900; min-height: 32px; margin: 6px 0; }
+    .lmsg.warn { color: var(--gold); } .lmsg.win { color: var(--green); animation: pop .4s; }
+    .locked { text-align: center; font-size: 20px; font-weight: 900; color: var(--muted); padding: 16px; border: 3px dashed var(--line); border-radius: 18px; }
+    .bpick { display: flex; gap: 14px; flex-wrap: wrap; justify-content: space-around; margin-bottom: 10px; }
+    .bpick > div { flex: 1 1 280px; }
+    .lt { text-align: center; font-weight: 900; color: var(--muted); margin-bottom: 6px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+    .chips button { border: 3px solid var(--m); background: var(--card); color: var(--ink); border-radius: 14px; padding: 6px 14px; font: 900 19px Tajawal; cursor: pointer; min-width: 56px; min-height: 42px; }
+    .chips button.on { background: var(--m); color: #1d2742; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,.15); }
+    .ltab-wrap { overflow-x: auto; }
+    .ltab { width: 100%; border-collapse: separate; border-spacing: 0; border: 2px solid var(--line); border-radius: 14px; overflow: hidden; font-size: 18px; margin: 12px 0; }
+    .ltab th { background: var(--teal); color: #fff; padding: 7px; }
+    .ltab td { padding: 6px; text-align: center; border-top: 2px solid var(--line); font-weight: 800; }
+    .ltab input { width: 105px; border: 2.5px solid var(--gold); border-radius: 10px; font: 900 18px Tajawal; text-align: center; direction: ltr; background: var(--card); color: var(--ink); min-height: 38px; }
+    .ltab .chk { border: none; background: var(--teal); color: #fff; border-radius: 10px; padding: 4px 12px; font: 900 16px Tajawal; cursor: pointer; margin-inline-start: 6px; min-height: 38px; }
+    .ltab tr.ok td { background: var(--green-l); }
+    .hint2 { background: var(--gold-l); border-radius: 12px; padding: 8px 14px; font-weight: 800; font-size: 17px; }
+
+    /* Differentiated tracks */
+    .tracks { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+    .track { flex: 1 1 200px; border-radius: 20px; padding: 14px; text-align: center; cursor: pointer; border: 3px solid var(--line); background: var(--card); transition: .2s; }
+    .track .ic { font-size: 38px; line-height: 1.1; }
+    .track h3 { margin: 4px 0 0; font-size: 22px; font-weight: 900; }
+    .track p { margin: 2px 0 0; font-size: 16px; font-weight: 700; color: var(--muted); }
+    .track.on { border-color: var(--c); background: var(--cl); transform: translateY(-2px); }
+    .tbox { display: none; } .tbox.on { display: block; animation: slide .35s; }
+    .task { background: var(--card); border: 2px solid var(--line); border-radius: 20px; padding: 14px 18px; margin-bottom: 14px; border-right: 8px solid var(--c); }
+    .task h4 { margin: 0 0 8px; font-size: 22px; font-weight: 900; color: var(--c); }
+    .calc { background: var(--soft); border: 2px solid var(--line); border-radius: 16px; padding: 10px 14px; margin-bottom: 10px; }
+    .calc .ce { font-weight: 900; font-size: 19px; text-align: center; margin-bottom: 6px; }
+    .calc .ci { display: flex; gap: 10px; align-items: center; justify-content: center; flex-wrap: wrap; font-weight: 900; font-size: 19px; direction: ltr; }
+    .calc input { width: 115px; border: 3px solid var(--gold); border-radius: 12px; padding: 4px 8px; font: 900 20px Tajawal; text-align: center; background: var(--card); color: var(--ink); min-height: 40px; }
+    .calc select { border: 2px solid var(--line); border-radius: 12px; padding: 4px 8px; font: 800 18px Tajawal; direction: rtl; background: var(--card); color: var(--ink); min-height: 40px; }
+    .calc .chk { border: none; background: var(--c); color: #fff; border-radius: 10px; padding: 5px 16px; font: 900 18px Tajawal; cursor: pointer; min-height: 40px; }
+    .calc.ok { border-color: var(--green); background: var(--green-l); }
+    .calc.no { border-color: var(--ox); background: var(--ox-l); animation: shake .4s; }
+
+    /* Challenge / Exit ticket */
+    .chal { border: 3px solid var(--gold); border-radius: 24px; padding: 16px 20px; text-align: center; background: var(--soft); }
+    .qn { font-weight: 900; color: var(--gold); font-size: 17px; }
+    .ring { width: 84px; height: 84px; margin: 4px auto 8px; position: relative; }
+    .ring svg { transform: rotate(-90deg); }
+    .ring b { position: absolute; inset: 0; display: grid; place-items: center; font-size: 27px; font-weight: 900; color: var(--gold); }
+    .cq { font-size: clamp(21px, 2.4vw, 27px); font-weight: 900; margin: 6px 0 12px; }
+    .copts { display: flex; flex-direction: column; gap: 8px; }
+    .copts button { border: 3px solid var(--line); background: var(--card); color: var(--ink); border-radius: 16px; padding: 10px 18px; font-size: 20px; font-weight: 800; cursor: pointer; text-align: right; min-height: 52px; }
+    .copts button.ok { border-color: var(--green); background: var(--green-l); }
+    .copts button.no { border-color: var(--ox); background: var(--ox-l); }
+    .res { min-height: 30px; font-size: 20px; font-weight: 900; margin-top: 8px; }
+    .row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 8px; }
+    .sumgrid { display: flex; flex-direction: column; gap: 8px; }
+    .sum { display: flex; align-items: center; gap: 12px; border-radius: 14px; padding: 9px 14px; font-size: 19px; font-weight: 800; background: var(--teal-l); }
+
+    /* side pen tools + modals */
+    .tools {
+      position: fixed; left: 10px; top: 50%; transform: translateY(-50%); z-index: 60;
+      background: var(--card); border: 2px solid var(--line); border-radius: 20px; padding: 8px 6px;
+      display: flex; flex-direction: column; gap: 6px; align-items: center; box-shadow: 0 8px 22px rgba(0,0,0,.14);
+    }
+    .tools button { width: 42px; height: 42px; border-radius: 14px; border: 2px solid transparent; background: var(--soft); font-size: 18px; cursor: pointer; display: grid; place-items: center; color: var(--ink); }
+    .tools button.on { border-color: var(--ink); background: var(--card); }
+    .tools .dot { width: 28px; height: 28px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 0 0 2px var(--line); cursor: pointer; padding: 0; }
+    .tools .dot.on { box-shadow: 0 0 0 3px var(--ink); }
+    .tools hr { width: 28px; border: none; border-top: 2px solid var(--line); margin: 2px 0; }
+    canvas.ink { position: absolute; inset: 0; pointer-events: none; z-index: 20; touch-action: none; }
+    body.pen canvas.ink { pointer-events: auto; cursor: crosshair; }
+    .modal { display: none; position: fixed; inset: 0; z-index: 80; background: rgba(29,39,66,.55); place-items: center; padding: 16px; }
+    .modal.show { display: grid; }
+    .mbox { background: var(--card); color: var(--ink); border-radius: 24px; padding: 20px; width: min(520px, 100%); animation: pop .3s; text-align: center; }
+    .picked { font-size: 34px; font-weight: 900; min-height: 66px; color: var(--ox); margin: 8px 0; border-radius: 16px; background: var(--ox-l); display: grid; place-items: center; }
+    .mbox textarea { width: 100%; height: 105px; border: 2px solid var(--line); border-radius: 14px; padding: 10px; font: 600 17px 'Tajawal'; background: var(--soft); color: var(--ink); }
+    #confetti { position: fixed; inset: 0; pointer-events: none; z-index: 100; }
+
+    @keyframes pop { 0% { transform: scale(.92); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    @keyframes slide { 0% { transform: translateY(10px); opacity: 0; } 100% { transform: none; opacity: 1; } }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+    @keyframes blink { 50% { opacity: .4; } }
+    @keyframes bump { 40% { transform: scale(1.22); } }
+    @keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(124,92,230,.22); } }
+
+    @media (max-width: 760px) {
+      .wrap { padding: 10px 12px 92px; }
+      .tools {
+        left: 50%; top: auto; bottom: 8px; transform: translateX(-50%);
+        flex-direction: row; flex-wrap: wrap; max-width: calc(100vw - 16px); padding: 6px;
+      }
+      .tools hr { display: none; }
+      .card { padding: 16px 14px; }
+      .lsteps { flex: 1 1 100%; }
+      .lright { flex: 1 1 100%; }
+    }
+  </style>
 </head>
-<body class="lesson-mode">
-  <header class="classroom-bar">
-    <div class="classroom-bar-inner">
-      <div class="lesson-crumb">
-        <a class="btn btn-sm" href="../index.html">الرئيسية</a>
-        <a id="backBookLink" class="btn btn-sm" href="../chem-3.html">كيمياء 3</a>
-        <h1 id="lessonTitle">4-1 الخلايا الجلفانية</h1>
-        <span id="lessonPages" class="page-ref">ص 134–143</span>
-        <span id="slideCounter" class="slide-counter-badge">1 / 1</span>
-      </div>
-      <div class="header-tools">
-        <div class="timer-widget" aria-label="مؤقت الحصة">
-          <span id="timerDisplay" class="timer-display">40:00</span>
-          <button id="timerToggleBtn" type="button" class="timer-btn">ابدئي</button>
-          <button id="timerResetBtn" type="button" class="timer-btn">إعادة</button>
-          <button type="button" class="timer-btn" data-timer-mins="5">5د</button>
-          <button type="button" class="timer-btn" data-timer-mins="40">40د</button>
-        </div>
-        <button id="wbToggleBtn" type="button" class="btn btn-sm" aria-pressed="false">قلم الشرح</button>
-        <button id="themeToggleBtn" type="button" class="btn btn-sm" aria-pressed="false">الوضع الليلي</button>
-      </div>
+<body>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <div class="tools" id="tools" aria-label="أدوات السبورة">
+    <button id="penBtn" type="button" title="قلم">✏️</button>
+    <button class="dot on" type="button" data-c="#1d2742" style="background:#1d2742" aria-label="لون داكن"></button>
+    <button class="dot" type="button" data-c="#e4572e" style="background:#e4572e" aria-label="لون مرجاني"></button>
+    <button class="dot" type="button" data-c="#2a7de1" style="background:#2a7de1" aria-label="لون أزرق"></button>
+    <button class="dot" type="button" data-c="#0b8a4a" style="background:#0b8a4a" aria-label="لون أخضر"></button>
+    <hr>
+    <button id="hiBtn" type="button" title="تظليل">🖍️</button>
+    <button id="erBtn" type="button" title="ممحاة">🧽</button>
+    <button id="clrBtn" type="button" title="مسح الصفحة">🗑️</button>
+  </div>
+
+  <header class="portal-strip">
+    <div class="portal-links">
+      <a class="pbtn" href="../index.html">الرئيسية</a>
+      <a class="pbtn" href="../chem-3.html">كيمياء 3</a>
+      <a class="pbtn" href="7-3.html">الدرس السابق: 7-3</a>
+      <a class="pbtn primary" href="4-2.html">الدرس التالي: 4-2 البطاريات</a>
     </div>
+    <button id="themeToggleBtn" type="button" class="pbtn" aria-pressed="false">الوضع الليلي</button>
   </header>
 
-  <canvas id="wbCanvas" class="whiteboard-canvas" aria-hidden="true"></canvas>
-  <aside id="wbDock" class="whiteboard-dock" hidden aria-label="أدوات قلم الشرح">
-    <button type="button" class="wb-swatch active" data-wb-color="#1D5FD6" style="background:#1D5FD6;" aria-label="لون أزرق"></button>
-    <button type="button" class="wb-swatch" data-wb-color="#B44308" style="background:#B44308;" aria-label="لون برتقالي"></button>
-    <button type="button" class="wb-swatch" data-wb-color="#B92B27" style="background:#B92B27;" aria-label="لون أحمر"></button>
-    <button type="button" class="wb-swatch" data-wb-color="#0B7A43" style="background:#0B7A43;" aria-label="لون أخضر"></button>
-    <button id="wbEraserBtn" type="button" class="wb-tool-btn">ممحاة</button>
-    <button id="wbUndoBtn" type="button" class="wb-tool-btn">تراجع</button>
-    <button id="wbClearBtn" type="button" class="wb-tool-btn">مسح</button>
-    <button id="wbCloseBtn" type="button" class="wb-tool-btn">إغلاق</button>
-  </aside>
-
-  <main class="deck-shell">
-    <div class="tabs-nav" role="tablist" aria-label="أقسام الشرائح">
-      <button type="button" class="tab-btn" role="tab" data-section-tab="goals" aria-selected="true">الأهداف والتركيز</button>
-      <button type="button" class="tab-btn" role="tab" data-section-tab="content" aria-selected="false">تسلسل الدرس والتفاعل</button>
-      <button type="button" class="tab-btn" role="tab" data-section-tab="exit" aria-selected="false">بطاقة الخروج</button>
+  <div class="wrap">
+    <div class="cover">
+      <div>
+        <h1>🔋 الخلايا الجلفانية : درس متكامل مع معمل افتراضي</h1>
+        <div class="sub">كيمياء 3 : الفصل الرابع الكيمياء الكهربائية : الدرس 4-1 (ص 134–143)</div>
+      </div>
+      <div class="cls" id="cls">
+        <button type="button" class="on"><span contenteditable="true">3 / 1</span></button>
+        <button type="button"><span contenteditable="true">3 / 2</span></button>
+        <button type="button"><span contenteditable="true">3 / 3</span></button>
+      </div>
     </div>
 
-    <div class="slide-dots-row">
-      <div id="slideDots" class="slide-dots" aria-label="أرقام الشرائح"></div>
+    <div class="nav">
+      <div class="tabs" id="tabs" role="tablist">
+        <button type="button" class="tab on" style="--c:#0b8a4a"><span class="e">🎯</span>الأهداف والتهيئة<small>البداية</small></button>
+        <button type="button" class="tab" style="--c:#e4572e"><span class="e">🔍</span>التهيئة العملية<small>تجربة الزنك</small></button>
+        <button type="button" class="tab" style="--c:#2a7de1"><span class="e">💡</span>الشرح والتفاعل<small>الخلية والجهد</small></button>
+        <button type="button" class="tab" style="--c:#7c5ce6"><span class="e">🧪</span>المعمل الافتراضي<small>بناء وقياسات</small></button>
+        <button type="button" class="tab" style="--c:#0e9aa7"><span class="e">🧭</span>المسارات<small>تعلم متمايز</small></button>
+        <button type="button" class="tab" style="--c:#d79b14"><span class="e">🏁</span>بطاقة الخروج<small>تحدي وتحصيلي</small></button>
+      </div>
+      <div class="ctrl">
+        <div class="clock" id="clock">40:00</div>
+        <button type="button" class="tb" id="tStart">▶ ابدئي الدرس</button>
+        <button type="button" class="tb sec" id="tReset">↺</button>
+        <button type="button" class="tb mic" id="micBtn">🎤 قرعة</button>
+        <div class="batt" title="طاقة الفصل"><div class="bshell"><i id="battI"></i></div><b id="battT">0%</b></div>
+        <div class="pts" id="pts">⭐ 0</div>
+      </div>
+      <div class="tbar"><i id="tbar"></i></div>
     </div>
 
-    <article id="slideStage" class="slide-stage" aria-live="polite"></article>
-
-    <div class="slide-arrows-bar">
-      <button id="slidePrevBtn" type="button" class="slide-arrow-btn" aria-label="الشريحة السابقة">&rarr;</button>
-      <span class="muted-note">التنقل بين الشرائح بالأسهم أو بلوحة المفاتيح</span>
-      <button id="slideNextBtn" type="button" class="slide-arrow-btn" aria-label="الشريحة التالية">&larr;</button>
+    <!-- P0: الأهداف والتهيئة -->
+    <div class="panel on">
+      <div class="card" style="--c:var(--green)">
+        <div class="ph"><div class="ic">🤲</div><h2>البداية والتهيئة من حياتك اليومية</h2></div>
+        <div class="dbox d3"><span class="h">🇸🇦 دعاء للوطن وطلب العلم</span>اللهم احفظ بلادنا المملكة العربية السعودية ووفق ولاة أمرنا، اللهم انفعنا بما علمتنا وزدنا علماً</div>
+        <div class="dbox d2"><span class="h">💡 تهيئة من حياتك اليومية</span>تأملي ساعة يدك أو جوالك: كلها تعمل بكهرباء صامتة ناتجة عن تفاعل كيميائي داخل بطارية صغيرة! كيف تتحول التفاعلات إلى سيل إلكترونات في سلك؟</div>
+      </div>
+      <div class="card" style="--c:var(--gold)">
+        <div class="lead">🔋 مهمتنا اليوم: <b>نشحن بطارية الفصل إلى 100%</b> : كل إجابة صحيحة تشحنها ⚡</div>
+        <div class="goal"><b>١</b>أصف تركيب الخلية الجلفانية: الأنود، الكاثود، والقنطرة الملحية</div>
+        <div class="goal"><b>٢</b>أحسب جهد الخلية القياسي <span dir="ltr">E°cell</span> من جهود الاختزال القياسية</div>
+        <div class="goal"><b>٣</b>أتنبأ بتلقائية تفاعل الأكسدة والاختزال من إشارة الجهد</div>
+        <div class="goal"><b>٤</b>أبني خلية جلفانية في المعمل الافتراضي وأسجّل القراءات وأتحقق منها</div>
+      </div>
+      <div class="next"><button type="button" class="big" style="--c:#e4572e" data-go="1">إلى التهيئة العملية 🔍 ←</button></div>
     </div>
 
-    <nav id="lessonPrevNext" class="lesson-footer-nav" aria-label="التنقل بين الدروس"></nav>
-  </main>
+    <!-- P1: التهيئة العملية -->
+    <div class="panel">
+      <div class="card" style="--c:#e4572e">
+        <div class="ph"><div class="ic">🔍</div><h2>ماذا يحدث لشريحة الخارصين في محلول كبريتات النحاس؟</h2><span class="book">📖 ص 134</span></div>
+        <div class="demo">
+          <svg viewBox="0 0 300 300" class="dsvg" aria-label="تجربة شريحة الخارصين في كبريتات النحاس">
+            <rect x="60" y="90" width="180" height="190" rx="18" fill="#fff" stroke="#8aa" stroke-width="5"/>
+            <rect id="dSol" x="65" y="125" width="170" height="150" rx="14" fill="#5aa9ff" style="transition:fill 4.5s"/>
+            <g id="dZn" style="transition:transform 1.2s;transform:translateY(-110px)">
+              <rect x="135" y="40" width="30" height="200" rx="5" fill="#9aa4b2"/>
+              <rect id="dCoat" x="135" y="125" width="30" height="115" rx="5" fill="#a0522d" opacity="0" style="transition:opacity 4.5s"/>
+            </g>
+            <text x="150" y="25" text-anchor="middle" font-size="20" font-weight="900" fill="currentColor" direction="ltr">Zn</text>
+            <text x="150" y="268" text-anchor="middle" font-size="18" font-weight="800" fill="#123" direction="ltr">CuSO₄(aq)</text>
+          </svg>
+          <div class="dside">
+            <button type="button" class="big" style="--c:#e4572e" id="dGo">⬇️ اغمسي الشريحة</button>
+            <div class="dobs" id="dObs">👀 راقبي: لون المحلول الأزرق… وسطح شريحة الخارصين…</div>
+            <div class="qrow" data-a="zn">١) المادة التي تأكسدت:
+              <select><option value="">اختاري</option><option value="zn">Zn</option><option value="cu">Cu²⁺</option></select>
+              <button type="button" class="chk">تحقق</button><span class="fb"></span>
+            </div>
+            <div class="qrow" data-a="cu">٢) يبهت اللون الأزرق لأن أيونات:
+              <select><option value="">اختاري</option><option value="cu">Cu²⁺ تُختزل إلى Cu</option><option value="zn">Zn²⁺ تتكوّن فقط</option></select>
+              <button type="button" class="chk">تحقق</button><span class="fb"></span>
+            </div>
+          </div>
+        </div>
+        <div class="tip">🤔 انتقلت الإلكترونات مباشرة من <bdi dir="ltr">Zn</bdi> إلى <bdi dir="ltr">Cu²⁺</bdi> وضاعت الطاقة <b>حرارةً</b>! كيف نجعلها تمرّ في <b>سلك خارجي</b>؟ ← <b>نفصل نصفي التفاعل = الخلية الجلفانية ⚡</b></div>
+      </div>
+      <div class="next"><button type="button" class="big" style="--c:var(--red)" data-go="2">إلى الشرح والتفاعل 💡 ←</button></div>
+    </div>
+
+    <!-- P2: الشرح والتفاعل + الإثراء والوطن -->
+    <div class="panel">
+      <div class="card" style="--c:var(--blue)">
+        <div class="ph"><div class="ic">١</div><h2>تركيب الخلية الجلفانية (خلية دانيال: الخارصين والنحاس)</h2><span class="book">📖 ص 135–137</span></div>
+        <div class="cell" id="cellD"></div>
+        <div class="row"><button type="button" class="tb" id="dRun">⚡ أغلقي الدائرة</button></div>
+        <div class="reveal4">
+          <button type="button" class="rv" data-k="an" style="--c:#e4572e">🔴 الأنود<span>Zn : يحدث عنده <b>التأكسد</b>، القطب <b>السالب</b>، تقل كتلته<br><code>Zn → Zn²⁺ + 2e⁻</code></span></button>
+          <button type="button" class="rv" data-k="ca" style="--c:#2a7de1">🔵 الكاثود<span>Cu : يحدث عنده <b>الاختزال</b>، القطب <b>الموجب</b>، تزداد كتلته<br><code>Cu²⁺ + 2e⁻ → Cu</code></span></button>
+          <button type="button" class="rv" data-k="br" style="--c:#7c5ce6">🌉 القنطرة الملحية<span>ممر للأيونات لتكتمل الدائرة وتحافظ على تعادل المحلولين</span></button>
+          <button type="button" class="rv" data-k="el" style="--c:#d79b14">⚡ الإلكترونات<span>تسري عبر السلك الخارجي <b>من الأنود إلى الكاثود</b></span></button>
+        </div>
+        <div class="mnem"><span>أ</span>نود ← <span>أ</span>كسدة &nbsp;|&nbsp; <span>ك</span>اثود ← اختزال <small>(قاعدة الحفظ: «الأنود يؤكسد، والكاثود يكسب»)</small></div>
+      </div>
+
+      <div class="card" style="--c:var(--red)">
+        <div class="ph"><div class="ic">٢</div><h2>حساب جهد الخلية القياسي والتنبؤ بالتلقائية</h2><span class="book">📖 مثال 4-1 ص 141</span></div>
+        <div class="formula" dir="ltr">E°<sub>cell</sub> = E°<sub>reduction (cathode)</sub> − E°<sub>oxidation (anode)</sub></div>
+        <div class="tip" style="border-color:var(--red); background:var(--red-l);">🔑 نصف الخلية ذو <b>جهد الاختزال الأعلى</b> يكون الكاثود (يُختزل)، والأقل يكون الأنود (يتأكسد)، وقطب الهيدروجين القياسي جهده <b dir="ltr">0.00 V</b>.</div>
+        <div class="exq">نصفا خلية: &nbsp;<code>I₂ + 2e⁻ → 2I⁻ &nbsp; E° = +0.536 V</code> &nbsp;&nbsp; <code>Fe²⁺ + 2e⁻ → Fe &nbsp; E° = −0.447 V</code></div>
+        <div class="steps">
+          <div class="st"><span class="l">الكاثود (اختزال)</span><span class="a">I₂ لأن جهده أعلى (+0.536)</span><button type="button">إظهار</button></div>
+          <div class="st"><span class="l">الأنود (تأكسد)</span><span class="a" dir="ltr">Fe → Fe²⁺ + 2e⁻</span><button type="button">إظهار</button></div>
+          <div class="st"><span class="l">التفاعل الكلي</span><span class="a" dir="ltr">I₂ + Fe → Fe²⁺ + 2I⁻</span><button type="button">إظهار</button></div>
+          <div class="st"><span class="l">جهد الخلية</span><span class="a" dir="ltr">E° = 0.536 − (−0.447) = +0.983 V</span><button type="button">إظهار</button></div>
+          <div class="st"><span class="l">الرمز الاصطلاحي</span><span class="a" dir="ltr">Fe | Fe²⁺ ‖ I₂ | I⁻</span><button type="button">إظهار</button></div>
+        </div>
+        <div class="tip" style="border-color:var(--green); background:var(--green-l);">✅ <b dir="ltr">E°</b> موجبة ← التفاعل <b>تلقائي</b> &nbsp; | &nbsp; ❌ <b dir="ltr">E°</b> سالبة ← <b>غير تلقائي</b></div>
+      </div>
+
+      <div class="watan">
+        <div class="wh">🇸🇦 من الوطن: بطاريات تُضيء البحر الأحمر</div>
+        <p>في وجهة <b>البحر الأحمر</b> بالمملكة يُخزَّن فائض طاقة الشمس نهاراً في واحد من أكبر أنظمة تخزين الطاقة بالبطاريات في العالم، لتُشغَّل الوجهة ليلاً بخلايا كهروكيميائية تحوّل الطاقة الكيميائية إلى كهربائية ⚡</p>
+        <button type="button" class="tb" id="wQ">❓ أين يحدث التأكسد في البطارية أثناء تشغيلها؟</button><span class="wa" id="wA">عند الأنود (القطب السالب) ✔️</span>
+      </div>
+
+      <div class="card" style="--c:var(--violet)">
+        <div class="ph"><div class="ic">🔬</div><h2>إثراء علمي: مناظرة جلفاني وفولتا (1791–1800)</h2><span class="book">علماء واكتشافات</span></div>
+        <p style="margin:0;">لاحظ الطبيب الإيطالي <b>لويجي جلفاني</b> انقباض عضلة ضفدع عند ملامسة معدنين مختلفين وظن أنها كهرباء حيوانية، لكن العالم <b>أليساندرو فولتا</b> أثبت أن تلامس معدنين بمحلول موصل هو سر توليد الكهرباء، فابتكر أول بطارية في التاريخ (العمود الفولتائي) عام 1800م ومن اسمه أُخذت وحدة <b>الفولت</b>!</p>
+      </div>
+
+      <div class="next"><button type="button" class="big" style="--c:#7c5ce6" data-go="3">إلى المعمل الافتراضي 🧪 ←</button></div>
+    </div>
+
+    <!-- P3: المعمل الافتراضي -->
+    <div class="panel">
+      <div class="card" style="--c:#7c5ce6">
+        <div class="ph"><div class="ic">🧪</div><h2>المعمل الافتراضي: نبني خلية جلفانية خطوة بخطوة</h2><span class="book">📖 مختبر الكيمياء</span></div>
+        <div class="safety"><span>🥽 نظارات واقية</span><span>🧤 قفازات</span><span>🥼 معطف المختبر</span><span>⚠️ لا تتذوقي المحاليل</span><span>♻️ تخلّصي من المحاليل بإشراف المعلمة</span></div>
+        <div class="labwrap">
+          <div class="lsteps" id="lSteps">
+            <div class="lt2">🧭 خطوات العمل : نفّذيها بالترتيب</div>
+            <button type="button" class="lstep" data-i="0">١ صُبّي 1M ZnSO₄ في الكأس الأيسر</button>
+            <button type="button" class="lstep" data-i="1">٢ صُبّي 1M CuSO₄ في الكأس الأيمن</button>
+            <button type="button" class="lstep" data-i="2">٣ اغمسي شريحة الخارصين Zn</button>
+            <button type="button" class="lstep" data-i="3">٤ اغمسي شريحة النحاس Cu</button>
+            <button type="button" class="lstep" data-i="4">٥ صِلي القطبين بالفولتميتر</button>
+            <button type="button" class="lstep" data-i="5">٦ ضعي القنطرة الملحية (KNO₃)</button>
+          </div>
+          <div class="lright">
+            <div class="cell" id="cellL"></div>
+            <div class="lmsg" id="lMsg">ابدئي بالخطوة الأولى 👈</div>
+            <div class="row"><button type="button" class="tb sec" id="lBr" disabled>🔬 جرّبي: ارفعي القنطرة الملحية</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="--c:var(--teal)">
+        <div class="ph"><div class="ic">📋</div><h2>جدول البيانات: غيّري الفلزات وسجّلي القراءات</h2></div>
+        <div class="locked" id="lLock">🔒 يُفتح تلقائياً بعد إكمال الخطوات الست لبناء الخلية</div>
+        <div id="lExp" style="display:none">
+          <div class="bpick">
+            <div><div class="lt">نصف الخلية الأيمن</div><div class="chips" id="xR"></div></div>
+            <div><div class="lt">نصف الخلية الأيسر</div><div class="chips" id="xL"></div></div>
+          </div>
+          <div class="row"><button type="button" class="big" style="--c:var(--teal)" id="lRec">📋 سجّلي القراءة بالجدول</button></div>
+          <div class="ltab-wrap">
+            <table class="ltab"><thead><tr><th>الخلية (الرمز الاصطلاحي)</th><th>القراءة المقيسة</th><th>E° المحسوب (احسبيه)</th><th></th></tr></thead><tbody id="lRows"></tbody></table>
+          </div>
+          <div class="hint2" dir="ltr">E° (V): Mg²⁺ -2.372 | Zn²⁺ -0.762 | Fe²⁺ -0.447 | Ni²⁺ -0.257 | Pb²⁺ -0.126 | Cu²⁺ +0.342 | Ag⁺ +0.800</div>
+        </div>
+        <div class="lead" style="margin-top:14px">🧠 التحليل والاستنتاج</div>
+        <div class="steps">
+          <div class="st"><span class="l">لماذا القراءة صفر قبل وضع القنطرة؟</span><span class="a">لأن الدائرة غير مكتملة؛ القنطرة تنقل الأيونات وتحفظ تعادل المحلولين</span><button type="button">إظهار</button></div>
+          <div class="st"><span class="l">لماذا القراءة المقيسة أقل قليلاً من المحسوبة؟</span><span class="a">الظروف ليست قياسية تماماً، ولمقاومة الأسلاك والمحاليل أثر</span><button type="button">إظهار</button></div>
+          <div class="st"><span class="l">أيّ زوج أعطى أعلى جهد؟ ولماذا؟</span><span class="a">الزوج الأكبر فرقاً في جهود الاختزال (مثل Mg و Ag)</span><button type="button">إظهار</button></div>
+        </div>
+      </div>
+      <div class="next"><button type="button" class="big" style="--c:var(--teal)" data-go="4">إلى المسارات المتمايزة 🧭 ←</button></div>
+    </div>
+
+    <!-- P4: المسارات المتمايزة والاستراتيجيات -->
+    <div class="panel">
+      <div class="card" style="--c:var(--teal)">
+        <div class="ph"><div class="ic">🧭</div><h2>التعلم المتمايز والاستراتيجيات: اختاري مسارك</h2></div>
+        <div class="tracks">
+          <div class="track" style="--c:#0b8a4a;--cl:var(--green-l)"><div class="ic">🔋</div><h3>شحن 30%</h3><p>أتعرّف أجزاء الخلية</p></div>
+          <div class="track" style="--c:#d79b14;--cl:var(--gold-l)"><div class="ic">🔋🔋</div><h3>شحن 70%</h3><p>أحسب جهد الخلية</p></div>
+          <div class="track" style="--c:#7c5ce6;--cl:var(--violet-l)"><div class="ic">🔋🔋🔋</div><h3>شحن 100%</h3><p>أتنبأ بالتلقائية</p></div>
+        </div>
+
+        <div class="tbox" id="t1" style="--c:#0b8a4a">
+          <div class="task"><h4>🔋 أكملي في خلية الخارصين والنحاس</h4>
+            <div class="qrow" data-a="zn">١) القطب الذي يحدث عنده التأكسد: <select><option value="">اختاري</option><option value="zn">Zn</option><option value="cu">Cu</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div>
+            <div class="qrow" data-a="cu">٢) القطب الذي تزداد كتلته: <select><option value="">اختاري</option><option value="zn">Zn</option><option value="cu">Cu</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div>
+            <div class="qrow" data-a="zc">٣) اتجاه الإلكترونات في السلك: <select><option value="">اختاري</option><option value="zc">من Zn إلى Cu</option><option value="cz">من Cu إلى Zn</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div>
+            <div class="qrow" data-a="neg">٤) شحنة الأنود في الخلية الجلفانية: <select><option value="">اختاري</option><option value="pos">موجبة</option><option value="neg">سالبة</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div>
+            <div class="qrow" data-a="ion">٥) وظيفة القنطرة الملحية: <select><option value="">اختاري</option><option value="e">نقل الإلكترونات</option><option value="ion">نقل الأيونات وإكمال الدائرة</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div>
+          </div>
+        </div>
+
+        <div class="tbox" id="t2" style="--c:#d79b14">
+          <div class="task"><h4>🔋🔋 مسائل تدريبية: احسبي E° للخلية</h4>
+            <div class="calc" data-a="1.318"><div class="ce" dir="ltr">Pt²⁺ + 2e⁻ → Pt (+1.18 V) | Sn²⁺ + 2e⁻ → Sn (−0.1375 V)</div><div class="ci">E° = <input type="number" step="0.001"> V <button type="button" class="chk">تحقق</button><span class="fb"></span></div></div>
+            <div class="calc" data-a="0.464"><div class="ce" dir="ltr">Co²⁺ + 2e⁻ → Co (−0.28 V) | Cr³⁺ + 3e⁻ → Cr (−0.744 V)</div><div class="ci">E° = <input type="number" step="0.001"> V <button type="button" class="chk">تحقق</button><span class="fb"></span></div></div>
+            <div class="calc" data-a="1.764"><div class="ce" dir="ltr">Hg²⁺ + 2e⁻ → Hg (+0.851 V) | Cr²⁺ + 2e⁻ → Cr (−0.913 V)</div><div class="ci">E° = <input type="number" step="0.001"> V <button type="button" class="chk">تحقق</button><span class="fb"></span></div></div>
+            <div class="hint2">💡 تلميح: الأعلى جهداً هو الكاثود ← E° = E°(الأعلى) − E°(الأقل)</div>
+          </div>
+        </div>
+
+        <div class="tbox" id="t3" style="--c:#7c5ce6">
+          <div class="task"><h4>🔋🔋🔋 احسبي E° ثم قرّري: هل التفاعل تلقائي؟</h4>
+            <div class="calc sp" data-a="0.509" data-s="y"><div class="ce" dir="ltr">Hg²⁺ + Cu → Hg + Cu²⁺</div><div class="ci">E° = <input type="number" step="0.001"> V <select><option value="">الحكم</option><option value="y">تلقائي</option><option value="n">غير تلقائي</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div></div>
+            <div class="calc sp" data-a="-0.789" data-s="n"><div class="ce" dir="ltr">Fe²⁺ + Cu → Fe + Cu²⁺</div><div class="ci">E° = <input type="number" step="0.001"> V <select><option value="">الحكم</option><option value="y">تلقائي</option><option value="n">غير تلقائي</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div></div>
+            <div class="calc sp" data-a="1.610" data-s="y"><div class="ce" dir="ltr">Zn²⁺ + Mg → Zn + Mg²⁺</div><div class="ci">E° = <input type="number" step="0.001"> V <select><option value="">الحكم</option><option value="y">تلقائي</option><option value="n">غير تلقائي</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div></div>
+            <div class="hint2">📋 E° (V): Hg²⁺ +0.851 | Cu²⁺ +0.342 | Fe²⁺ −0.447 | Zn²⁺ −0.762 | Mg²⁺ −2.372</div>
+          </div>
+          <div class="task"><h4>🧠 سؤال تفكير عليا</h4>
+            <div class="st"><span class="l">لماذا لا تُحفظ محاليل كبريتات النحاس في أوعية خارصين؟</span><span class="a">لأن جهد اختزال Cu²⁺ أعلى، فيتأكسد الخارصين تلقائياً ويترسب النحاس ويتآكل الوعاء</span><button type="button">إظهار</button></div>
+          </div>
+        </div>
+        <div class="tip" style="border-color:var(--teal); background:var(--teal-l);">💡 اختاري المسار المناسب، ومن تنهي مسارها تنتقل للمستوى الأعلى لتشحن بطارية الفصل!</div>
+      </div>
+      <div class="next"><button type="button" class="big" style="--c:var(--gold)" data-go="5">إلى بطاقة الخروج 🏁 ←</button></div>
+    </div>
+
+    <!-- P5: بطاقة الخروج والتحصيلي -->
+    <div class="panel">
+      <div class="card" style="--c:var(--gold)">
+        <div class="ph"><div class="ic">🏁</div><h2>بطاقة الخروج: تحدّي الأسرع وأسئلة من التحصيلي ⚡</h2><span class="book">أسئلة من التحصيلي</span></div>
+        <div class="chal">
+          <div class="qn" id="qn">6 أسئلة : 15 ثانية لكل سؤال (تُحفظ نتيجتك في البوابة)</div>
+          <div class="ring">
+            <svg width="84" height="84"><circle cx="42" cy="42" r="36" stroke="var(--gold-l)" stroke-width="8" fill="none"/><circle id="ringC" cx="42" cy="42" r="36" stroke="#d79b14" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="0"/></svg>
+            <b id="ringT">15</b>
+          </div>
+          <div class="cq" id="cq">مستعدة؟ اضغطي ابدئي التحدي 🙋‍♀️</div>
+          <div class="copts" id="copts"></div>
+          <div class="res" id="res"></div>
+          <div class="row">
+            <button type="button" class="big" style="--c:var(--gold)" id="cGo">▶ ابدئي بطاقة الخروج</button>
+            <button type="button" class="big ghost" style="--c:var(--gold); display:none;" id="cNext">السؤال التالي ←</button>
+          </div>
+        </div>
+        <div class="lead" style="margin-top:14px">📌 الخلاصة السريعة</div>
+        <div class="sumgrid">
+          <div class="sum">🔴 الأنود: تأكسد، سالب &nbsp;|&nbsp; الكاثود: اختزال، موجب</div>
+          <div class="sum">⚡ الإلكترونات من الأنود إلى الكاثود عبر السلك، والأيونات عبر القنطرة الملحية</div>
+          <div class="sum">🧮 <span dir="ltr">E°cell = E°cathode − E°anode</span> ؛ موجبة ← تفاعل تلقائي</div>
+        </div>
+      </div>
+      <div class="next"><button type="button" class="big ghost" style="--c:var(--ink)" id="resetAll">↺ إعادة السبورة للفصل التالي</button></div>
+    </div>
+  </div>
+
+  <div class="modal" id="drawM">
+    <div class="mbox">
+      <h3>🎤 قرعة المشاركة</h3>
+      <div class="picked" id="picked">؟</div>
+      <div class="row">
+        <button type="button" class="big" style="--c:#e4572e" id="drawGo">🎲 اسحبي</button>
+        <button type="button" class="big ghost" style="--c:var(--ink)" id="drawClose">إغلاق</button>
+      </div>
+      <p style="font-size:14px;color:var(--muted);">أسماء طالبات الفصل (اسم في كل سطر) أو يُسحب رقم عشوائي.</p>
+      <textarea id="names" placeholder="اسم في كل سطر"></textarea>
+      <div class="row" style="font-weight:700"><label><input type="checkbox" id="noRep" checked> بلا تكرار</label><label>العدد: <input type="number" id="count" value="25" min="2" style="width:64px;font:700 16px Tajawal"></label></div>
+    </div>
+  </div>
+
+  <div class="modal" id="alarm">
+    <div class="mbox">
+      <div style="font-size:56px">⏰</div>
+      <h3>انتهت الـ 40 دقيقة!</h3>
+      <p>أحسنتنّ يا مهندسات الكيمياء الكهربائية ⚡</p>
+      <button type="button" class="big" style="--c:var(--green)" onclick="this.closest('.modal').classList.remove('show')">حسناً</button>
+    </div>
+  </div>
+
+  <script>
+    const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
+    let curClass = 0, points = 0, actx = null;
+
+    function tone(f, d = .18, t0 = 0, type = 'sine') {
+      try {
+        actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+        const o = actx.createOscillator(), g = actx.createGain(), t = actx.currentTime + t0;
+        o.type = type; o.frequency.value = f;
+        g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(.28, t + .02); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+        o.connect(g); g.connect(actx.destination); o.start(t); o.stop(t + d + .05);
+      } catch (e) {}
+    }
+    const good = () => { tone(660, .15); tone(880, .2, .12); };
+    const bad = () => tone(200, .25, 0, 'square');
+    const fanfare = () => [523, 659, 784, 1047].forEach((f, i) => tone(f, .22, i * .13));
+
+    const cvf = $('#confetti'), cfx = cvf.getContext('2d');
+    let parts = [], anim = null;
+    function confetti(n = 110) {
+      cvf.width = innerWidth; cvf.height = innerHeight;
+      const C = ['#e4572e', '#ffc93c', '#2a7de1', '#7c5ce6', '#0b8a4a'];
+      for (let i = 0; i < n; i++) parts.push({ x: Math.random() * cvf.width, y: -20 - Math.random() * cvf.height * .3, vx: (Math.random() - .5) * 4, vy: 2 + Math.random() * 4, r: Math.random() * 6.28, s: 6 + Math.random() * 7, c: C[i % 5] });
+      if (!anim) loop();
+    }
+    function loop() {
+      cfx.clearRect(0, 0, cvf.width, cvf.height);
+      parts.forEach(p => { p.x += p.vx; p.y += p.vy; p.vy += .05; p.r += .1; cfx.save(); cfx.translate(p.x, p.y); cfx.rotate(p.r); cfx.fillStyle = p.c; cfx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2); cfx.restore(); });
+      parts = parts.filter(p => p.y < cvf.height + 30);
+      anim = parts.length ? requestAnimationFrame(loop) : (cfx.clearRect(0, 0, cvf.width, cvf.height), null);
+    }
+
+    function updBatt() {
+      const p = Math.min(100, Math.round(points / 1.5));
+      $('#battI').style.width = p + '%';
+      $('#battI').style.background = p < 35 ? '#e4572e' : p < 70 ? '#d79b14' : '#0b8a4a';
+      $('#battT').textContent = p + '%';
+      if (p >= 100 && !updBatt.full) { updBatt.full = true; fanfare(); confetti(140); }
+    }
+    function addPts(n) {
+      points += n;
+      const e = $('#pts');
+      e.textContent = '⭐ ' + points;
+      e.classList.remove('bump'); void e.offsetWidth; e.classList.add('bump');
+      updBatt();
+    }
+
+    function go(n) {
+      $$('.tab').forEach((t, i) => { t.classList.toggle('on', i === n); if (i < n) t.classList.add('done'); });
+      $$('.panel').forEach((p, i) => p.classList.toggle('on', i === n));
+      scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(sizeInk, 80);
+    }
+    $$('.tab').forEach((t, i) => t.onclick = () => go(i));
+    $$('[data-go]').forEach(b => b.onclick = () => go(+b.dataset.go));
+
+    /* Timer 40:00 */
+    const TOTAL = 40 * 60;
+    let el = 0, run = false, iv = null, rang = false, warned = false;
+    function renderClock() {
+      const l = TOTAL - el, a = Math.abs(l);
+      $('#clock').textContent = (l < 0 ? '+' : '') + String(Math.floor(a / 60)).padStart(2, '0') + ':' + String(a % 60).padStart(2, '0');
+      $('#clock').className = 'clock' + (l <= 0 ? ' over' : l <= 300 ? ' warn' : '');
+      $('#tbar').style.width = Math.min(100, el / TOTAL * 100) + '%';
+      if (run && l === 300 && !warned) { warned = true; tone(660, .3); tone(660, .3, .4); }
+      if (run && l <= 0 && !rang) { rang = true; [0, .5, 1].forEach(t => tone(880, .35, t)); $('#alarm').classList.add('show'); }
+    }
+    $('#tStart').onclick = () => {
+      run = !run;
+      try { actx = actx || new (window.AudioContext || window.webkitAudioContext)(); actx.resume(); } catch (e) {}
+      if (run) { iv = setInterval(() => { el++; renderClock(); }, 1000); $('#tStart').textContent = '⏸ إيقاف'; }
+      else { clearInterval(iv); $('#tStart').textContent = '▶ متابعة'; }
+      renderClock();
+    };
+    function resetTimer() { clearInterval(iv); run = false; el = 0; rang = false; warned = false; $('#tStart').textContent = '▶ ابدئي الدرس'; renderClock(); }
+    $('#tReset').onclick = resetTimer; renderClock();
+
+    /* Mic draw */
+    let pool = null;
+    const drawKey = () => 'galv-names-' + curClass;
+    $('#micBtn').onclick = () => { try { $('#names').value = localStorage.getItem(drawKey()) || ''; } catch (e) {} pool = null; $('#picked').textContent = '؟'; $('#drawM').classList.add('show'); };
+    $('#names').oninput = () => { try { localStorage.setItem(drawKey(), $('#names').value); } catch (e) {} pool = null; };
+    $('#drawClose').onclick = () => $('#drawM').classList.remove('show');
+    $('#drawGo').onclick = () => {
+      let L = $('#names').value.split('\n').map(s => s.trim()).filter(Boolean);
+      if (!L.length) { const n = Math.max(2, +$('#count').value || 25); L = Array.from({ length: n }, (_, i) => 'الطالبة رقم ' + (i + 1)); }
+      if (!pool || !$('#noRep').checked || !pool.length) pool = [...L];
+      const p = $('#picked'); let k = 0;
+      const sp = setInterval(() => {
+        p.textContent = L[Math.floor(Math.random() * L.length)]; tone(300 + k * 20, .04);
+        if (++k > 14) { clearInterval(sp); p.textContent = '🎤 ' + pool.splice(Math.floor(Math.random() * pool.length), 1)[0]; fanfare(); }
+      }, 70);
+    };
+
+    /* Ink canvas overlay per panel */
+    let pen = false, mode = 'pen', col = '#1d2742'; const inks = [];
+    $$('.panel').forEach(p => {
+      const c = document.createElement('canvas'); c.className = 'ink'; p.appendChild(c);
+      const x = c.getContext('2d'); let dr = false, lp = null;
+      const pos = e => { const r = c.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top, p: e.pressure || .5 }; };
+      c.addEventListener('pointerdown', e => { if (!pen) return; dr = true; lp = pos(e); c.setPointerCapture(e.pointerId); e.preventDefault(); });
+      c.addEventListener('pointermove', e => {
+        if (!dr) return; const q = pos(e);
+        x.globalCompositeOperation = mode === 'er' ? 'destination-out' : 'source-over';
+        x.globalAlpha = mode === 'hi' ? .25 : 1; x.strokeStyle = mode === 'hi' ? '#ffd400' : col;
+        x.lineWidth = mode === 'er' ? 30 : mode === 'hi' ? 22 : (e.pointerType === 'pen' ? 2 + q.p * 4 : 4);
+        x.lineCap = 'round'; x.lineJoin = 'round'; x.beginPath(); x.moveTo(lp.x, lp.y); x.lineTo(q.x, q.y); x.stroke(); lp = q;
+      });
+      ['pointerup', 'pointercancel', 'pointerleave'].forEach(t => c.addEventListener(t, () => dr = false));
+      inks.push({ c, x, p });
+    });
+    function sizeInk() {
+      inks.forEach(o => {
+        if (!o.p.classList.contains('on')) return;
+        const w = o.p.offsetWidth, h = o.p.scrollHeight, d = devicePixelRatio || 1;
+        if (o.c.width === Math.round(w * d) && o.c.height === Math.round(h * d)) return;
+        o.c.width = w * d; o.c.height = h * d; o.c.style.width = w + 'px'; o.c.style.height = h + 'px'; o.x.setTransform(d, 0, 0, d, 0, 0);
+      });
+    }
+    addEventListener('resize', sizeInk); sizeInk();
+    function setMode(m) { mode = m; pen = true; document.body.classList.add('pen'); $('#penBtn').classList.toggle('on', m === 'pen'); $('#hiBtn').classList.toggle('on', m === 'hi'); $('#erBtn').classList.toggle('on', m === 'er'); }
+    $('#penBtn').onclick = () => { if (pen && mode === 'pen') { pen = false; document.body.classList.remove('pen'); $('#penBtn').classList.remove('on'); } else setMode('pen'); };
+    $('#hiBtn').onclick = () => { if (pen && mode === 'hi') { pen = false; document.body.classList.remove('pen'); $('#hiBtn').classList.remove('on'); } else setMode('hi'); };
+    $('#erBtn').onclick = () => { if (pen && mode === 'er') { pen = false; document.body.classList.remove('pen'); $('#erBtn').classList.remove('on'); } else setMode('er'); };
+    $$('.tools .dot').forEach(d => d.onclick = () => { col = d.dataset.c; $$('.tools .dot').forEach(z => z.classList.remove('on')); d.classList.add('on'); setMode('pen'); });
+    $('#clrBtn').onclick = () => { const o = inks.find(o => o.p.classList.contains('on')); if (o) o.x.clearRect(0, 0, o.c.width, o.c.height); };
+
+    /* Electrode data & animated cell renderer */
+    const M = {
+      Mg: { E: -2.372, q: 2, c: '#c9ced6', s: '#eef1f5' }, Al: { E: -1.662, q: 3, c: '#b7c0cc', s: '#eef1f5' },
+      Zn: { E: -0.762, q: 2, c: '#9aa4b2', s: '#eef2f7' }, Fe: { E: -0.447, q: 2, c: '#6b6f76', s: '#e9f3e4' },
+      Ni: { E: -0.257, q: 2, c: '#a8a99a', s: '#e3f5e6' }, Sn: { E: -0.1375, q: 2, c: '#c4c4c4', s: '#f3f3f3' },
+      Pb: { E: -0.126, q: 2, c: '#6e7682', s: '#f1f1f4' }, Cu: { E: 0.342, q: 2, c: '#c87533', s: '#d9ecff' },
+      Ag: { E: 0.7996, q: 1, c: '#d8dde3', s: '#f5f7fa' }
+    };
+    const sup = { 1: '⁺', 2: '²⁺', 3: '³⁺' }; const ion = m => m + sup[M[m].q];
+
+    /* Hook animation */
+    let dDone = false;
+    $('#dGo').onclick = () => {
+      if (dDone) return; dDone = true; $('#dZn').style.transform = 'translateY(0)'; tone(400, .2);
+      setTimeout(() => { $('#dSol').setAttribute('fill', '#d6ecff'); $('#dCoat').setAttribute('opacity', '.95'); }, 700);
+      setTimeout(() => { $('#dObs').innerHTML = '✅ بهت اللون الأزرق، وتكوّنت طبقة بنية من <b>النحاس</b> على الشريحة<br><code dir="ltr">Zn + Cu²⁺ → Zn²⁺ + Cu</code>'; $('#dObs').classList.add('on'); good(); addPts(3); }, 2600);
+    };
+    function dReset() {
+      dDone = false; $('#dZn').style.transition = 'none'; $('#dZn').style.transform = 'translateY(-110px)';
+      $('#dSol').style.transition = 'none'; $('#dSol').setAttribute('fill', '#5aa9ff');
+      $('#dCoat').style.transition = 'none'; $('#dCoat').setAttribute('opacity', '0');
+      $('#dObs').textContent = '👀 راقبي: لون المحلول الأزرق… وسطح شريحة الخارصين…'; $('#dObs').classList.remove('on');
+      requestAnimationFrame(() => requestAnimationFrame(() => { $('#dZn').style.transition = 'transform 1.2s'; $('#dSol').style.transition = 'fill 4.5s'; $('#dCoat').style.transition = 'opacity 4.5s'; }));
+    }
+
+    function makeCell(box) {
+      box.innerHTML = `<svg viewBox="0 0 700 380" class="csvg">
+       <path class="wire" d="M155 120 V45 H545 V120" fill="none" stroke="var(--ink)" stroke-width="5"/>
+       <path class="bridge" d="M215 235 V150 H485 V235" fill="none" stroke="#c9b8ff" stroke-width="30" stroke-linecap="round" opacity=".85"/>
+       <text class="bt" x="350" y="140" text-anchor="middle" font-size="18" font-weight="800" fill="var(--violet)">القنطرة الملحية</text>
+       <g class="ib"></g>
+       <rect x="60" y="180" width="200" height="160" rx="16" fill="#fff" stroke="#8aa" stroke-width="4"/><rect class="solL" x="64" y="210" width="192" height="126" rx="12"/>
+       <rect x="440" y="180" width="200" height="160" rx="16" fill="#fff" stroke="#8aa" stroke-width="4"/><rect class="solR" x="444" y="210" width="192" height="126" rx="12"/>
+       <rect class="eL" x="140" y="120" width="30" height="190" rx="5"/><rect class="eR" x="530" y="120" width="30" height="190" rx="5"/>
+       <text class="mL" x="128" y="150" text-anchor="end" font-size="24" font-weight="900" fill="var(--ink)"></text>
+       <text class="mR" x="572" y="150" text-anchor="start" font-size="24" font-weight="900" fill="var(--ink)"></text>
+       <text class="iL" x="210" y="300" text-anchor="middle" font-size="22" font-weight="800" fill="#1d2742"></text>
+       <text class="iR" x="490" y="300" text-anchor="middle" font-size="22" font-weight="800" fill="#1d2742"></text>
+       <g class="labL"><rect x="70" y="345" width="180" height="32" rx="16"/><text x="160" y="368" text-anchor="middle" font-size="18" font-weight="900" fill="#fff"></text></g>
+       <g class="labR"><rect x="450" y="345" width="180" height="32" rx="16"/><text x="540" y="368" text-anchor="middle" font-size="18" font-weight="900" fill="#fff"></text></g>
+       <g class="es"></g><g class="vm"><circle cx="350" cy="45" r="36" fill="var(--card)" stroke="var(--ink)" stroke-width="4"/><text class="vt" x="350" y="54" text-anchor="middle" direction="ltr" font-size="20" font-weight="900" fill="var(--ink)">V</text></g></svg>`;
+      const sv = box.querySelector('svg'), es = sv.querySelector('.es'), ib = sv.querySelector('.ib');
+      for (let i = 0; i < 7; i++) { const c = document.createElementNS('http://www.w3.org/2000/svg', 'g'); c.innerHTML = '<circle r="11" fill="#ffc93c" stroke="#d79b14" stroke-width="2"/><text y="5" text-anchor="middle" font-size="13" font-weight="900" fill="#7a4b00">e⁻</text>'; es.appendChild(c); }
+      for (let i = 0; i < 4; i++) { const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); c.setAttribute('r', 7); c.setAttribute('fill', i % 2 ? '#e4572e' : '#2a7de1'); ib.appendChild(c); }
+      const P = [[155, 120], [155, 45], [545, 45], [545, 120]], seg = [75, 390, 75], T = 540;
+      function pt(d) { d = ((d % T) + T) % T; for (let i = 0; i < 3; i++) { if (d <= seg[i]) { const a = P[i], b = P[i + 1], t = d / seg[i]; return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]; } d -= seg[i]; } return P[3]; }
+      const BP = [[215, 235], [215, 150], [485, 150], [485, 235]], bs = [85, 270, 85], BT = 440;
+      function bpt(d) { d = ((d % BT) + BT) % BT; for (let i = 0; i < 3; i++) { if (d <= bs[i]) { const a = BP[i], b = BP[i + 1], t = d / bs[i]; return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]; } d -= bs[i]; } return BP[3]; }
+      const st = { run: false, dir: 1, t: 0, mass: 0, L: 'Zn', R: 'Cu' };
+      function frame() {
+        if (st.run) { st.t += 2.2; st.mass = Math.min(40, st.mass + .05); }
+        [...es.children].forEach((c, i) => { const [x, y] = pt(st.dir * st.t + i * T / 7); c.setAttribute('transform', `translate(${x},${y})`); c.style.opacity = st.run ? 1 : 0; });
+        [...ib.children].forEach((c, i) => { const an = i % 2 === 0; const d = (an ? -st.dir : st.dir) * st.t * .6 + i * BT / 4; const [x, y] = bpt(d); c.setAttribute('cx', x); c.setAttribute('cy', y); c.style.opacity = st.run ? .9 : 0; });
+        const aEl = st.dir > 0 ? 'eL' : 'eR', cEl = st.dir > 0 ? 'eR' : 'eL';
+        const ea = sv.querySelector('.' + aEl), ec = sv.querySelector('.' + cEl);
+        ea.setAttribute('width', 30 - st.mass * .35); ea.setAttribute('x', (aEl === 'eL' ? 140 : 530) + st.mass * .175);
+        ec.setAttribute('width', 30 + st.mass * .35); ec.setAttribute('x', (cEl === 'eL' ? 140 : 530) - st.mass * .175);
+        requestAnimationFrame(frame);
+      }
+      frame();
+      return {
+        set(L, R) {
+          st.L = L; st.R = R; st.mass = 0; const v = M[R].E - M[L].E; st.dir = v >= 0 ? 1 : -1;
+          sv.querySelector('.eL').setAttribute('fill', M[L].c); sv.querySelector('.eR').setAttribute('fill', M[R].c);
+          sv.querySelector('.solL').setAttribute('fill', M[L].s); sv.querySelector('.solR').setAttribute('fill', M[R].s);
+          sv.querySelector('.mL').textContent = L; sv.querySelector('.mR').textContent = R;
+          sv.querySelector('.iL').textContent = ion(L); sv.querySelector('.iR').textContent = ion(R);
+          const an = st.dir > 0 ? 'L' : 'R';
+          [['L'], ['R']].forEach(([s]) => { const g = sv.querySelector('.lab' + s); const isA = s === an && L !== R; g.querySelector('rect').setAttribute('fill', L === R ? '#999' : isA ? '#e4572e' : '#2a7de1'); g.querySelector('text').textContent = L === R ? ':' : isA ? 'أنود (-) تأكسد' : 'كاثود (+) اختزال'; });
+          sv.querySelector('.vt').textContent = Math.abs(v).toFixed(2) + ' V'; return v;
+        },
+        run(on) { st.run = on; }, sv, st,
+        vis(o) { for (const k in o) { const e = sv.querySelector('.' + k); e.style.opacity = o[k] ? 1 : 0; if (k === 'eL' || k === 'eR') e.style.transform = o[k] ? 'none' : 'translateY(-160px)'; } },
+        vt(t) { sv.querySelector('.vt').textContent = t; }
+      };
+    }
+
+    const cD = makeCell($('#cellD')); cD.set('Zn', 'Cu');
+    $('#dRun').onclick = () => { const on = !cD.st.run; cD.run(on); $('#dRun').textContent = on ? '⏸ افتحي الدائرة' : '⚡ أغلقي الدائرة'; if (on) { tone(660, .2); addPts(2); } };
+    $$('.rv').forEach(b => b.onclick = () => {
+      if (b.classList.contains('open')) return; b.classList.add('open'); good(); addPts(3);
+      const k = b.dataset.k, sv = cD.sv; sv.querySelectorAll('.glow').forEach(x => x.classList.remove('glow'));
+      ({ an: ['.eL', '.labL'], ca: ['.eR', '.labR'], br: ['.bridge'], el: ['.wire', '.es'] })[k].forEach(s => sv.querySelector(s).classList.add('glow'));
+      if (k === 'el' && !cD.st.run) $('#dRun').click();
+    });
+
+    /* Virtual Lab */
+    function chips(box, list, cur, cb) {
+      box.innerHTML = '';
+      list.forEach(m => {
+        const b = document.createElement('button'); b.type = 'button'; b.textContent = m; b.style.setProperty('--m', M[m].c); if (m === cur) b.className = 'on';
+        b.onclick = () => { box.querySelectorAll('button').forEach(x => x.classList.remove('on')); b.classList.add('on'); cb(m); };
+        box.appendChild(b);
+      });
+    }
+    const cL = makeCell($('#cellL')); cL.set('Zn', 'Cu');
+    const PARTS = ['solL', 'solR', 'eL', 'eR', 'mL', 'mR', 'iL', 'iR', 'wire', 'vm', 'bridge', 'bt', 'labL', 'labR'];
+    let ls = 0, brOn = true, xLm = 'Zn', xRm = 'Cu', rec = new Set();
+    const meas = (a, b) => { const E = Math.abs(M[b].E - M[a].E); const h = (a + b).split('').reduce((x, c) => x + c.charCodeAt(0), 0); return E * (0.955 + (h % 4) * 0.01); };
+    function lmsg(t, c) { const e = $('#lMsg'); e.innerHTML = t; e.className = 'lmsg ' + (c || ''); }
+    const XM = ['Mg', 'Zn', 'Fe', 'Ni', 'Pb', 'Cu', 'Ag'];
+    function labReset() {
+      ls = 0; brOn = true; cL.run(false); cL.set('Zn', 'Cu'); const o = {}; PARTS.forEach(p => o[p] = 0); cL.vis(o);
+      $$('.lstep').forEach((b, i) => { b.classList.remove('done'); b.disabled = i !== 0; });
+      $('#lBr').disabled = true; $('#lBr').textContent = '🔬 جرّبي: ارفعي القنطرة الملحية';
+      lmsg('ابدئي بالخطوة الأولى 👈'); $('#lExp').style.display = 'none'; $('#lLock').style.display = ''; $('#lRows').innerHTML = ''; rec = new Set(); xLm = 'Zn'; xRm = 'Cu';
+      chips($('#xL'), XM, xLm, m => { xLm = m; xSet(); }); chips($('#xR'), XM, xRm, m => { xRm = m; xSet(); });
+    }
+    const ACT = [
+      () => { cL.vis({ solL: 1, iL: 1 }); lmsg('💧 كأس ZnSO₄ جاهز'); },
+      () => { cL.vis({ solR: 1, iR: 1 }); lmsg('💧 كأس CuSO₄ جاهز : لاحظي اللون الأزرق'); },
+      () => { cL.vis({ eL: 1, mL: 1 }); lmsg('🔩 شريحة Zn في مكانها'); },
+      () => { cL.vis({ eR: 1, mR: 1 }); lmsg('🔩 شريحة Cu في مكانها'); },
+      () => { cL.vis({ wire: 1, vm: 1 }); cL.vt('0.00 V'); lmsg('⚠️ القراءة <b>0.00 V</b>! ما الذي ينقص لإكمال الدائرة؟ 🤔', 'warn'); },
+      () => { cL.vis({ bridge: 1, bt: 1, labL: 1, labR: 1 }); cL.vt(meas('Zn', 'Cu').toFixed(2) + ' V'); cL.run(true); lmsg(`🎉 اكتملت الدائرة! القراءة <b dir="ltr">${meas('Zn', 'Cu').toFixed(2)} V</b>`, 'win'); fanfare(); confetti(80); $('#lBr').disabled = false; $('#lExp').style.display = ''; $('#lLock').style.display = 'none'; }
+    ];
+    $$('.lstep').forEach((b, i) => b.onclick = () => { if (i !== ls) return; ACT[i](); b.classList.add('done'); b.disabled = true; ls++; const n = $$('.lstep')[ls]; if (n) n.disabled = false; tone(500 + i * 70, .12); addPts(3); });
+    $('#lBr').onclick = () => {
+      brOn = !brOn; cL.vis({ bridge: brOn ? 1 : 0, bt: brOn ? 1 : 0 }); cL.run(brOn);
+      if (brOn) { cL.vt(meas(xLm, xRm).toFixed(2) + ' V'); lmsg('✅ أعدنا القنطرة ← عادت القراءة', 'win'); $('#lBr').textContent = '🔬 جرّبي: ارفعي القنطرة الملحية'; }
+      else { cL.vt('0.00 V'); lmsg('🔬 بدون القنطرة الملحية ← <b>0.00 V</b> : الدائرة مفتوحة', 'warn'); $('#lBr').textContent = '↩️ أعيدي القنطرة'; addPts(2); }
+    };
+    function xSet() {
+      if (xLm === xRm) { lmsg('اختاري فلزّين مختلفين', 'warn'); cL.set(xLm, xRm); cL.vt('0.00 V'); cL.run(false); return; }
+      cL.set(xLm, xRm); brOn = true; cL.vis({ bridge: 1, bt: 1 }); cL.run(true); const v = meas(xLm, xRm); cL.vt(v.toFixed(2) + ' V');
+      const an = M[xRm].E > M[xLm].E ? xLm : xRm; lmsg(`القراءة <b dir="ltr">${v.toFixed(2)} V</b> : الأنود: <b>${an}</b>`, 'win'); tone(300 + v * 200, .15);
+    }
+    $('#lRec').onclick = () => {
+      if (xLm === xRm) { bad(); return; }
+      const cat = M[xRm].E > M[xLm].E ? xRm : xLm, an = cat === xRm ? xLm : xRm, key = an + cat;
+      if (rec.has(key)) { lmsg('سُجّلت هذه الخلية من قبل : جرّبي زوجاً آخر', 'warn'); return; }
+      rec.add(key);
+      const E = M[cat].E - M[an].E, tr = document.createElement('tr');
+      tr.innerHTML = `<td dir="ltr">${an} | ${ion(an)} ‖ ${ion(cat)} | ${cat}</td><td dir="ltr">${meas(an, cat).toFixed(2)} V</td><td><input type="number" step="0.001" placeholder="V"><button type="button" class="chk">تحقق</button></td><td class="fb"></td>`;
+      $('#lRows').appendChild(tr); good(); addPts(2);
+      tr.querySelector('.chk').onclick = () => {
+        const i = tr.querySelector('input'), v = parseFloat(i.value); if (tr.classList.contains('ok')) return;
+        if (!isNaN(v) && Math.abs(v - E) <= 0.008) { tr.classList.add('ok'); tr.querySelector('.fb').textContent = '✅'; i.disabled = true; good(); addPts(8); }
+        else { tr.querySelector('.fb').textContent = '❌'; bad(); }
+      };
+    };
+    labReset();
+
+    $('#wQ').onclick = () => { $('#wA').classList.add('show'); good(); addPts(3); };
+    $$('.st').forEach(s => { const o = () => { if (!s.classList.contains('open')) { s.classList.add('open'); tone(620, .1); addPts(1); } }; s.querySelector('button').onclick = o; s.querySelector('.a').onclick = o; });
+
+    /* Tracks */
+    function showTrack(i) { $$('.track').forEach((t, k) => t.classList.toggle('on', k === i)); $$('.tbox').forEach((b, k) => b.classList.toggle('on', k === i)); tone(500 + i * 120, .12); setTimeout(sizeInk, 60); }
+    $$('.track').forEach((t, i) => t.onclick = () => showTrack(i));
+    $$('.qrow[data-a]').forEach(r => {
+      const s = r.querySelector('select'), b = r.querySelector('.chk');
+      b.onclick = () => {
+        if (r.classList.contains('ok')) return; if (!s.value) { bad(); return; } r.classList.remove('no'); void r.offsetWidth;
+        if (s.value === r.dataset.a) { r.classList.add('ok'); r.querySelector('.fb').textContent = '✅'; s.disabled = true; good(); addPts(6); }
+        else { r.classList.add('no'); r.querySelector('.fb').textContent = '❌'; bad(); }
+      };
+    });
+    $$('.calc').forEach(r => {
+      const i = r.querySelector('input'), s = r.querySelector('select'), b = r.querySelector('.chk');
+      b.onclick = () => {
+        if (r.classList.contains('ok')) return; r.classList.remove('no'); void r.offsetWidth; const v = parseFloat(i.value);
+        const okN = !isNaN(v) && Math.abs(v - parseFloat(r.dataset.a)) <= 0.008, okS = !s || s.value === r.dataset.s;
+        if (okN && okS) { r.classList.add('ok'); r.querySelector('.fb').textContent = '✅'; i.disabled = true; if (s) s.disabled = true; good(); addPts(10); }
+        else { r.classList.add('no'); r.querySelector('.fb').textContent = !okN ? '❌ راجعي الحساب' : '❌ راجعي الحكم'; bad(); }
+      };
+    });
+
+    /* Exit ticket Speed Challenge (with Tahsili questions & score persistence) */
+    const QS = [
+      { q: 'في الخلية الجلفانية يحدث التأكسد عند:', o: ['الكاثود', 'الأنود', 'القنطرة الملحية'], a: 1 },
+      { q: 'تتحرك الإلكترونات في السلك الخارجي:', o: ['من الأنود إلى الكاثود', 'من الكاثود إلى الأنود', 'عبر القنطرة الملحية'], a: 0 },
+      { q: 'إذا كان E° للخلية سالباً فإن التفاعل:', o: ['تلقائي', 'غير تلقائي', 'متزن دائماً'], a: 1 },
+      { q: 'جهد خلية الخارصين والنحاس القياسي تقريباً:', o: ['0.42 V', '1.10 V', '−1.10 V'], a: 1 },
+      { q: 'الخلية الجلفانية تحوّل الطاقة:', o: ['الكهربائية إلى كيميائية', 'الكيميائية إلى كهربائية', 'الحرارية إلى ضوئية'], a: 1 },
+      { q: '[تحصيلي] ما جهد خلية Sn²⁺ (-0.137 V) و Pt²⁺ (+1.18 V)؟', o: ['+1.04 V', '+1.32 V', '−1.32 V'], a: 1 }
+    ];
+    let qi = 0, left = 15, civ = null, ans = false, corr = 0;
+    function ring() { $('#ringT').textContent = left; $('#ringC').style.strokeDashoffset = 226.2 * (1 - left / 15); $('#ringC').style.stroke = left <= 5 ? '#e4572e' : '#d79b14'; }
+    function loadQ() {
+      const Q = QS[qi]; ans = false; left = 15; ring(); $('#qn').textContent = `السؤال ${qi + 1} من ${QS.length} · أسئلة من التحصيلي`; $('#cq').textContent = Q.q; $('#res').textContent = '';
+      const b = $('#copts'); b.innerHTML = ''; Q.o.forEach((t, i) => { const x = document.createElement('button'); x.type = 'button'; x.textContent = ['أ', 'ب', 'ج'][i] + ') ' + t; x.onclick = () => answer(i); b.appendChild(x); });
+      $('#cNext').style.display = 'none'; clearInterval(civ);
+      civ = setInterval(() => { left--; ring(); if (left <= 3 && left > 0) tone(440, .08); if (left <= 0) { clearInterval(civ); answer(-1); } }, 1000);
+    }
+    function answer(i) {
+      if (ans) return; ans = true; clearInterval(civ);
+      const Q = QS[qi], bs = $$('#copts button'); bs[Q.a].classList.add('ok'); if (i >= 0 && i !== Q.a) bs[i].classList.add('no');
+      if (i === Q.a) { corr++; good(); addPts(10); $('#res').innerHTML = '<span style="color:var(--green)">✓ إجابة صحيحة! ⚡ +10</span>'; }
+      else { bad(); $('#res').innerHTML = i < 0 ? '<span style="color:var(--ox)">⏰ انتهى الوقت</span>' : '<span style="color:var(--ox)">✗ الإجابة الصحيحة بالأخضر</span>'; }
+      if (window.CHEM_PORTAL) window.CHEM_PORTAL.saveLessonScore('4-1', corr, QS.length);
+      if (qi < QS.length - 1) $('#cNext').style.display = '';
+      else { $('#res').innerHTML += `<div style="color:var(--gold)">🏆 النتيجة النهائية: ${corr} من ${QS.length}</div>`; $('#cGo').style.display = ''; $('#cGo').textContent = '↺ أعيدي التحدي'; if (corr >= 4) { fanfare(); confetti(); } }
+    }
+    $('#cGo').onclick = () => { qi = 0; corr = 0; $('#cGo').style.display = 'none'; loadQ(); };
+    $('#cNext').onclick = () => { qi++; loadQ(); };
+
+    function resetBoard() {
+      points = 0; $('#pts').textContent = '⭐ 0'; updBatt.full = false; updBatt();
+      dReset(); labReset(); cD.run(false); cD.set('Zn', 'Cu'); $('#dRun').textContent = '⚡ أغلقي الدائرة';
+      cD.sv.querySelectorAll('.glow').forEach(x => x.classList.remove('glow')); $$('.rv').forEach(b => b.classList.remove('open'));
+      $('#wA').classList.remove('show'); $$('.st').forEach(s => s.classList.remove('open'));
+      $$('.track').forEach(t => t.classList.remove('on')); $$('.tbox').forEach(t => t.classList.remove('on'));
+      $$('.qrow[data-a]').forEach(r => { r.classList.remove('ok', 'no'); r.querySelector('.fb').textContent = ''; const s = r.querySelector('select'); s.disabled = false; s.value = ''; });
+      $$('.calc').forEach(r => { r.classList.remove('ok', 'no'); r.querySelector('.fb').textContent = ''; const i = r.querySelector('input'); i.disabled = false; i.value = ''; const s = r.querySelector('select'); if (s) { s.disabled = false; s.value = ''; } });
+      clearInterval(civ); qi = 0; corr = 0; $('#copts').innerHTML = ''; $('#res').textContent = ''; $('#cNext').style.display = 'none'; $('#cGo').style.display = ''; $('#cGo').textContent = '▶ ابدئي بطاقة الخروج'; left = 15; ring();
+      inks.forEach(o => o.x.clearRect(0, 0, o.c.width, o.c.height)); resetTimer(); pool = null; $$('.tab').forEach(t => t.classList.remove('done')); go(0);
+    }
+    $('#resetAll').onclick = resetBoard;
+    $$('#cls button').forEach((b, i) => b.onclick = () => { if (b.classList.contains('on')) return; $$('#cls button').forEach(z => z.classList.remove('on')); b.classList.add('on'); curClass = i; resetBoard(); });
+  </script>
 </body>
 </html>
