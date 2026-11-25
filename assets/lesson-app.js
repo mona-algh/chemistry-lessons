@@ -856,6 +856,7 @@
 
   function mountLessonDeck(lesson) {
     if (!lesson) return;
+    document.documentElement.classList.add('lesson-html');
     document.title = lesson.code + ' ' + lesson.title + ' | دروس الكيمياء التفاعلية';
 
     const titleEl = document.getElementById('lessonTitle');
@@ -907,6 +908,7 @@
 
       if (stageEl) {
         stageEl.innerHTML = '';
+        stageEl.scrollTop = 0;
         const topMeta = el('div', { className: 'slide-top-meta' }, [
           el('span', { className: 'slide-section-pill', text: s.sectionLabel }),
           el('span', { className: s.isTahsili ? 'quiz-source-tag tahsili' : 'page-ref', text: s.badge || lesson.pages })

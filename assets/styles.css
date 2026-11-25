@@ -489,26 +489,26 @@ button, input, select {
 }
 
 .classroom-bar-inner {
-  max-width: 1280px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0.5rem 1rem;
+  padding: 0.42rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.65rem;
+  gap: 0.55rem;
   flex-wrap: wrap;
 }
 
 .lesson-crumb {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   flex-wrap: wrap;
 }
 
 .lesson-crumb h1 {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 0.98rem;
   font-weight: 800;
 }
 
@@ -1114,6 +1114,177 @@ button, input, select {
   text-align: center;
   color: var(--text-muted);
   font-size: 0.88rem;
+}
+
+@media (min-width: 1120px) {
+  .classroom-bar-inner {
+    flex-wrap: nowrap;
+  }
+
+  .lesson-crumb,
+  .header-tools {
+    flex-wrap: nowrap;
+  }
+
+  .lesson-crumb h1,
+  .page-ref,
+  .slide-counter-badge {
+    white-space: nowrap;
+  }
+}
+
+@media (min-width: 769px) {
+  html.lesson-html,
+  html:has(body.lesson-mode) {
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  body.lesson-mode {
+    height: 100vh;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .classroom-bar {
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .deck-shell {
+    flex: 1 1 auto;
+    min-height: 0;
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0.65rem 5.25rem 0.65rem;
+    gap: 0.55rem;
+    overflow: hidden;
+    align-items: center;
+  }
+
+  .tabs-nav,
+  .slide-dots-row,
+  .slide-stage,
+  .lesson-footer-nav {
+    width: 100%;
+    max-width: 1060px;
+  }
+
+  .tabs-nav {
+    flex-shrink: 0;
+    justify-content: center;
+    padding: 0.1rem 0;
+  }
+
+  .tab-btn {
+    min-height: 36px;
+    padding: 0.3rem 0.85rem;
+    font-size: 0.86rem;
+  }
+
+  .slide-dots-row {
+    flex-shrink: 0;
+    justify-content: center;
+  }
+
+  .slide-dot {
+    min-width: 26px;
+    height: 26px;
+    font-size: 0.78rem;
+  }
+
+  .slide-stage {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    padding: 1.35rem 2rem;
+  }
+
+  .slide-top-meta {
+    margin-bottom: 0.55rem;
+  }
+
+  .slide-heading {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.22rem, 2.05vw, 1.62rem);
+  }
+
+  .main-idea-box {
+    padding: 0.9rem 1.2rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .focus-card {
+    padding: 0.95rem 1.2rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .scaffolding-grid {
+    margin-top: 0.7rem;
+    gap: 0.7rem;
+  }
+
+  .scaffold-box {
+    padding: 0.75rem 0.95rem;
+    font-size: 0.94rem;
+  }
+
+  .quiz-live-bar {
+    padding: 0.5rem 0.85rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .quiz-q-text {
+    margin: 0 0 0.7rem;
+    font-size: 1.08rem;
+  }
+
+  .quiz-options {
+    gap: 0.6rem;
+  }
+
+  .quiz-option-btn {
+    min-height: 46px;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.96rem;
+  }
+
+  .slide-arrows-bar {
+    height: 0;
+    margin: 0;
+    overflow: visible;
+  }
+
+  .slide-arrows-bar .muted-note {
+    display: none;
+  }
+
+  #slidePrevBtn {
+    position: fixed;
+    right: 1.25rem;
+    bottom: 1.15rem;
+    z-index: 40;
+  }
+
+  #slideNextBtn {
+    position: fixed;
+    left: 1.25rem;
+    bottom: 1.15rem;
+    z-index: 40;
+  }
+
+  .lesson-footer-nav {
+    flex-shrink: 0;
+    padding-top: 0.4rem;
+  }
+
+  .lesson-footer-nav .btn-sm {
+    min-height: 34px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.82rem;
+  }
 }
 
 @media (max-width: 900px) {
