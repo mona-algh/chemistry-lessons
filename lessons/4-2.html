@@ -1,73 +1,364 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>4-2 البطاريات | دروس الكيمياء التفاعلية</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><polygon points='18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5' stroke='%231D5A70' stroke-width='2.4' fill='none'/><circle cx='18' cy='18' r='4.5' fill='%231D5A70'/></svg>">
-  <link rel="stylesheet" href="../assets/styles.css">
-  <script>window.CURRENT_LESSON_ID = '4-2';</script>
+  <title>4-2 البطاريات | درس متكامل مع معمل افتراضي</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><polygon points='18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5' stroke='%232a7de1' stroke-width='2.4' fill='none'/><circle cx='18' cy='18' r='4.5' fill='%230b8a4a'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
   <script src="../assets/theme.js"></script>
-  <script src="../assets/data/chem3-ch4.js"></script>
-  <script src="../assets/illustrations-labs.js"></script>
-  <script src="../assets/lesson-app.js"></script>
+  <link rel="stylesheet" href="../assets/chem3-board.css">
 </head>
-<body class="lesson-mode">
-  <header class="classroom-bar">
-    <div class="classroom-bar-inner">
-      <div class="lesson-crumb">
-        <a class="btn btn-sm" href="../index.html">الرئيسية</a>
-        <a id="backBookLink" class="btn btn-sm" href="../chem-3.html">كيمياء 3</a>
-        <h1 id="lessonTitle">4-2 البطاريات</h1>
-        <span id="lessonPages" class="page-ref">ص 144–153</span>
-        <span id="slideCounter" class="slide-counter-badge">1 / 1</span>
-      </div>
-      <div class="header-tools">
-        <div class="timer-widget" aria-label="مؤقت الحصة">
-          <span id="timerDisplay" class="timer-display">40:00</span>
-          <button id="timerToggleBtn" type="button" class="timer-btn">ابدئي</button>
-          <button id="timerResetBtn" type="button" class="timer-btn">إعادة</button>
-          <button type="button" class="timer-btn" data-timer-mins="5">5د</button>
-          <button type="button" class="timer-btn" data-timer-mins="40">40د</button>
-        </div>
-        <button id="wbToggleBtn" type="button" class="btn btn-sm" aria-pressed="false">قلم الشرح</button>
-        <button id="themeToggleBtn" type="button" class="btn btn-sm" aria-pressed="false">الوضع الليلي</button>
-      </div>
+<body>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <div class="tools" id="tools" aria-label="أدوات السبورة">
+    <button id="penBtn" type="button" title="قلم">✏️</button>
+    <button class="dot on" type="button" data-c="#1d2742" style="background:#1d2742" aria-label="لون داكن"></button>
+    <button class="dot" type="button" data-c="#e4572e" style="background:#e4572e" aria-label="لون مرجاني"></button>
+    <button class="dot" type="button" data-c="#2a7de1" style="background:#2a7de1" aria-label="لون أزرق"></button>
+    <button class="dot" type="button" data-c="#0b8a4a" style="background:#0b8a4a" aria-label="لون أخضر"></button>
+    <hr>
+    <button id="hiBtn" type="button" title="تظليل">🖍️</button>
+    <button id="erBtn" type="button" title="ممحاة">🧽</button>
+    <button id="clrBtn" type="button" title="مسح الصفحة">🗑️</button>
+  </div>
+
+  <header class="portal-strip">
+    <div class="portal-links">
+      <a class="pbtn" href="../index.html">الرئيسية</a>
+      <a class="pbtn" href="../chem-3.html">كيمياء 3</a>
+      <a class="pbtn" href="4-1.html">الدرس السابق: 4-1</a>
+      <a class="pbtn primary" href="4-3.html">الدرس التالي: 4-3 التحليل الكهربائي</a>
     </div>
+    <button id="themeToggleBtn" type="button" class="pbtn" aria-pressed="false">الوضع الليلي</button>
   </header>
 
-  <canvas id="wbCanvas" class="whiteboard-canvas" aria-hidden="true"></canvas>
-  <aside id="wbDock" class="whiteboard-dock" hidden aria-label="أدوات قلم الشرح">
-    <button type="button" class="wb-swatch active" data-wb-color="#1D5FD6" style="background:#1D5FD6;" aria-label="لون أزرق"></button>
-    <button type="button" class="wb-swatch" data-wb-color="#B44308" style="background:#B44308;" aria-label="لون برتقالي"></button>
-    <button type="button" class="wb-swatch" data-wb-color="#B92B27" style="background:#B92B27;" aria-label="لون أحمر"></button>
-    <button type="button" class="wb-swatch" data-wb-color="#0B7A43" style="background:#0B7A43;" aria-label="لون أخضر"></button>
-    <button id="wbEraserBtn" type="button" class="wb-tool-btn">ممحاة</button>
-    <button id="wbUndoBtn" type="button" class="wb-tool-btn">تراجع</button>
-    <button id="wbClearBtn" type="button" class="wb-tool-btn">مسح</button>
-    <button id="wbCloseBtn" type="button" class="wb-tool-btn">إغلاق</button>
-  </aside>
-
-  <main class="deck-shell">
-    <div class="tabs-nav" role="tablist" aria-label="أقسام الشرائح">
-      <button type="button" class="tab-btn" role="tab" data-section-tab="goals" aria-selected="true">الأهداف والتركيز</button>
-      <button type="button" class="tab-btn" role="tab" data-section-tab="content" aria-selected="false">تسلسل الدرس والتفاعل</button>
-      <button type="button" class="tab-btn" role="tab" data-section-tab="exit" aria-selected="false">بطاقة الخروج</button>
+  <div class="wrap">
+    <div class="cover">
+      <div>
+        <h1>🔌 البطاريات : درس متكامل مع معمل افتراضي</h1>
+        <div class="sub">كيمياء 3 : الفصل الرابع الكيمياء الكهربائية : الدرس 4-2 (ص 144–153)</div>
+      </div>
+      <div class="cls" id="cls">
+        <button type="button" class="on"><span contenteditable="true">3 / 1</span></button>
+        <button type="button"><span contenteditable="true">3 / 2</span></button>
+        <button type="button"><span contenteditable="true">3 / 3</span></button>
+      </div>
     </div>
 
-    <div class="slide-dots-row">
-      <div id="slideDots" class="slide-dots" aria-label="أرقام الشرائح"></div>
+    <div class="nav">
+      <div class="tabs" id="tabs" role="tablist">
+        <button type="button" class="tab on" style="--c:#0b8a4a"><span class="e">🎯</span>الأهداف والتهيئة<small>البداية</small></button>
+        <button type="button" class="tab" style="--c:#e4572e"><span class="e">🔍</span>التهيئة العملية<small>تجربة الصدأ</small></button>
+        <button type="button" class="tab" style="--c:#2a7de1"><span class="e">💡</span>الشرح والإثراء<small>أنواع البطاريات</small></button>
+        <button type="button" class="tab" style="--c:#7c5ce6"><span class="e">🧪</span>المعمل الافتراضي<small>بناء وقياسات</small></button>
+        <button type="button" class="tab" style="--c:#0e9aa7"><span class="e">🧭</span>المسارات<small>تعلم متمايز</small></button>
+        <button type="button" class="tab" style="--c:#d79b14"><span class="e">🏁</span>بطاقة الخروج<small>تحدي وتحصيلي</small></button>
+      </div>
+      <div class="ctrl">
+        <div class="clock" id="clock">40:00</div>
+        <button type="button" class="tb" id="tStart">▶ ابدئي الدرس</button>
+        <button type="button" class="tb sec" id="tReset">↺</button>
+        <button type="button" class="tb mic" id="micBtn">🎤 قرعة</button>
+        <div class="batt" title="طاقة الفصل"><div class="bshell"><i id="battI"></i></div><b id="battT">0%</b></div>
+        <div class="pts" id="pts">⭐ 0</div>
+      </div>
+      <div class="tbar"><i id="tbar"></i></div>
     </div>
 
-    <article id="slideStage" class="slide-stage" aria-live="polite"></article>
-
-    <div class="slide-arrows-bar">
-      <button id="slidePrevBtn" type="button" class="slide-arrow-btn" aria-label="الشريحة السابقة">&rarr;</button>
-      <span class="muted-note">التنقل بين الشرائح بالأسهم أو بلوحة المفاتيح</span>
-      <button id="slideNextBtn" type="button" class="slide-arrow-btn" aria-label="الشريحة التالية">&larr;</button>
+    <!-- P0 -->
+    <div class="panel on">
+      <div class="card" style="--c:var(--green)">
+        <div class="ph"><div class="ic">🤲</div><h2>البداية والتهيئة من حياتك اليومية</h2></div>
+        <div class="dbox d3"><span class="h">🇸🇦 دعاء للوطن وطلب العلم</span>اللهم احفظ بلادنا المملكة العربية السعودية وأدم علينا الأمن والرخاء، اللهم انفعنا بما علمتنا وزدنا علماً</div>
+        <div class="dbox d2"><span class="h">💡 تهيئة من حياتك اليومية</span>عندما تنفد بطارية جهاز التحكم نرميها، بينما بطارية الهاتف أو السيارة نعيد شحنها يومياً، وفي المدن الساحلية كجدة والدمام يسرع الهواء الرطب صدأ أبواب الحديد! كيف نفسر ذلك؟</div>
+      </div>
+      <div class="card" style="--c:var(--gold)">
+        <div class="lead">🔋 مهمتنا اليوم: <b>نشحن بطارية الفصل إلى 100%</b> : كل إجابة صحيحة تشحنها ⚡</div>
+        <div class="goal"><b>١</b>أصف تركيب الخلية الجافة التقليدية (خارصين-كربون) ومكوناتها</div>
+        <div class="goal"><b>٢</b>أميّز بين البطاريات الأولية والثانوية وأعطي أمثلة لكل منهما</div>
+        <div class="goal"><b>٣</b>أفسر عمل خلية الوقود (الهيدروجين-الأكسجين) وناتجها النقي</div>
+        <div class="goal"><b>٤</b>أشرح ظاهرة تآكل الحديد وطرائق حمايته (الطلاء، الجلفنة، الأنود المضحي)</div>
+      </div>
+      <div class="next"><button type="button" class="big" style="--c:#e4572e" data-go="1">إلى التهيئة العملية 🔍 ←</button></div>
     </div>
 
-    <nav id="lessonPrevNext" class="lesson-footer-nav" aria-label="التنقل بين الدروس"></nav>
-  </main>
+    <!-- P1: تجربة مسامير الصدأ المتحركة -->
+    <div class="panel">
+      <div class="card" style="--c:#e4572e">
+        <div class="ph"><div class="ic">🔍</div><h2>تجربة تآكل الحديد: أي مسمار يصدأ وأيها يُحمى في الماء المالح؟</h2><span class="book">📖 مختبر الكيمياء ص 152</span></div>
+        <div class="demo">
+          <svg viewBox="0 0 340 240" class="dsvg" aria-label="تجربة مقارنة صدأ الحديد مع الماغنسيوم والنحاس">
+            <rect x="20" y="65" width="90" height="145" rx="12" fill="#e6f0fd" stroke="#8aa" stroke-width="3"/>
+            <rect x="125" y="65" width="90" height="145" rx="12" fill="#e6f0fd" stroke="#8aa" stroke-width="3"/>
+            <rect x="230" y="65" width="90" height="145" rx="12" fill="#e6f0fd" stroke="#8aa" stroke-width="3"/>
+            <!-- Nail 1: Fe + Mg -->
+            <rect x="59" y="80" width="12" height="110" rx="4" fill="#9aa4b2"/>
+            <rect x="54" y="122" width="22" height="22" rx="4" fill="#d8dde3"/>
+            <text x="65" y="46" text-anchor="middle" font-size="14" font-weight="900" fill="var(--green)">Fe + Mg</text>
+            <!-- Nail 2: Fe alone -->
+            <rect id="nFe" x="164" y="80" width="12" height="110" rx="4" fill="#9aa4b2" style="transition:fill 2.2s"/>
+            <text x="170" y="46" text-anchor="middle" font-size="14" font-weight="900" fill="var(--ink)">Fe فقط</text>
+            <!-- Nail 3: Fe + Cu -->
+            <rect id="nCu" x="269" y="80" width="12" height="110" rx="4" fill="#9aa4b2" style="transition:fill 2.2s"/>
+            <rect x="264" y="122" width="22" height="22" rx="4" fill="#c87533"/>
+            <text x="275" y="46" text-anchor="middle" font-size="14" font-weight="900" fill="var(--ox)">Fe + Cu</text>
+          </svg>
+          <div class="dside">
+            <button type="button" class="big" style="--c:#e4572e" id="rustGo">💧 أضيفي الماء المالح ولاحظي التغير</button>
+            <div class="dobs" id="rustObs">👀 راقبي المسامير الثلاثة بعد تعرضها للماء والأكسجين…</div>
+            <div class="qrow" data-a="mg">١) الفلز الذي يحمي مسمار الحديد ويعمل أنوداً مضحياً:
+              <select><option value="">اختاري</option><option value="mg">الماغنسيوم Mg</option><option value="cu">النحاس Cu</option></select>
+              <button type="button" class="chk">تحقق</button><span class="fb"></span>
+            </div>
+            <div class="qrow" data-a="cu">٢) أي مسمار تسارعت عملية صدئه أكثر من غيره؟
+              <select><option value="">اختاري</option><option value="mg">Fe + Mg</option><option value="cu">Fe + Cu</option></select>
+              <button type="button" class="chk">تحقق</button><span class="fb"></span>
+            </div>
+          </div>
+        </div>
+        <div class="tip">🔑 الماغنسيوم أنشط من الحديد فيتأكسد بدلاً منه، أما النحاس فأقل نشاطاً فينعكس التأكسد على الحديد نفسه فيسرّع صدأه!</div>
+      </div>
+      <div class="next"><button type="button" class="big" style="--c:var(--red)" data-go="2">إلى الشرح والإثراء 💡 ←</button></div>
+    </div>
+
+    <!-- P2 -->
+    <div class="panel">
+      <div class="card" style="--c:var(--blue)">
+        <div class="ph"><div class="ic">١</div><h2>مقارنة البطاريات الأولية والثانوية وخلية الوقود</h2><span class="book">📖 ص 144–150</span></div>
+        <div class="reveal4">
+          <button type="button" class="rv" style="--c:#e4572e">🔋 الخلية الجافة (1.5 V)<span><b>أولية (لا تُشحن)</b><br>الأنود: حافظة الخارصين <code>Zn</code><br>الكاثود غير الفعال: عمود الكربون في عجينة <code>MnO₂, NH₄Cl</code></span></button>
+          <button type="button" class="rv" style="--c:#2a7de1">⌚ القلوية والفضة<span><b>أولية صغيرة وعالية الكفاءة</b><br>القلوية: مسحوق <code>Zn</code> مع <code>KOH</code><br>الفضة: تستخدم <code>Ag₂O</code> لسماعات الأذن والساعات</span></button>
+          <button type="button" class="rv" style="--c:#0b8a4a">🚗 المركم الرصاصي (12 V)<span><b>ثانوية (تُشحن)</b> : 6 خلايا × 2V<br>الأنود <code>Pb</code> والكاثود <code>PbO₂</code><br>في محلول حمض الكبريتيك <code>H₂SO₄</code></span></button>
+          <button type="button" class="rv" style="--c:#7c5ce6">🚀 الليثيوم وخلية الوقود<span><b>أعلى جهد ونظافة بيئية</b><br>الليثيوم أخف فلز (<code>-3.04 V</code>)<br>خلية الوقود: <code>2H₂ + O₂ → 2H₂O</code></span></button>
+        </div>
+        <div class="mnem">أولية = <span>تُستعمل مرة</span> (جافة · قلوية · فضة) &nbsp;|&nbsp; ثانوية = <span>تُشحن عكسياً</span> (المركم · الليثيوم · نيكل-كادميوم)</div>
+      </div>
+
+      <div class="card" style="--c:var(--red)">
+        <div class="ph"><div class="ic">٢</div><h2>حساب جهد بطارية السيارة (المركم الرصاصي) وحماية الفلزات</h2><span class="book">📖 مثال تطبيقي</span></div>
+        <div class="formula" dir="ltr">E°<sub>cell</sub> = E°<sub>PbO₂ (+1.685 V)</sub> − E°<sub>Pb (−0.356 V)</sub> = +2.041 V</div>
+        <div class="exq">تتكون بطارية السيارة من 6 خلايا رصاص موصلة على التوالي؛ فكم الجهد الكلي؟</div>
+        <div class="steps">
+          <div class="st"><span class="l">جهد الخلية الواحدة</span><span class="a" dir="ltr">+1.685 − (−0.356) = +2.041 V ≈ 2 V</span><button type="button">إظهار</button></div>
+          <div class="st"><span class="l">الجهد الكلي للبطارية</span><span class="a" dir="ltr">6 خلايا × 2 V = 12 V</span><button type="button">إظهار</button></div>
+          <div class="st"><span class="l">حماية الحديد بالجلفنة</span><span class="a">تغليف الحديد بطبقة خارصين تعزله وتعمل كأنود مضحٍّ عند الخدش</span><button type="button">إظهار</button></div>
+        </div>
+      </div>
+
+      <div class="watan">
+        <div class="wh">🩺 من حياتنا والعلوم الأخرى: منظم ضربات القلب وحافلات الهيدروجين</div>
+        <p>تعمل أجهزة تنظيم ضربات القلب ببطاريات <b>ليثيوم-يود</b> لعمرها الطويل (5–8 سنوات) دون انبعاث غازات، كما تعتمد حافلات النقل النظيف على <b>خلايا وقود الهيدروجين</b> لأن عادمها ماء نقي فقط!</p>
+        <button type="button" class="tb" id="wQ">❓ لماذا لا تنفد خلية الوقود كالبطارية الجافة؟</button><span class="wa" id="wA">لأنها تُزوَّد بغازي H₂ و O₂ باستمرار من الخارج ✔️</span>
+      </div>
+
+      <div class="card" style="--c:var(--violet)">
+        <div class="ph"><div class="ic">🔬</div><h2>إثراء علمي: نوبل في البطاريات وبطاريات الحالة الصلبة</h2><span class="book">جائزة نوبل 2019</span></div>
+        <p style="margin:0;">حصل العلماء <b>جون غوديناف وستانلي ويتنغهام وأكيرا يوشينو</b> على جائزة نوبل في الكيمياء عام 2019 لتطويرهم <b>بطارية أيون الليثيوم</b> التي أحدثت ثورة في الجوالات والسيارات الكهربائية. وتتجه الأبحاث اليوم نحو <b>بطاريات الحالة الصلبة (Solid-State)</b> التي تستبدل الإلكتروليت السائل بمواد صلبة خزفية لزيادة الأمان وسرعة الشحن.</p>
+      </div>
+      <div class="next"><button type="button" class="big" style="--c:#7c5ce6" data-go="3">إلى المعمل الافتراضي 🧪 ←</button></div>
+    </div>
+
+    <!-- P3: المعمل الافتراضي -->
+    <div class="panel">
+      <div class="card" style="--c:#7c5ce6">
+        <div class="ph"><div class="ic">🧪</div><h2>المعمل الافتراضي: اختبار البطاريات والحماية المهبطية</h2><span class="book">📖 مختبر تفاعلي</span></div>
+        <div class="labwrap">
+          <div class="lsteps" id="lSteps">
+            <div class="lt2">🧭 خطوات المختبر : نفّذيها بالترتيب</div>
+            <button type="button" class="lstep" data-i="0">١ فحص الخلية الجافة (1.5 V)</button>
+            <button type="button" class="lstep" data-i="1">٢ توصيل المركم الرصاصي (12 V)</button>
+            <button type="button" class="lstep" data-i="2">٣ ضخ H₂ و O₂ في خلية الوقود</button>
+            <button type="button" class="lstep" data-i="3">٤ ربط أنبوب الحديد بأنود مضحّي Mg</button>
+          </div>
+          <div class="lright">
+            <div id="batSvgBox"></div>
+            <div class="lmsg" id="lMsg">ابدئي باختبار الخلية الأولى 👈</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="--c:var(--teal)">
+        <div class="ph"><div class="ic">📋</div><h2>جدول القياسات: تحققي من جهد البطاريات</h2></div>
+        <div class="locked" id="lLock">🔒 يُفتح تلقائياً بعد إكمال الخطوات الأربع في المختبر</div>
+        <div id="lExp" style="display:none">
+          <div class="ltab-wrap">
+            <table class="ltab">
+              <thead><tr><th>الخلية / النظام</th><th>الأنود والكاثود</th><th>احسبي/اكتبي الجهد المتوقع (V)</th><th></th></tr></thead>
+              <tbody id="batRows">
+                <tr data-a="1.5"><td>الخلية الجافة (خارصين-كربون)</td><td><span dir="ltr">Zn / C(MnO₂)</span></td><td><input type="number" step="0.01" placeholder="V"><button type="button" class="chk">تحقق</button></td><td class="fb"></td></tr>
+                <tr data-a="12"><td>بطارية السيارة (6 خلايا رصاص)</td><td><span dir="ltr">Pb / PbO₂ in H₂SO₄</span></td><td><input type="number" step="0.1" placeholder="V"><button type="button" class="chk">تحقق</button></td><td class="fb"></td></tr>
+                <tr data-a="1.23"><td>خلية وقود الهيدروجين والأكسجين</td><td><span dir="ltr">2H₂ + O₂ → 2H₂O</span></td><td><input type="number" step="0.01" placeholder="V"><button type="button" class="chk">تحقق</button></td><td class="fb"></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="hint2">💡 تذكري: الجافة `1.5 V`، بطارية السيارة `6 × 2 = 12 V`، وخلية الوقود القياسية `1.23 V`.</div>
+        </div>
+      </div>
+      <div class="next"><button type="button" class="big" style="--c:var(--teal)" data-go="4">إلى المسارات المتمايزة 🧭 ←</button></div>
+    </div>
+
+    <!-- P4: المسارات -->
+    <div class="panel">
+      <div class="card" style="--c:var(--teal)">
+        <div class="ph"><div class="ic">🧭</div><h2>التعلم المتمايز والاستراتيجيات: اختاري مسارك</h2></div>
+        <div class="tracks">
+          <div class="track" style="--c:#0b8a4a;--cl:var(--green-l)"><div class="ic">🔋</div><h3>شحن 30%</h3><p>تصنيف البطاريات ومكوناتها</p></div>
+          <div class="track" style="--c:#d79b14;--cl:var(--gold-l)"><div class="ic">🔋🔋</div><h3>شحن 70%</h3><p>حساب جهود الخلايا</p></div>
+          <div class="track" style="--c:#7c5ce6;--cl:var(--violet-l)"><div class="ic">🔋🔋🔋</div><h3>شحن 100%</h3><p>تحليل التآكل وحماية المعادن</p></div>
+        </div>
+
+        <div class="tbox" id="t1" style="--c:#0b8a4a">
+          <div class="task"><h4>🔋 أكملي حول البطاريات الأولية والثانوية</h4>
+            <div class="qrow" data-a="an">١) تعمل حافظة الخارصين في الخلية الجافة بوصفها: <select><option value="">اختاري</option><option value="an">الأنود</option><option value="ca">الكاثود</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div>
+            <div class="qrow" data-a="elec">٢) عند شحن البطارية الثانوية فإنها تعمل عمل خلية: <select><option value="">اختاري</option><option value="galv">جلفانية</option><option value="elec">تحليل كهربائي</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div>
+            <div class="qrow" data-a="h2so4">٣) المحلول الموصل في المركم الرصاصي هو: <select><option value="">اختاري</option><option value="koh">KOH</option><option value="h2so4">H₂SO₄</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div>
+          </div>
+        </div>
+
+        <div class="tbox" id="t2" style="--c:#d79b14">
+          <div class="task"><h4>🔋🔋 مسائل حسابية على جهد البطاريات</h4>
+            <div class="calc" data-a="2.041"><div class="ce" dir="ltr">خلية مركم واحدة: E°(PbO₂)= +1.685 V | E°(Pb)= −0.356 V</div><div class="ci">E° = <input type="number" step="0.001"> V <button type="button" class="chk">تحقق</button><span class="fb"></span></div></div>
+            <div class="calc" data-a="4.00"><div class="ce" dir="ltr">بطارية ليثيوم-أكسجين افتراضية: E°(cat)= +0.96 V | E°(Li)= −3.04 V</div><div class="ci">E° = <input type="number" step="0.01"> V <button type="button" class="chk">تحقق</button><span class="fb"></span></div></div>
+          </div>
+        </div>
+
+        <div class="tbox" id="t3" style="--c:#7c5ce6">
+          <div class="task"><h4>🔋🔋🔋 تفكير ناقد: حماية المعادن</h4>
+            <div class="st"><span class="l">لماذا يفشل طلاء الحديد بالنحاس عند الخدش بخلاف الخارصين؟</span><span class="a">لأن النحاس أقل نشاطاً (جهد اختزاله أعلى)، فإذا انخدش يصبح الحديد هو الأنود ويصدأ أسرع، بينما الخارصين أنشط فيضحي بنفسه لحماية الحديد</span><button type="button">إظهار</button></div>
+            <div class="st"><span class="l">ما شروط حدوث الصدأ وكيف تسرعه الأملاح؟</span><span class="a">يتطلب الماء والأكسجين معاً، وتزيد الأملاح توصيل الأيونات في الخلية الجلفانية الموضعية</span><button type="button">إظهار</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="next"><button type="button" class="big" style="--c:var(--gold)" data-go="5">إلى بطاقة الخروج والتحصيلي 🏁 ←</button></div>
+    </div>
+
+    <!-- P5: بطاقة الخروج والتحصيلي -->
+    <div class="panel">
+      <div class="card" style="--c:var(--gold)">
+        <div class="ph"><div class="ic">🏁</div><h2>بطاقة الخروج: تحدّي الأسرع وأسئلة من التحصيلي ⚡</h2><span class="book">أسئلة من التحصيلي</span></div>
+        <div class="chal">
+          <div class="qn" id="qn">6 أسئلة من التحصيلي والكتاب : 15 ثانية لكل سؤال</div>
+          <div class="ring">
+            <svg width="84" height="84"><circle cx="42" cy="42" r="36" stroke="var(--gold-l)" stroke-width="8" fill="none"/><circle id="ringC" cx="42" cy="42" r="36" stroke="#d79b14" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="0"/></svg>
+            <b id="ringT">15</b>
+          </div>
+          <div class="cq" id="cq">مستعدة؟ اضغطي ابدئي بطاقة الخروج 🙋‍♀️</div>
+          <div class="copts" id="copts"></div>
+          <div class="res" id="res"></div>
+          <div class="row">
+            <button type="button" class="big" style="--c:var(--gold)" id="cGo">▶ ابدئي بطاقة الخروج</button>
+            <button type="button" class="big ghost" style="--c:var(--gold); display:none;" id="cNext">السؤال التالي ←</button>
+          </div>
+        </div>
+
+        <div class="tahsili-box">
+          <h3>📌 قواعد وتنبيهات مهمة للتحصيلي</h3>
+          <ul>
+            <li>الليثيوم أخف فلز معروف وأقل جهد اختزال قياسي (<span dir="ltr">-3.04 V</span>) لذا يعطي جهداً عالياً.</li>
+            <li>البطاريات الجافة والقلوية والفضة <b>أولية</b>، بينما المركم الرصاصي (<span dir="ltr">H₂SO₄</span>) والليثيوم ونيكل-كادميوم <b>ثانوية</b>.</li>
+            <li>طرق حماية الحديد من التآكل: <b>الطلاء</b>، <b>الجلفنة</b> (التغليف بالخارصين)، و<b>الأنود المضحي</b> (مثل الماغنسيوم).</li>
+          </ul>
+        </div>
+      </div>
+      <div class="next"><button type="button" class="big ghost" style="--c:var(--ink)" id="resetAll">↺ إعادة السبورة للفصل التالي</button></div>
+    </div>
+  </div>
+
+  <div class="modal" id="drawM">
+    <div class="mbox">
+      <h3>🎤 قرعة المشاركة</h3>
+      <div class="picked" id="picked">؟</div>
+      <div class="row"><button type="button" class="big" style="--c:#e4572e" id="drawGo">🎲 اسحبي</button><button type="button" class="big ghost" style="--c:var(--ink)" id="drawClose">إغلاق</button></div>
+      <textarea id="names" placeholder="اسم في كل سطر"></textarea>
+      <div class="row" style="font-weight:700"><label><input type="checkbox" id="noRep" checked> بلا تكرار</label><label>العدد: <input type="number" id="count" value="25" min="2" style="width:64px;font:700 16px Tajawal"></label></div>
+    </div>
+  </div>
+  <div class="modal" id="alarm"><div class="mbox"><div style="font-size:56px">⏰</div><h3>انتهت الـ 40 دقيقة!</h3><p>أحسنتنّ في درس البطاريات ⚡</p><button type="button" class="big" style="--c:var(--green)" onclick="this.closest('.modal').classList.remove('show')">حسناً</button></div></div>
+
+  <script src="../assets/chem3-board.js"></script>
+  <script>
+    const QS = [
+      { src: 'اختبار مقنن ص 168', q: 'أي العبارات الآتية غير صحيحة عن البطاريات؟', o: ['البطاريات نماذج مضغوطة من الخلايا الجلفانية', 'البطاريات الثانوية من بطاريات التخزين', 'لا يمكن أن تتكون البطارية من خلية واحدة فقط', 'التفاعل عند الشحن تفاعل معكوس'], a: 2, exp: 'يمكن أن تتكون البطارية من خلية جلفانية واحدة أو أكثر.' },
+      { src: 'أسئلة من التحصيلي', q: 'بطاريات صغيرة جداً تُستخدم في سماعات الأذن والساعات:', o: ['المركم الرصاصي', 'بطارية الفضة', 'بطارية نيكل-كادميوم', 'خلية داون'], a: 1, exp: 'بطارية الفضة صغيرة الحجم وتناسب الأجهزة الدقيقة.' },
+      { src: 'أسئلة من التحصيلي', q: 'أي مما يأتي يُعد الناتج الوحيد لخلية وقود الهيدروجين-الأكسجين؟', o: ['ثاني أكسيد الكربون', 'الماء النقي', 'غاز الكلور', 'أكسيد المنجنيز'], a: 1, exp: '2H₂ + O₂ → 2H₂O.' },
+      { src: 'تقويم الكتاب ص 163', q: 'تغليف الحديد بطبقة من الخارصين لحمايته من التآكل يُسمى:', o: ['التحليل الكهربائي', 'الجلفنة', 'التسامي', 'الاختزال التفضيلي'], a: 1, exp: 'الجلفنة تغليف الحديد بالخارصين لحمايته عزلاً وتضحية.' },
+      { src: 'تقويم الكتاب ص 165', q: 'تُوصل قضبان الماغنسيوم بأنابيب الحديد المدفونة لأن الماغنسيوم:', o: ['يرفع حرارة الأنبوب', 'أنشط فيتأكسد كأنود مضحٍّ بدلاً من الحديد', 'يسرّع الصدأ', 'يعزل الكهرباء'], a: 1, exp: 'يتأكسد الماغنسيوم بدلاً من الحديد فيبقيه محمياً.' },
+      { src: 'أسئلة من التحصيلي', q: 'ما المحلول الموصل في بطارية المركم الرصاصي (السيارة)؟', o: ['هيدروكسيد البوتاسيوم', 'حمض الكبريتيك H₂SO₄', 'كلوريد الأمونيوم', 'نترات الفضة'], a: 1, exp: 'تُغمر ألواح Pb و PbO₂ في محلول حمض الكبريتيك المخفف.' }
+    ];
+
+    let rustDone = false, labStep = 0;
+    const B = window.initChem3Board({
+      lessonId: '4-2',
+      challengeQuestions: QS,
+      onReset() {
+        rustDone = false; labStep = 0;
+        document.getElementById('nFe').setAttribute('fill', '#9aa4b2');
+        document.getElementById('nCu').setAttribute('fill', '#9aa4b2');
+        document.getElementById('rustObs').textContent = '👀 راقبي المسامير الثلاثة بعد تعرضها للماء والأكسجين…';
+        document.getElementById('rustObs').classList.remove('on');
+        initBatLab();
+      }
+    });
+
+    document.getElementById('rustGo').onclick = () => {
+      if (rustDone) return; rustDone = true;
+      document.getElementById('nFe').setAttribute('fill', '#b86832');
+      document.getElementById('nCu').setAttribute('fill', '#8b3a1a');
+      document.getElementById('rustObs').innerHTML = '✅ بقي المسمار مع <b>Mg</b> لامعاً، وصدئ <b>Fe</b> قليلاً، بينما تصدأ <b>Fe+Cu</b> بشدة!';
+      document.getElementById('rustObs').classList.add('on');
+      B.good(); B.addPts(4);
+    };
+
+    const scenes = [
+      { v: '1.50 V', lbl: 'خلية جافة Zn/C (أولية)', msg: '🔋 الخلية الجافة تعطي 1.50 V ولا يمكن شحنها.', guard: false },
+      { v: '12.0 V', lbl: 'مركم رصاصي Pb/PbO₂ (ثانوية)', msg: '🚗 6 خلايا رصاص موصلة على التوالي تعطي 12 V وتُشحن!', guard: false },
+      { v: '1.23 V', lbl: 'خلية وقود H₂ + O₂ → H₂O', msg: '🚀 خلية الوقود تولد كهرباء مستمرة وماءً نقياً!', guard: false },
+      { v: 'محمي Fe', lbl: 'أنود مضحّي Mg يحمي الحديد', msg: '🛡️ اكتملت تجارب المختبر! افتحي جدول القياسات أدناه.', guard: true }
+    ];
+    function drawBatScene(sc) {
+      const box = document.getElementById('batSvgBox');
+      if (!sc) { box.innerHTML = '<svg viewBox="0 0 600 180" class="csvg"><rect x="90" y="35" width="420" height="110" rx="18" fill="var(--soft)" stroke="var(--line)" stroke-width="3"/><text x="300" y="96" text-anchor="middle" font-size="20" font-weight="800" fill="var(--muted)">اضغطي على خطوات المختبر بالأعلى</text></svg>'; return; }
+      if (sc.guard) {
+        box.innerHTML = '<svg viewBox="0 0 600 180" class="csvg"><rect x="75" y="54" width="170" height="68" rx="14" fill="var(--ox-l)" stroke="var(--ox)" stroke-width="3"/><text x="160" y="95" text-anchor="middle" font-size="18" font-weight="900" fill="var(--ox)">أنود مضحّي Mg</text><path d="M245 88 H355" stroke="var(--blue)" stroke-width="6" class="flow-wire"/><rect x="355" y="54" width="170" height="68" rx="14" fill="var(--green-l)" stroke="var(--green)" stroke-width="3"/><text x="440" y="95" text-anchor="middle" font-size="18" font-weight="900" fill="var(--green)">حديد محمي Fe</text><text x="300" y="70" text-anchor="middle" font-size="14" font-weight="900" fill="var(--blue)">e⁻ تتدفق للحديد</text></svg>';
+      } else {
+        box.innerHTML = '<svg viewBox="0 0 600 180" class="csvg"><rect x="105" y="45" width="160" height="82" rx="14" fill="var(--red-l)" stroke="var(--blue)" stroke-width="3"/><rect x="265" y="70" width="14" height="32" rx="4" fill="var(--blue)"/><text x="185" y="94" text-anchor="middle" direction="ltr" font-size="22" font-weight="900" fill="var(--blue)">' + sc.v + '</text><path d="M279 78 H420 V96 H279" fill="none" stroke="var(--ox)" stroke-width="5" class="flow-wire"/><circle cx="446" cy="87" r="26" fill="var(--gold-l)" stroke="var(--gold)" stroke-width="3"/><text x="446" y="93" text-anchor="middle" font-size="16" font-weight="900" fill="var(--ink)">⚡ حمل</text><text x="300" y="158" text-anchor="middle" font-size="16" font-weight="800" fill="var(--ink)">' + sc.lbl + '</text></svg>';
+      }
+    }
+    function initBatLab() {
+      labStep = 0; drawBatScene(null);
+      B.$$('.lstep').forEach((b, i) => { b.classList.remove('done'); b.disabled = i !== 0; });
+      document.getElementById('lMsg').textContent = 'ابدئي باختبار الخلية الأولى 👈';
+      document.getElementById('lExp').style.display = 'none';
+      document.getElementById('lLock').style.display = '';
+      B.$$('#batRows tr').forEach(tr => { tr.classList.remove('ok'); tr.querySelector('.fb').textContent = ''; const inp = tr.querySelector('input'); inp.disabled = false; inp.value = ''; });
+    }
+    B.$$('.lstep').forEach((b, i) => b.onclick = () => {
+      if (i !== labStep) return;
+      const sc = scenes[i]; drawBatScene(sc);
+      document.getElementById('lMsg').textContent = sc.msg;
+      document.getElementById('lMsg').className = 'lmsg win';
+      b.classList.add('done'); b.disabled = true; labStep++;
+      const nxt = B.$$('.lstep')[labStep]; if (nxt) nxt.disabled = false;
+      B.tone(520 + i * 75, .14); B.addPts(4);
+      if (labStep >= scenes.length) {
+        B.fanfare(); B.confetti(70);
+        document.getElementById('lExp').style.display = '';
+        document.getElementById('lLock').style.display = 'none';
+      }
+    });
+    B.$$('#batRows tr').forEach(tr => {
+      tr.querySelector('.chk').onclick = () => {
+        if (tr.classList.contains('ok')) return;
+        const inp = tr.querySelector('input'), val = parseFloat(inp.value), ans = parseFloat(tr.dataset.a);
+        if (!isNaN(val) && Math.abs(val - ans) <= 0.05) {
+          tr.classList.add('ok'); tr.querySelector('.fb').textContent = '✅'; inp.disabled = true; B.good(); B.addPts(8);
+        } else { tr.querySelector('.fb').textContent = '❌'; B.bad(); }
+      };
+    });
+    initBatLab();
+  </script>
 </body>
 </html>

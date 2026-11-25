@@ -1,73 +1,362 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>4-3 التحليل الكهربائي | دروس الكيمياء التفاعلية</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><polygon points='18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5' stroke='%231D5A70' stroke-width='2.4' fill='none'/><circle cx='18' cy='18' r='4.5' fill='%231D5A70'/></svg>">
-  <link rel="stylesheet" href="../assets/styles.css">
-  <script>window.CURRENT_LESSON_ID = '4-3';</script>
+  <title>4-3 التحليل الكهربائي | درس متكامل مع معمل افتراضي</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><polygon points='18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5' stroke='%232a7de1' stroke-width='2.4' fill='none'/><circle cx='18' cy='18' r='4.5' fill='%230b8a4a'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
   <script src="../assets/theme.js"></script>
-  <script src="../assets/data/chem3-ch4.js"></script>
-  <script src="../assets/illustrations-labs.js"></script>
-  <script src="../assets/lesson-app.js"></script>
+  <link rel="stylesheet" href="../assets/chem3-board.css">
 </head>
-<body class="lesson-mode">
-  <header class="classroom-bar">
-    <div class="classroom-bar-inner">
-      <div class="lesson-crumb">
-        <a class="btn btn-sm" href="../index.html">الرئيسية</a>
-        <a id="backBookLink" class="btn btn-sm" href="../chem-3.html">كيمياء 3</a>
-        <h1 id="lessonTitle">4-3 التحليل الكهربائي</h1>
-        <span id="lessonPages" class="page-ref">ص 154–158</span>
-        <span id="slideCounter" class="slide-counter-badge">1 / 1</span>
-      </div>
-      <div class="header-tools">
-        <div class="timer-widget" aria-label="مؤقت الحصة">
-          <span id="timerDisplay" class="timer-display">40:00</span>
-          <button id="timerToggleBtn" type="button" class="timer-btn">ابدئي</button>
-          <button id="timerResetBtn" type="button" class="timer-btn">إعادة</button>
-          <button type="button" class="timer-btn" data-timer-mins="5">5د</button>
-          <button type="button" class="timer-btn" data-timer-mins="40">40د</button>
-        </div>
-        <button id="wbToggleBtn" type="button" class="btn btn-sm" aria-pressed="false">قلم الشرح</button>
-        <button id="themeToggleBtn" type="button" class="btn btn-sm" aria-pressed="false">الوضع الليلي</button>
-      </div>
+<body>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <div class="tools" id="tools" aria-label="أدوات السبورة">
+    <button id="penBtn" type="button" title="قلم">✏️</button>
+    <button class="dot on" type="button" data-c="#1d2742" style="background:#1d2742" aria-label="لون داكن"></button>
+    <button class="dot" type="button" data-c="#e4572e" style="background:#e4572e" aria-label="لون مرجاني"></button>
+    <button class="dot" type="button" data-c="#2a7de1" style="background:#2a7de1" aria-label="لون أزرق"></button>
+    <button class="dot" type="button" data-c="#0b8a4a" style="background:#0b8a4a" aria-label="لون أخضر"></button>
+    <hr>
+    <button id="hiBtn" type="button" title="تظليل">🖍️</button>
+    <button id="erBtn" type="button" title="ممحاة">🧽</button>
+    <button id="clrBtn" type="button" title="مسح الصفحة">🗑️</button>
+  </div>
+
+  <header class="portal-strip">
+    <div class="portal-links">
+      <a class="pbtn" href="../index.html">الرئيسية</a>
+      <a class="pbtn" href="../chem-3.html">كيمياء 3</a>
+      <a class="pbtn" href="4-2.html">الدرس السابق: 4-2</a>
+      <a class="pbtn primary" href="../chem-3.html">فهرس كيمياء 3</a>
     </div>
+    <button id="themeToggleBtn" type="button" class="pbtn" aria-pressed="false">الوضع الليلي</button>
   </header>
 
-  <canvas id="wbCanvas" class="whiteboard-canvas" aria-hidden="true"></canvas>
-  <aside id="wbDock" class="whiteboard-dock" hidden aria-label="أدوات قلم الشرح">
-    <button type="button" class="wb-swatch active" data-wb-color="#1D5FD6" style="background:#1D5FD6;" aria-label="لون أزرق"></button>
-    <button type="button" class="wb-swatch" data-wb-color="#B44308" style="background:#B44308;" aria-label="لون برتقالي"></button>
-    <button type="button" class="wb-swatch" data-wb-color="#B92B27" style="background:#B92B27;" aria-label="لون أحمر"></button>
-    <button type="button" class="wb-swatch" data-wb-color="#0B7A43" style="background:#0B7A43;" aria-label="لون أخضر"></button>
-    <button id="wbEraserBtn" type="button" class="wb-tool-btn">ممحاة</button>
-    <button id="wbUndoBtn" type="button" class="wb-tool-btn">تراجع</button>
-    <button id="wbClearBtn" type="button" class="wb-tool-btn">مسح</button>
-    <button id="wbCloseBtn" type="button" class="wb-tool-btn">إغلاق</button>
-  </aside>
-
-  <main class="deck-shell">
-    <div class="tabs-nav" role="tablist" aria-label="أقسام الشرائح">
-      <button type="button" class="tab-btn" role="tab" data-section-tab="goals" aria-selected="true">الأهداف والتركيز</button>
-      <button type="button" class="tab-btn" role="tab" data-section-tab="content" aria-selected="false">تسلسل الدرس والتفاعل</button>
-      <button type="button" class="tab-btn" role="tab" data-section-tab="exit" aria-selected="false">بطاقة الخروج</button>
+  <div class="wrap">
+    <div class="cover">
+      <div>
+        <h1>⚡ التحليل الكهربائي : درس متكامل مع معمل افتراضي</h1>
+        <div class="sub">كيمياء 3 : الفصل الرابع الكيمياء الكهربائية : الدرس 4-3 (ص 154–158)</div>
+      </div>
+      <div class="cls" id="cls">
+        <button type="button" class="on"><span contenteditable="true">3 / 1</span></button>
+        <button type="button"><span contenteditable="true">3 / 2</span></button>
+        <button type="button"><span contenteditable="true">3 / 3</span></button>
+      </div>
     </div>
 
-    <div class="slide-dots-row">
-      <div id="slideDots" class="slide-dots" aria-label="أرقام الشرائح"></div>
+    <div class="nav">
+      <div class="tabs" id="tabs" role="tablist">
+        <button type="button" class="tab on" style="--c:#0b8a4a"><span class="e">🎯</span>الأهداف والتهيئة<small>البداية</small></button>
+        <button type="button" class="tab" style="--c:#e4572e"><span class="e">🔍</span>التهيئة العملية<small>التل الكهربائي</small></button>
+        <button type="button" class="tab" style="--c:#2a7de1"><span class="e">💡</span>الشرح والإثراء<small>داون والطلاء</small></button>
+        <button type="button" class="tab" style="--c:#7c5ce6"><span class="e">🧪</span>المعمل الافتراضي<small>بناء والطلاء بالفضة</small></button>
+        <button type="button" class="tab" style="--c:#0e9aa7"><span class="e">🧭</span>المسارات<small>تعلم متمايز</small></button>
+        <button type="button" class="tab" style="--c:#d79b14"><span class="e">🏁</span>بطاقة الخروج<small>تحدي وتحصيلي</small></button>
+      </div>
+      <div class="ctrl">
+        <div class="clock" id="clock">40:00</div>
+        <button type="button" class="tb" id="tStart">▶ ابدئي الدرس</button>
+        <button type="button" class="tb sec" id="tReset">↺</button>
+        <button type="button" class="tb mic" id="micBtn">🎤 قرعة</button>
+        <div class="batt" title="طاقة الفصل"><div class="bshell"><i id="battI"></i></div><b id="battT">0%</b></div>
+        <div class="pts" id="pts">⭐ 0</div>
+      </div>
+      <div class="tbar"><i id="tbar"></i></div>
     </div>
 
-    <article id="slideStage" class="slide-stage" aria-live="polite"></article>
-
-    <div class="slide-arrows-bar">
-      <button id="slidePrevBtn" type="button" class="slide-arrow-btn" aria-label="الشريحة السابقة">&rarr;</button>
-      <span class="muted-note">التنقل بين الشرائح بالأسهم أو بلوحة المفاتيح</span>
-      <button id="slideNextBtn" type="button" class="slide-arrow-btn" aria-label="الشريحة التالية">&larr;</button>
+    <!-- P0 -->
+    <div class="panel on">
+      <div class="card" style="--c:var(--green)">
+        <div class="ph"><div class="ic">🤲</div><h2>البداية والتهيئة من حياتك اليومية</h2></div>
+        <div class="dbox d3"><span class="h">🇸🇦 دعاء للوطن وطلب العلم</span>اللهم احفظ بلادنا المملكة العربية السعودية وبارك في علمنا وعملنا، اللهم انفعنا بما علمتنا وزدنا علماً</div>
+        <div class="dbox d2"><span class="h">💡 تهيئة من حياتك اليومية</span>كثير من الملاعق والإكسسوارات مصنوعة من معدن رخيص لكنها مغطاة بطبقة فضية لامعة لا تبهت، وعلب المشروبات حولنا مصنوعة من ألومنيوم نقي! كيف نصنع ذلك بالكهرباء؟</div>
+      </div>
+      <div class="card" style="--c:var(--gold)">
+        <div class="lead">🔋 مهمتنا اليوم: <b>نشحن بطارية الفصل إلى 100%</b> : كل إجابة صحيحة تشحنها ⚡</div>
+        <div class="goal"><b>١</b>أصف كيف يعكس مصدر التيار تفاعل الأكسدة والاختزال غير التلقائي</div>
+        <div class="goal"><b>٢</b>أقارن نواتج التحليل الكهربائي لمصهور <span dir="ltr">NaCl</span> (خلية داون) وماء البحر</div>
+        <div class="goal"><b>٣</b>أناقش إنتاج الألومنيوم (هول-هيروليت)، تنقية النحاس، والطلاء بالكهرباء</div>
+      </div>
+      <div class="next"><button type="button" class="big" style="--c:#e4572e" data-go="1">إلى التهيئة العملية 🔍 ←</button></div>
     </div>
 
-    <nav id="lessonPrevNext" class="lesson-footer-nav" aria-label="التنقل بين الدروس"></nav>
-  </main>
+    <!-- P1 -->
+    <div class="panel">
+      <div class="card" style="--c:#e4572e">
+        <div class="ph"><div class="ic">🔍</div><h2>تشبيه الطاقة: متى نحتاج لمصدر جهد خارجي؟</h2><span class="book">📖 ص 154</span></div>
+        <div class="demo">
+          <svg viewBox="0 0 340 220" class="dsvg" aria-label="الخلية الجلفانية مقابل خلية التحليل الكهربائي">
+            <path d="M35 55 Q150 55 180 120 Q220 190 305 190" fill="none" stroke="var(--blue)" stroke-width="5"/>
+            <circle id="bikeDot" cx="70" cy="58" r="14" fill="var(--green)" style="transition:cx 1.4s, cy 1.4s"/>
+            <text x="85" y="34" text-anchor="middle" font-size="14" font-weight="900" fill="var(--green)">تلقائي (خلية جلفانية)</text>
+            <text x="250" y="165" text-anchor="middle" font-size="14" font-weight="900" fill="var(--ox)">قسر غير تلقائي (تحليل كهربائي)</text>
+          </svg>
+          <div class="dside">
+            <button type="button" class="big" style="--c:#e4572e" id="pushGo">⚡ شغّلي مصدر الجهد لقسر التفاعل</button>
+            <div class="dobs" id="pushObs">👀 النزول من التل تلقائي (يُنتج طاقة)، أما الصعود فيحتاج طاقة كهربائية!</div>
+            <div class="qrow" data-a="ext">١) تحتاج خلية التحليل الكهربائي دائماً إلى:
+              <select><option value="">اختاري</option><option value="ext">مصدر تيار كهربائي خارجي (بطارية DC)</option><option value="none">حدوث التفاعل تلقائياً بدون كهرباء</option></select>
+              <button type="button" class="chk">تحقق</button><span class="fb"></span>
+            </div>
+            <div class="qrow" data-a="cath">٢) عند الطلاء بالفضة يوصل المفتاح المراد طلاؤه بـ:
+              <select><option value="">اختاري</option><option value="an">الأنود (+)</option><option value="cath">الكاثود (-)</option></select>
+              <button type="button" class="chk">تحقق</button><span class="fb"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="next"><button type="button" class="big" style="--c:var(--red)" data-go="2">إلى الشرح والإثراء 💡 ←</button></div>
+    </div>
+
+    <!-- P2 -->
+    <div class="panel">
+      <div class="card" style="--c:var(--blue)">
+        <div class="ph"><div class="ic">١</div><h2>مصهور كلوريد الصوديوم (داون) مقابل ماء البحر والتطبيقات</h2><span class="book">📖 ص 155–158</span></div>
+        <div class="reveal4">
+          <button type="button" class="rv" style="--c:#e4572e">🧂 مصهور NaCl (خلية داون)<span><b>لا يوجد ماء</b><br>الكاثود (-): <code>Na⁺ + e⁻ → Na</code> (صوديوم نقي)<br>الأنود (+): <code>2Cl⁻ → Cl₂ + 2e⁻</code></span></button>
+          <button type="button" class="rv" style="--c:#2a7de1">🌊 ماء البحر NaCl(aq)<span><b>اختزال الماء أسهل من Na⁺!</b><br>الكاثود: تصاعد غاز <code>H₂</code> وتكوّن <code>NaOH</code><br>الأنود: غاز الكلور <code>Cl₂</code></span></button>
+          <button type="button" class="rv" style="--c:#7c5ce6">🥤 هول-هيروليت (Al)<span>استخلاص الألومنيوم من مصهور البوكسيت والكريوليت.<br><b>إعادة تدوير العلب</b> توفر طاقة كهربائية هائلة!</span></button>
+          <button type="button" class="rv" style="--c:#d79b14">✨ تنقية النحاس والطلاء<span>الجسم المراد طلاؤه أو الفلز النقي يُوضع عند <b>الكاثود (-)</b>، والفلز النقي للتعويض أو غير النقي عند <b>الأنود (+)</b></span></button>
+        </div>
+        <div class="mnem">في خلية التحليل دائماً: الأنود <span>موجب (+)</span> تأكسد &nbsp;|&nbsp; الكاثود <span>سالب (−)</span> اختزال وترسيب</div>
+      </div>
+
+      <div class="card" style="--c:var(--red)">
+        <div class="ph"><div class="ic">٢</div><h2>مثال محلول: طلاء مفتاح معدني بطبقة من الفضة</h2><span class="book">📖 تطبيق عملي</span></div>
+        <div class="exq">محلول الخلية: <code>AgNO₃(aq)</code> | القطبان: شريحة فضة نقية ومفتاح معدني</div>
+        <div class="steps">
+          <div class="st"><span class="l">قطب المفتاح المراد طلاؤه</span><span class="a">يُوصل بالكاثود (−) فتختزل أيونات Ag⁺ وتترسب عليه</span><button type="button">إظهار</button></div>
+          <div class="st"><span class="l">قطب الفضة النقية</span><span class="a">يُوصل بالأنود (+) فيتأكسد لتعويض أيونات المحلول: Ag → Ag⁺ + e⁻</span><button type="button">إظهار</button></div>
+          <div class="st"><span class="l">ماذا يحدث لكتلة المفتاح؟</span><span class="a">تزداد كتلته بترسب ذرات الفضة اللامعة بانتظام</span><button type="button">إظهار</button></div>
+        </div>
+      </div>
+
+      <div class="watan">
+        <div class="wh">♻️ ربط بالحياة والصناعة: لماذا نعيد تدوير علب الألومنيوم؟</div>
+        <p>استخلاص الألومنيوم بعملية <b>هول-هيروليت</b> يستهلك طاقة كهربائية ضخمة جداً، بينما إعادة تدوير علب الألومنيوم توفر أكثر من 90% من هذه الطاقة وتحافظ على الموارد والبيئة!</p>
+        <button type="button" class="tb" id="wQ">❓ ما النواتج الثلاثة لتحليل ماء البحر صناعياً؟</button><span class="wa" id="wA">H₂ + Cl₂ + NaOH ✔️</span>
+      </div>
+
+      <div class="card" style="--c:var(--violet)">
+        <div class="ph"><div class="ic">🔬</div><h2>إثراء علمي: فاراداي (1833) ومعجزة هول وهيرو (1886)</h2><span class="book">اكتشافات وعلماء</span></div>
+        <p style="margin:0;">وضع العالم <b>مايكل فاراداي</b> قوانين التحليل الكهربائي الكمية وابتكر مصطلحات الأنود والكاثود. وبعده في عام 1886 توصل الشابان <b>تشارلز هول وبول هيرو</b> (بعمر 22 عاماً كل منهما دون علم بالآخر!) إلى إذابة أكسيد الألومنيوم في الكريوليت المنصهر، فحولا الألومنيوم من معدن أثمن من الذهب إلى معدن الحياة اليومية!</p>
+      </div>
+      <div class="next"><button type="button" class="big" style="--c:#7c5ce6" data-go="3">إلى المعمل الافتراضي 🧪 ←</button></div>
+    </div>
+
+    <!-- P3: المعمل الافتراضي -->
+    <div class="panel">
+      <div class="card" style="--c:#7c5ce6">
+        <div class="ph"><div class="ic">🧪</div><h2>المعمل الافتراضي: بناء خلية الطلاء بالفضة والتحليل الكهربائي</h2><span class="book">📖 مختبر الكيمياء</span></div>
+        <div class="labwrap">
+          <div class="lsteps" id="lSteps">
+            <div class="lt2">🧭 خطوات التجربة : نفّذيها بالترتيب</div>
+            <button type="button" class="lstep" data-i="0">١ صُبّي محلول نترات الفضة AgNO₃</button>
+            <button type="button" class="lstep" data-i="1">٢ ثبّتي شريحة الفضة عند الأنود (+)</button>
+            <button type="button" class="lstep" data-i="2">٣ ثبّتي المفتاح المعدني عند الكاثود (−)</button>
+            <button type="button" class="lstep" data-i="3">٤ شغّلي مصدر التيار المستمر DC</button>
+          </div>
+          <div class="lright">
+            <div id="elecSvgBox"></div>
+            <div class="lmsg" id="lMsg">ابدئي بإعداد الخلية بالخطوة الأولى 👈</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="--c:var(--teal)">
+        <div class="ph"><div class="ic">📋</div><h2>مختبر التطبيقات: قارني خلايا التحليل الكهربائي</h2></div>
+        <div class="locked" id="lLock">🔒 يُفتح تلقائياً بعد إتمام خطوات بناء خلية الطلاء الأربع</div>
+        <div id="lExp" style="display:none">
+          <div class="chips" id="elecTabs">
+            <button type="button" class="on" data-mode="0">مصهور NaCl (داون)</button>
+            <button type="button" data-mode="1">ماء البحر NaCl(aq)</button>
+            <button type="button" data-mode="2">هول-هيروليت Al</button>
+            <button type="button" data-mode="3">الطلاء بالفضة Ag</button>
+          </div>
+          <div class="dobs on" id="elecReadout" style="text-align:center;">خلية داون: الأنود (+) يتأكسد 2Cl⁻ إلى Cl₂، والكاثود (−) يُختزل Na⁺ إلى صوديوم نقي Na.</div>
+          <div class="ltab-wrap">
+            <table class="ltab">
+              <thead><tr><th>العملية</th><th>السؤال</th><th>اختاري / أجيبي</th><th></th></tr></thead>
+              <tbody>
+                <tr data-sel="H2"><td>ماء البحر NaCl(aq)</td><td>الغاز المتصاعد عند الكاثود (−)</td><td><select><option value="">اختاري</option><option value="Na">فلز Na</option><option value="H2">غاز الهيدروجين H₂</option></select><button type="button" class="chk">تحقق</button></td><td class="fb"></td></tr>
+                <tr data-sel="cath"><td>الطلاء الكهربائي</td><td>أين يُوضع الجسم المراد طلاؤه؟</td><td><select><option value="">اختاري</option><option value="an">الأنود (+)</option><option value="cath">الكاثود (−)</option></select><button type="button" class="chk">تحقق</button></td><td class="fb"></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="next"><button type="button" class="big" style="--c:var(--teal)" data-go="4">إلى المسارات المتمايزة 🧭 ←</button></div>
+    </div>
+
+    <!-- P4: المسارات -->
+    <div class="panel">
+      <div class="card" style="--c:var(--teal)">
+        <div class="ph"><div class="ic">🧭</div><h2>التعلم المتمايز والاستراتيجيات: اختاري مسارك</h2></div>
+        <div class="tracks">
+          <div class="track" style="--c:#0b8a4a;--cl:var(--green-l)"><div class="ic">🔋</div><h3>شحن 30%</h3><p>أساسيات التحليل والطلاء</p></div>
+          <div class="track" style="--c:#d79b14;--cl:var(--gold-l)"><div class="ic">🔋🔋</div><h3>شحن 70%</h3><p>مصهور NaCl مقابل ماء البحر</p></div>
+          <div class="track" style="--c:#7c5ce6;--cl:var(--violet-l)"><div class="ic">🔋🔋🔋</div><h3>شحن 100%</h3><p>تفكير ناقد وطاقة الاستخلاص</p></div>
+        </div>
+
+        <div class="tbox" id="t1" style="--c:#0b8a4a">
+          <div class="task"><h4>🔋 أساسيات خلية التحليل الكهربائي</h4>
+            <div class="qrow" data-a="nonsp">١) تفاعل الأكسدة والاختزال في خلية التحليل الكهربائي: <select><option value="">اختاري</option><option value="sp">تلقائي</option><option value="nonsp">غير تلقائي ويحتاج تياراً</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div>
+            <div class="qrow" data-a="cath">٢) لطلاء ملعقة بالذهب تُوصل الملعقة بـ: <select><option value="">اختاري</option><option value="an">الأنود</option><option value="cath">الكاثود</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div>
+          </div>
+        </div>
+
+        <div class="tbox" id="t2" style="--c:#d79b14">
+          <div class="task"><h4>🔋🔋 مقارنة النواتج الصناعية</h4>
+            <div class="qrow" data-a="na">١) نحصل على فلز الصوديوم النقي من تحليل: <select><option value="">اختاري</option><option value="na">مصهور NaCl (خلية داون)</option><option value="aq">محلول ماء البحر NaCl(aq)</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div>
+            <div class="qrow" data-a="al">٢) العملية الصناعية لإنتاج الألومنيوم النقي هي: <select><option value="">اختاري</option><option value="down">خلية داون</option><option value="al">عملية هول-هيروليت</option></select><button type="button" class="chk">تحقق</button><span class="fb"></span></div>
+          </div>
+        </div>
+
+        <div class="tbox" id="t3" style="--c:#7c5ce6">
+          <div class="task"><h4>🔋🔋🔋 تفكير ناقد</h4>
+            <div class="st"><span class="l">لماذا يستهلك إنتاج 1 kg من Al³⁺ كهرباء أكبر من 1 kg من Ag⁺؟</span><span class="a">لأن مول الألومنيوم كتلته أصغر (27 g) ويحتاج 3 مول إلكترونات، بينما مول الفضة أكبر (108 g) ويحتاج مول إلكترون واحد!</span><button type="button">إظهار</button></div>
+            <div class="st"><span class="l">لماذا توصل قطعة النحاس غير النقية بالأنود أثناء التنقية؟</span><span class="a">لتتأكسد ذرات النحاس إلى Cu²⁺ وتترسب نقية على الكاثود بينما تسقط الشوائب في القاع</span><button type="button">إظهار</button></div>
+          </div>
+        </div>
+      </div>
+      <div class="next"><button type="button" class="big" style="--c:var(--gold)" data-go="5">إلى بطاقة الخروج والتحصيلي 🏁 ←</button></div>
+    </div>
+
+    <!-- P5: بطاقة الخروج والتحصيلي -->
+    <div class="panel">
+      <div class="card" style="--c:var(--gold)">
+        <div class="ph"><div class="ic">🏁</div><h2>بطاقة الخروج: تحدّي الأسرع وأسئلة من التحصيلي ⚡</h2><span class="book">أسئلة من التحصيلي</span></div>
+        <div class="chal">
+          <div class="qn" id="qn">6 أسئلة من التحصيلي والكتاب : 15 ثانية لكل سؤال</div>
+          <div class="ring">
+            <svg width="84" height="84"><circle cx="42" cy="42" r="36" stroke="var(--gold-l)" stroke-width="8" fill="none"/><circle id="ringC" cx="42" cy="42" r="36" stroke="#d79b14" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="226.2" stroke-dashoffset="0"/></svg>
+            <b id="ringT">15</b>
+          </div>
+          <div class="cq" id="cq">مستعدة؟ اضغطي ابدئي بطاقة الخروج 🙋‍♀️</div>
+          <div class="copts" id="copts"></div>
+          <div class="res" id="res"></div>
+          <div class="row">
+            <button type="button" class="big" style="--c:var(--gold)" id="cGo">▶ ابدئي بطاقة الخروج</button>
+            <button type="button" class="big ghost" style="--c:var(--gold); display:none;" id="cNext">السؤال التالي ←</button>
+          </div>
+        </div>
+
+        <div class="tahsili-box">
+          <h3>📌 قواعد وتنبيهات مهمة للتحصيلي</h3>
+          <ul>
+            <li>خلية داون تحلل <b>مصهور</b> <span dir="ltr">NaCl</span> إلى صوديوم نقي <span dir="ltr">Na</span> وغاز كلور <span dir="ltr">Cl₂</span>.</li>
+            <li>التحليل الكهربائي لماء البحر (<span dir="ltr">NaCl(aq)</span>) ينتج <span dir="ltr">H₂ + Cl₂ + NaOH</span> ولا ينتج فلز الصوديوم.</li>
+            <li>عملية هول-هيروليت خاصة بإنتاج <b>الألومنيوم</b> وتُشجَّع إعادة تدويره لتوفير الكهرباء.</li>
+          </ul>
+        </div>
+      </div>
+      <div class="next"><button type="button" class="big ghost" style="--c:var(--ink)" id="resetAll">↺ إعادة السبورة للفصل التالي</button></div>
+    </div>
+  </div>
+
+  <div class="modal" id="drawM">
+    <div class="mbox">
+      <h3>🎤 قرعة المشاركة</h3>
+      <div class="picked" id="picked">؟</div>
+      <div class="row"><button type="button" class="big" style="--c:#e4572e" id="drawGo">🎲 اسحبي</button><button type="button" class="big ghost" style="--c:var(--ink)" id="drawClose">إغلاق</button></div>
+      <textarea id="names" placeholder="اسم في كل سطر"></textarea>
+      <div class="row" style="font-weight:700"><label><input type="checkbox" id="noRep" checked> بلا تكرار</label><label>العدد: <input type="number" id="count" value="25" min="2" style="width:64px;font:700 16px Tajawal"></label></div>
+    </div>
+  </div>
+  <div class="modal" id="alarm"><div class="mbox"><div style="font-size:56px">⏰</div><h3>انتهت الـ 40 دقيقة!</h3><p>أحسنتنّ في درس التحليل الكهربائي ⚡</p><button type="button" class="big" style="--c:var(--green)" onclick="this.closest('.modal').classList.remove('show')">حسناً</button></div></div>
+
+  <script src="../assets/chem3-board.js"></script>
+  <script>
+    const QS = [
+      { src: 'اختبار مقنن ص 168', q: 'ما المادة التي تتكون على المهبط (الكاثود) عند التحليل الكهربائي لمحلول مائي من NaCl؟', o: ['الصوديوم', 'الأكسجين', 'الهيدروجين', 'الكلور'], a: 2, exp: 'اختزال جزيئات الماء أسهل من أيونات الصوديوم فينطلق غاز H₂.' },
+      { src: 'أسئلة من التحصيلي', q: 'النواتج الثلاثة للتحليل الكهربائي لماء البحر (2H₂O + 2NaCl) هي:', o: ['Na, Cl₂, O₂', 'H₂, Cl₂, NaOH', 'H₂, O₂, NaCl', 'Na, H₂, O₂'], a: 1, exp: '2H₂O(l) + 2NaCl(aq) → H₂(g) + Cl₂(g) + 2NaOH(aq).' },
+      { src: 'أسئلة من التحصيلي', q: 'تُستخدم عملية هول-هيروليت في الصناعة لـ:', o: ['استخلاص الصوديوم من ماء البحر', 'إنتاج الألومنيوم النقي بالتحليل الكهربائي', 'تنقية الفضة بالترسيب', 'شحن بطاريات الرصاص'], a: 1, exp: 'عملية هول-هيروليت لاستخلاص الألومنيوم النقي.' },
+      { src: 'تقويم الكتاب ص 164', q: 'في خلية تنقية النحاس بالتحليل الكهربائي، أين يُوضع النحاس غير النقي وأين يُوضع النقي؟', o: ['غير النقي كاثود والنقي أنود', 'غير النقي أنود والنقي كاثود', 'كلاهما أنود', 'في القنطرة الملحية'], a: 1, exp: 'يتأكسد النحاس من الأنود غير النقي ليترسب نقياً على الكاثود.' },
+      { src: 'أسئلة من التحصيلي', q: 'لإنتاج فلز الصوديوم النقي من كلوريد الصوديوم نُجري التحليل الكهربائي في خلية داون لـ:', o: ['محلول مائي مخفف', 'محلول مائي مركز', 'مصهور NaCl', 'بلورات جافة'], a: 2, exp: 'يُستخدم مصهور NaCl لغياب الماء المنافس على الاختزال.' },
+      { src: 'أسئلة من التحصيلي', q: 'أهم أسباب تشجيع إعادة تدوير علب الألومنيوم بدلاً من استخلاصه من الخام:', o: ['انعدام وجود الخام', 'توفير الطاقة الكهربائية الهائلة المستهلكة في التحليل', 'تغيير لونه فقط', 'تقليل كثافته'], a: 1, exp: 'إعادة التدوير توفر الطاقة الكهربائية الكبيرة لعملية هول-هيروليت.' }
+    ];
+
+    let pushDone = false, labStep = 0;
+    const B = window.initChem3Board({
+      lessonId: '4-3',
+      challengeQuestions: QS,
+      onReset() {
+        pushDone = false; labStep = 0;
+        document.getElementById('bikeDot').setAttribute('cx', '70');
+        document.getElementById('bikeDot').setAttribute('cy', '58');
+        document.getElementById('pushObs').textContent = '👀 النزول من التل تلقائي (يُنتج طاقة)، أما الصعود فيحتاج طاقة كهربائية!';
+        document.getElementById('pushObs').classList.remove('on');
+        initElecLab();
+      }
+    });
+
+    document.getElementById('pushGo').onclick = () => {
+      if (pushDone) return; pushDone = true;
+      document.getElementById('bikeDot').setAttribute('cx', '275');
+      document.getElementById('bikeDot').setAttribute('cy', '186');
+      document.getElementById('pushObs').innerHTML = '⚡ دفع مصدر الجهد الخارجي الإلكترونات قسرياً في الاتجاه غير التلقائي!';
+      document.getElementById('pushObs').classList.add('on');
+      B.good(); B.addPts(4);
+    };
+
+    function drawTank(step) {
+      const box = document.getElementById('elecSvgBox');
+      const hasSol = step >= 1, hasAn = step >= 2, hasCat = step >= 3, isRun = step >= 4;
+      box.innerHTML = `<svg viewBox="0 0 600 200" class="csvg">
+        ${isRun ? '<path d="M180 72 V26 H420 V72" fill="none" stroke="var(--ox)" stroke-width="5" class="flow-wire"/>' : '<path d="M180 72 V26 H420 V72" fill="none" stroke="var(--line)" stroke-width="4"/>'}
+        <rect x="250" y="10" width="100" height="32" rx="8" fill="${isRun ? 'var(--blue)' : 'var(--soft)'}" stroke="var(--blue)" stroke-width="2"/><text x="300" y="31" text-anchor="middle" font-size="14" font-weight="900" fill="${isRun ? '#fff' : 'var(--ink)'}">مصدر DC ⚡</text>
+        <rect x="100" y="68" width="400" height="114" rx="14" fill="${hasSol ? 'var(--red-l)' : 'var(--card)'}" stroke="var(--ink)" stroke-width="3"/>
+        ${hasAn ? '<rect x="168" y="58" width="24" height="92" rx="4" fill="#d8dde3" stroke="var(--ox)" stroke-width="2"/><text x="180" y="170" text-anchor="middle" font-size="13" font-weight="900" fill="var(--ox)">الأنود (+): فضة Ag</text>' : ''}
+        ${hasCat ? '<rect x="408" y="58" width="24" height="92" rx="6" fill="' + (isRun ? '#e2e6ec' : '#9aa4b2') + '" stroke="var(--green)" stroke-width="' + (isRun ? '5' : '2') + '"/><text x="420" y="170" text-anchor="middle" font-size="13" font-weight="900" fill="var(--green)">الكاثود (−): ' + (isRun ? 'مفتاح مطلي ✨' : 'المفتاح') + '</text>' : ''}
+      </svg>`;
+    }
+
+    const modeDescs = [
+      'خلية داون (مصهور NaCl): الأنود (+) يتأكسد 2Cl⁻ إلى Cl₂، والكاثود (−) يُختزل Na⁺ إلى صوديوم نقي Na.',
+      'ماء البحر NaCl(aq): اختزال جزيئات الماء أسهل من Na⁺ فينطلق غاز H₂ عند الكاثود (−) ويتكون NaOH و Cl₂.',
+      'عملية هول-هيروليت: استخلاص الألومنيوم المنصهر من خامه المذاب في الكريوليت عند الكاثود (−).',
+      'الطلاء الكهربائي بالفضة: تترسب طبقة فضة لامعة على المفتاح عند الكاثود (−) ويعوّض أنود الفضة المحلول.'
+    ];
+    function initElecLab() {
+      labStep = 0; drawTank(0);
+      B.$$('.lstep').forEach((b, i) => { b.classList.remove('done'); b.disabled = i !== 0; });
+      document.getElementById('lMsg').textContent = 'ابدئي بإعداد الخلية بالخطوة الأولى 👈';
+      document.getElementById('lExp').style.display = 'none';
+      document.getElementById('lLock').style.display = '';
+      B.$$('[data-sel]').forEach(tr => { tr.classList.remove('ok'); tr.querySelector('.fb').textContent = ''; const s = tr.querySelector('select'); s.disabled = false; s.value = ''; });
+    }
+    B.$$('.lstep').forEach((b, i) => b.onclick = () => {
+      if (i !== labStep) return;
+      labStep++; drawTank(labStep);
+      const msgs = ['💧 تم صب محلول نترات الفضة AgNO₃', '🔩 شريحة الفضة جاهزة عند الأنود (+)', '🔑 المفتاح جاهز عند الكاثود (−)', '✨ اكتمل الطلاء الكهربائي! افتحي مقارنة التطبيقات أدناه'];
+      document.getElementById('lMsg').textContent = msgs[i];
+      document.getElementById('lMsg').className = 'lmsg win';
+      b.classList.add('done'); b.disabled = true;
+      const nxt = B.$$('.lstep')[labStep]; if (nxt) nxt.disabled = false;
+      B.tone(520 + i * 75, .14); B.addPts(4);
+      if (labStep >= 4) {
+        B.fanfare(); B.confetti(70);
+        document.getElementById('lExp').style.display = '';
+        document.getElementById('lLock').style.display = 'none';
+      }
+    });
+    B.$$('#elecTabs button').forEach(btn => btn.onclick = () => {
+      B.$$('#elecTabs button').forEach(x => x.classList.remove('on')); btn.classList.add('on');
+      document.getElementById('elecReadout').textContent = modeDescs[+btn.dataset.mode];
+    });
+    B.$$('[data-sel]').forEach(tr => {
+      tr.querySelector('.chk').onclick = () => {
+        if (tr.classList.contains('ok')) return;
+        const s = tr.querySelector('select');
+        if (s.value === tr.dataset.sel) { tr.classList.add('ok'); tr.querySelector('.fb').textContent = '✅'; s.disabled = true; B.good(); B.addPts(8); }
+        else { tr.querySelector('.fb').textContent = '❌'; B.bad(); }
+      };
+    });
+    initElecLab();
+  </script>
 </body>
 </html>
