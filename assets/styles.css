@@ -1725,7 +1725,201 @@ button, input, select {
 .anim-bubble-2 { animation: chemRise 2.1s ease-in 0.5s infinite; }
 .anim-bubble-3 { animation: chemRise 1.9s ease-in 1.0s infinite; }
 
+/* Student Name Draw (القرعة) */
+.btn-draw {
+  background: linear-gradient(135deg, #e4572e, #ff9a3d);
+  border-color: #e4572e;
+  color: #ffffff;
+  font-weight: 800;
+}
+.btn-draw:hover {
+  background: linear-gradient(135deg, #d14820, #f08826);
+  border-color: #d14820;
+  color: #ffffff;
+}
+.draw-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1200;
+  background: rgba(15, 23, 42, 0.58);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.draw-modal.open {
+  display: flex;
+}
+.draw-card {
+  background: var(--surface);
+  color: var(--text);
+  border: 2px solid var(--border);
+  border-top: 6px solid var(--coral);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.35rem;
+  width: min(500px, 100%);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  text-align: center;
+}
+.draw-card h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 900;
+}
+.draw-picked {
+  min-height: 64px;
+  border-radius: var(--radius-md);
+  background: var(--coral-l);
+  color: var(--coral);
+  font-size: 1.55rem;
+  font-weight: 900;
+  display: grid;
+  place-items: center;
+  padding: 0.45rem 0.75rem;
+  border: 2px dashed var(--coral);
+}
+.draw-textarea {
+  width: 100%;
+  min-height: 98px;
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.75rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: var(--bg);
+  color: var(--text);
+  resize: vertical;
+}
+.draw-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  flex-wrap: wrap;
+}
+
+/* Integrated Virtual Lab Shell (Chemistry 2-1) */
+.vlab-shell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.vlab-safety {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+.vlab-safety-pill {
+  background: var(--gold-l);
+  color: var(--text);
+  border: 1.5px solid var(--gold);
+  border-radius: 999px;
+  padding: 0.18rem 0.7rem;
+  font-size: 0.84rem;
+  font-weight: 800;
+}
+.vlab-grid {
+  display: grid;
+  grid-template-columns: minmax(230px, 0.78fr) minmax(0, 1.45fr);
+  gap: 0.95rem;
+  align-items: start;
+}
+.vlab-steps-col {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.vlab-steps-title {
+  margin: 0 0 0.15rem;
+  font-size: 0.95rem;
+  font-weight: 900;
+  color: var(--violet);
+}
+.vlab-step-btn {
+  text-align: right;
+  border: 2px solid var(--violet);
+  background: var(--violet);
+  color: #ffffff;
+  border-radius: var(--radius-sm);
+  padding: 0.48rem 0.7rem;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+  min-height: 40px;
+  transition: transform 0.14s ease, opacity 0.15s ease;
+}
+.vlab-step-btn:disabled {
+  background: var(--surface-muted);
+  border-color: var(--border);
+  color: var(--text-muted);
+  cursor: default;
+}
+.vlab-step-btn.done {
+  background: var(--green-l);
+  border-color: var(--green);
+  color: var(--green);
+}
+.vlab-step-msg {
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: var(--primary);
+  background: var(--surface);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.55rem;
+}
+.vlab-verify-card {
+  background: var(--surface-muted);
+  border: 2px solid var(--teal);
+  border-radius: var(--radius-md);
+  padding: 0.65rem 0.85rem;
+}
+.vlab-verify-card h4 {
+  margin: 0 0 0.45rem;
+  font-size: 0.95rem;
+  color: var(--teal);
+  font-weight: 900;
+}
+.vlab-check-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding: 0.35rem 0;
+  border-top: 1px dashed var(--border);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.vlab-check-row:first-of-type {
+  border-top: none;
+}
+.vlab-check-row input,
+.vlab-check-row select {
+  min-height: 36px;
+  border: 2px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.2rem 0.55rem;
+  background: var(--surface);
+  color: var(--text);
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+.vlab-check-row.ok {
+  color: var(--green);
+}
+
 @media (max-width: 900px) {
+  .vlab-grid {
+    grid-template-columns: 1fr;
+  }
   .books-layout,
   .scaffolding-grid,
   .quiz-options {

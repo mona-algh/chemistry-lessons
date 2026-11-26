@@ -82,6 +82,112 @@
     render();
   }
 
+  function playChime(freq, dur) {
+    try {
+      const AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      if (!playChime.ctx) playChime.ctx = new AC();
+      const c = playChime.ctx;
+      if (c.state === 'suspended') c.resume();
+      const o = c.createOscillator();
+      const g = c.createGain();
+      const t = c.currentTime;
+      o.type = 'sine';
+      o.frequency.value = freq || 660;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(0.18, t + 0.02);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + (dur || 0.16));
+      o.connect(g);
+      g.connect(c.destination);
+      o.start(t);
+      o.stop(t + (dur || 0.16) + 0.04);
+    } catch (_e) {}
+  }
+
+  function initStudentDraw() {
+    const tools = document.querySelector('.header-tools');
+    if (!tools || document.getElementById('drawOpenBtn')) return;
+    const btn = el('button', { id: 'drawOpenBtn', type: 'button', className: 'btn btn-sm btn-draw', text: '🎤 قرعة' });
+    const wbBtn = document.getElementById('wbToggleBtn');
+    tools.insertBefore(btn, wbBtn || null);
+
+    const modal = el('div', { id: 'drawModal', className: 'draw-modal', role: 'dialog', 'aria-modal': 'true', 'aria-label': 'قرعة اختيار أسماء الطالبات' });
+    const picked = el('div', { id: 'drawPicked', className: 'draw-picked', text: '؟' });
+    const namesArea = el('textarea', { id: 'drawNamesInput', className: 'draw-textarea', placeholder: 'اكتبي اسم كل طالبة في سطر منفصل (يُحفظ تلقائياً)...' });
+    const noRepeatChk = el('input', { type: 'checkbox', id: 'drawNoRepeat', checked: '' });
+    const countInput = el('input', { type: 'number', id: 'drawCountInput', min: '2', max: '60', value: '25', className: 'btn btn-sm', style: 'width:72px' });
+    const spinBtn = el('button', { id: 'drawSpinBtn', type: 'button', className: 'btn btn-primary', text: '🎲 اسحبي اسماً' });
+    const resetPoolBtn = el('button', { id: 'drawResetPoolBtn', type: 'button', className: 'btn btn-sm', text: 'إعادة القائمة ↺' });
+    const closeBtn = el('button', { id: 'drawCloseBtn', type: 'button', className: 'btn btn-sm', text: 'إغلاق' });
+
+    const card = el('div', { className: 'draw-card' }, [
+      el('h3', { text: '🎤 قرعة اختيار أسماء الطالبات' }),
+      picked,
+      el('div', { className: 'draw-row' }, [spinBtn, resetPoolBtn, closeBtn]),
+      namesArea,
+      el('div', { className: 'draw-row', style: 'font-size:0.88rem;font-weight:700;' }, [
+        el('label', { style: 'display:inline-flex;align-items:center;gap:0.3rem;cursor:pointer;' }, [noRepeatChk, ' بلا تكرار']),
+        el('label', { style: 'display:inline-flex;align-items:center;gap:0.3rem;' }, ['العدد الافتراضي: ', countInput])
+      ])
+    ]);
+    modal.appendChild(card);
+    document.body.appendChild(modal);
+
+    const STORE_KEY = 'chem21-draw-names';
+    let pool = [];
+    let spinning = false;
+
+    function getList() {
+      const raw = namesArea.value.split('\n').map(function (s) { return s.trim(); }).filter(Boolean);
+      if (raw.length) return raw;
+      const n = Math.max(2, Math.min(60, Number(countInput.value) || 25));
+      return Array.from({ length: n }, function (_, i) { return 'الطالبة رقم ' + (i + 1); });
+    }
+
+    function openModal() {
+      try { namesArea.value = localStorage.getItem(STORE_KEY) || ''; } catch (_e) {}
+      if (!pool.length) pool = getList();
+      modal.classList.add('open');
+    }
+    function closeModal() {
+      modal.classList.remove('open');
+    }
+
+    btn.addEventListener('click', openModal);
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
+    namesArea.addEventListener('input', function () {
+      try { localStorage.setItem(STORE_KEY, namesArea.value); } catch (_e) {}
+      pool = [];
+    });
+    countInput.addEventListener('change', function () { pool = []; });
+    resetPoolBtn.addEventListener('click', function () {
+      pool = getList();
+      picked.textContent = '؟ (تمت إعادة القائمة)';
+    });
+
+    spinBtn.addEventListener('click', function () {
+      if (spinning) return;
+      const list = getList();
+      if (!pool.length || !noRepeatChk.checked) pool = list.slice();
+      spinning = true;
+      let k = 0;
+      const iv = setInterval(function () {
+        picked.textContent = list[Math.floor(Math.random() * list.length)];
+        playChime(320 + k * 25, 0.05);
+        if (++k > 10) {
+          clearInterval(iv);
+          const idx = Math.floor(Math.random() * pool.length);
+          const chosen = pool.splice(idx, 1)[0];
+          picked.textContent = '🎤 ' + chosen;
+          playChime(784, 0.22);
+          spinning = false;
+        }
+      }, 55);
+    });
+  }
+
   function initWhiteboard() {
     const toggleBtn = document.getElementById('wbToggleBtn');
     const dock = document.getElementById('wbDock');
@@ -1351,13 +1457,107 @@
 
       if (cIdx === simSlot && lesson.simulation) {
         slides.push({
-          sectionId: 'content',
+          sectionId: 'lab',
           tone: 'lab',
           sectionLabel: 'المعمل الافتراضي والتجربة',
-          title: 'المعمل الافتراضي: ' + (simTitles[lesson.simulation] || 'تجربة تفاعلية'),
-          badge: 'مختبر تفاعلي',
+          title: '🧪 المعمل الافتراضي: ' + (simTitles[lesson.simulation] || 'تجربة تفاعلية'),
+          badge: 'مختبر تفاعلي متكامل',
           render: function () {
-            return createSimulationNode(lesson.simulation);
+            const simNode = createSimulationNode(lesson.simulation);
+            const guide = window.CHEM21_LAB_GUIDES && window.CHEM21_LAB_GUIDES[lesson.id];
+            if (!guide) return simNode;
+
+            const shell = el('div', { className: 'vlab-shell' });
+            const safetyBar = el('div', { className: 'vlab-safety' });
+            guide.safety.forEach(function (sf) {
+              safetyBar.appendChild(el('span', { className: 'vlab-safety-pill', text: sf }));
+            });
+            shell.appendChild(safetyBar);
+
+            const grid = el('div', { className: 'vlab-grid' });
+            const stepsCol = el('div', { className: 'vlab-steps-col' }, [
+              el('h4', { className: 'vlab-steps-title', text: '🧭 خطوات المختبر (نفّذيها بالترتيب)' })
+            ]);
+            const msgBox = el('div', { className: 'vlab-step-msg', text: 'ابدئي بالخطوة الأولى ثم جربي المختبر المباشر 🔬' });
+
+            const verifyCard = el('div', { className: 'vlab-verify-card', hidden: '' }, [
+              el('h4', { text: '📋 جدول القياسات والتحقق المخبري' })
+            ]);
+
+            guide.checks.forEach(function (chk) {
+              const row = el('div', { className: 'vlab-check-row' });
+              const lbl = el('span', { text: chk.label });
+              let inputEl;
+              if (chk.type === 'select') {
+                inputEl = el('select', { 'aria-label': chk.label });
+                chk.options.forEach(function (o) {
+                  inputEl.appendChild(el('option', { value: o.v, text: o.t }));
+                });
+              } else {
+                inputEl = el('input', { type: 'number', step: 'any', placeholder: 'أدخلي القيمة', style: 'width:110px;direction:ltr;text-align:center;' });
+              }
+              const chkBtn = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: 'تحقق' });
+              const fb = el('span', { className: 'vlab-fb', text: '' });
+              chkBtn.addEventListener('click', function () {
+                if (row.classList.contains('ok')) return;
+                let ok = false;
+                if (chk.type === 'select') {
+                  ok = inputEl.value === chk.ans;
+                } else {
+                  const val = parseFloat(inputEl.value);
+                  ok = !isNaN(val) && Math.abs(val - chk.ans) <= (chk.tol || 0.05);
+                }
+                if (ok) {
+                  row.classList.add('ok');
+                  fb.textContent = '✅ صحيح!';
+                  inputEl.disabled = true;
+                  chkBtn.disabled = true;
+                  playChime(784, 0.2);
+                } else {
+                  fb.textContent = '❌ راجعي التجربة';
+                  playChime(220, 0.16);
+                }
+              });
+              row.appendChild(lbl);
+              row.appendChild(inputEl);
+              row.appendChild(chkBtn);
+              row.appendChild(fb);
+              verifyCard.appendChild(row);
+            });
+
+            let curStep = 0;
+            const stepBtns = [];
+            guide.steps.forEach(function (st, idx) {
+              const b = el('button', { type: 'button', className: 'vlab-step-btn', text: st.label });
+              if (idx !== 0) b.disabled = true;
+              b.addEventListener('click', function () {
+                if (idx !== curStep) return;
+                b.classList.add('done');
+                b.textContent = st.label + ' ✔';
+                b.disabled = true;
+                msgBox.textContent = st.msg;
+                playChime(520 + idx * 80, 0.14);
+                curStep++;
+                if (stepBtns[curStep]) {
+                  stepBtns[curStep].disabled = false;
+                } else {
+                  verifyCard.hidden = false;
+                  playChime(880, 0.24);
+                }
+              });
+              stepBtns.push(b);
+              stepsCol.appendChild(b);
+            });
+            stepsCol.appendChild(msgBox);
+
+            const rightCol = el('div', { style: 'display:flex;flex-direction:column;gap:0.65rem;' }, [
+              simNode,
+              verifyCard
+            ]);
+            grid.appendChild(stepsCol);
+            grid.appendChild(rightCol);
+            shell.appendChild(grid);
+            return shell;
           }
         });
       }
@@ -1539,6 +1739,13 @@
     const slides = buildSlides(lesson);
     let current = 0;
 
+    const tabsNav = document.querySelector('.tabs-nav');
+    const exitTabBtn = tabsNav && tabsNav.querySelector('[data-section-tab="exit"]');
+    if (tabsNav && !tabsNav.querySelector('[data-section-tab="lab"]') && slides.some(function (s) { return s.sectionId === 'lab'; })) {
+      const labTabBtn = el('button', { type: 'button', className: 'tab-btn', role: 'tab', 'data-section-tab': 'lab', 'aria-selected': 'false', text: '🧪 المعمل الافتراضي' });
+      tabsNav.insertBefore(labTabBtn, exitTabBtn || null);
+    }
+
     const counterEl = document.getElementById('slideCounter');
     const stageEl = document.getElementById('slideStage');
     const dotsEl = document.getElementById('slideDots');
@@ -1636,6 +1843,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     initTimer();
+    initStudentDraw();
     initWhiteboard();
     if (window.CURRENT_LESSON_ID && window.LESSONS_REGISTRY && window.LESSONS_REGISTRY[window.CURRENT_LESSON_ID]) {
       mountLessonDeck(window.LESSONS_REGISTRY[window.CURRENT_LESSON_ID]);
