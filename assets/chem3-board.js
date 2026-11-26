@@ -128,6 +128,24 @@
     $$('.tools .dot').forEach(d => d.onclick = () => { col = d.dataset.c; $$('.tools .dot').forEach(z => z.classList.remove('on')); d.classList.add('on'); setMode('pen'); });
     $('#clrBtn').onclick = () => { const o = inks.find(o => o.p.classList.contains('on')); if (o) o.x.clearRect(0, 0, o.c.width, o.c.height); };
 
+    /* Inject interactive Vocabulary Flashcards in Tab 0 if provided */
+    if (cfg.vocab && cfg.vocab.length && window.createVocabFlashcards) {
+      const p0 = $('.panel');
+      if (p0) {
+        const vCard = document.createElement('div');
+        vCard.className = 'card';
+        vCard.style.setProperty('--c', 'var(--blue)');
+        vCard.appendChild(window.createVocabFlashcards(cfg.vocab, {
+          title: '🃏 المفردات الأساسية (اضغطي على الكلمة لكشف التعريف ⚡ +1)',
+          onFlip: function (_t, elCard) {
+            if (!elCard.dataset.scored) { elCard.dataset.scored = '1'; good(); addPts(1); }
+          }
+        }));
+        const nextDiv = p0.querySelector('.next');
+        p0.insertBefore(vCard, nextDiv || null);
+      }
+    }
+
     /* Common interactions: reveal cards, blur steps, tracks, qrow, calc */
     $$('.rv').forEach(b => b.onclick = () => { if (b.classList.contains('open')) return; b.classList.add('open'); good(); addPts(3); });
     $$('.st').forEach(s => { const o = () => { if (!s.classList.contains('open')) { s.classList.add('open'); tone(620, .1); addPts(1); } }; s.querySelector('button').onclick = o; s.querySelector('.a').onclick = o; });

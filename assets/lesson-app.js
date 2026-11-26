@@ -432,27 +432,41 @@
         { label: 'H₂O (الماء)', m: '18.0 g/mol', bp: '100 °C', strength: 4, tag: 'شبكة هيدروجينية قوية', force: 'روابط هيدروجينية قوية ومتعددة (O-H)، تفسر بقاء الماء سائلاً وارتفاع درجة غليانه.' }
       ];
       let curIdx = 3;
+      let tempC = 25;
       const controls = el('div', { className: 'sim-controls' });
+      const heatRange = el('input', { type: 'range', min: '-180', max: '130', step: '5', value: '25', 'aria-label': 'درجة الحرارة المطبقة' });
+      const heatLbl = el('span', { className: 'page-ref', text: ' الحرارة: 25 °C' });
       const canvasWrap = el('div', { className: 'sim-canvas-wrap' });
       const canvas = el('canvas', { width: '620', height: '190' });
       const readout = el('div', { className: 'sim-readout' });
       canvasWrap.appendChild(canvas);
       canvasWrap.appendChild(readout);
       box.appendChild(controls);
+      box.appendChild(el('div', { className: 'sim-controls' }, [el('label', { text: 'تحكمي بالتسخين / التبريد (°C): ' }, [heatRange, heatLbl])]));
       box.appendChild(canvasWrap);
 
+      function updateReadout() {
+        const it = items[curIdx];
+        const bpVal = parseFloat(it.bp);
+        const boiled = tempC >= bpVal;
+        heatLbl.textContent = ' ' + tempC + ' °C (' + (boiled ? 'غاز / تبخّر' : 'متماسك / مكثّف') + ')';
+        readout.innerHTML = 'الكتلة المولية: <span class="chem">' + it.m + '</span> | الغليان: <span class="chem">' + it.bp + '</span> · الحالة عند <span class="chem">' + tempC + ' °C</span>: <strong>' + (boiled ? 'تغلّبت الحرارة على قوى التجاذب!' : 'قوى التجاذب ممسكة بالجسيمات') + '</strong> : ' + it.force;
+      }
       function selectItem(idx) {
         curIdx = idx;
         controls.querySelectorAll('button').forEach(function (btn, bIdx) {
           btn.classList.toggle('btn-primary', bIdx === idx);
         });
-        const it = items[idx];
-        readout.innerHTML = 'الكتلة المولية: <span class="chem">' + it.m + '</span> | الغليان: <span class="chem">' + it.bp + '</span> : ' + it.force;
+        updateReadout();
       }
       items.forEach(function (it, i) {
         const b = el('button', { type: 'button', className: 'btn btn-sm', text: it.label });
         b.addEventListener('click', function () { selectItem(i); });
         controls.appendChild(b);
+      });
+      heatRange.addEventListener('input', function () {
+        tempC = Number(heatRange.value);
+        updateReadout();
       });
       selectItem(3);
 
@@ -461,16 +475,20 @@
       function drawIMF() {
         if (!document.body.contains(canvas)) return;
         const it = items[curIdx];
+        const bpVal = parseFloat(it.bp);
+        const boiled = tempC >= bpVal;
         const pal = themePalette();
-        const vib = (5 - it.strength) * 3.8;
-        t += 0.07;
+        const vib = boiled ? 14 : (5 - it.strength) * 2.8 + Math.max(0, (tempC + 180) / 140);
+        t += boiled ? 0.11 : 0.065;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         for (let row = 0; row < 2; row++) {
           for (let col = 0; col < 3; col++) {
-            const bx = 135 + col * 175 + Math.sin(t + row + col) * vib;
-            const by = 58 + row * 72 + Math.cos(t * 1.1 + col) * (vib * 0.7);
-            if (col < 2) {
+            const spread = boiled ? (col - 1) * 32 + Math.sin(t * 1.4 + row * 3 + col) * 18 : 0;
+            const spreadY = boiled ? (row - 0.5) * 18 + Math.cos(t * 1.3 + col * 2) * 14 : 0;
+            const bx = 135 + col * 175 + spread + Math.sin(t + row + col) * vib;
+            const by = 58 + row * 72 + spreadY + Math.cos(t * 1.1 + col) * (vib * 0.7);
+            if (col < 2 && !boiled) {
               const nx = 135 + (col + 1) * 175 + Math.sin(t + row + col + 1) * vib;
               const ny = 58 + row * 72 + Math.cos(t * 1.1 + col + 1) * (vib * 0.7);
               ctx.save();
@@ -485,7 +503,7 @@
             }
             ctx.beginPath();
             ctx.arc(bx, by, 18, 0, Math.PI * 2);
-            ctx.fillStyle = it.strength >= 3 ? pal.primary : pal.accent;
+            ctx.fillStyle = boiled ? pal.coral : (it.strength >= 3 ? pal.primary : pal.accent);
             ctx.fill();
             ctx.fillStyle = pal.surface;
             ctx.font = 'bold 12px Tajawal, sans-serif';
@@ -497,7 +515,7 @@
         ctx.fillStyle = pal.ink;
         ctx.font = 'bold 14px Tajawal, sans-serif';
         ctx.textBaseline = 'alphabetic';
-        ctx.fillText('قوة الترابط: ' + it.tag + '  |  درجة الغليان: ' + it.bp, canvas.width / 2, 178);
+        ctx.fillText((boiled ? '🔥 تبخّر (تكسّرت الروابط بين الجزيئات)' : '🧊 مترابط: ' + it.tag) + '  |  T = ' + tempC + ' °C', canvas.width / 2, 178);
         requestAnimationFrame(drawIMF);
       }
       requestAnimationFrame(drawIMF);
@@ -818,14 +836,21 @@
       canvasWrap.appendChild(canvas);
       canvasWrap.appendChild(readout);
 
-      let vN2 = 5;
+      let vN2 = 5, reacted = false;
+      const reactBtn = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: 'أجري التفاعل في الوعاء ⚡' });
       function update() {
         vN2 = Number(n2In.value);
-        readout.innerHTML = '<span class="chem">' + vN2 + ' L N₂</span> يتفاعل مع <span class="chem">' + (vN2 * 3) + ' L H₂</span> لإنتاج <span class="chem">' + (vN2 * 2) + ' L NH₃</span> (النسبة الحجمية 1 : 3 : 2)';
+        readout.innerHTML = (reacted ? '✅ نتج ' : 'المتوقع: ') + '<span class="chem">' + vN2 + ' L N₂</span> يتفاعل مع <span class="chem">' + (vN2 * 3) + ' L H₂</span> لإنتاج <span class="chem">' + (vN2 * 2) + ' L NH₃</span> (النسبة الحجمية 1 : 3 : 2)';
       }
-      n2In.addEventListener('input', update);
+      n2In.addEventListener('input', function () { reacted = false; reactBtn.textContent = 'أجري التفاعل في الوعاء ⚡'; update(); });
+      reactBtn.addEventListener('click', function () {
+        reacted = !reacted;
+        reactBtn.textContent = reacted ? 'إعادة المتفاعلات ↺' : 'أجري التفاعل في الوعاء ⚡';
+        update();
+      });
       update();
       controls.appendChild(el('label', { text: 'حجم N₂ (باللتر): ' }, [n2In]));
+      controls.appendChild(reactBtn);
       box.appendChild(controls);
       box.appendChild(canvasWrap);
 
@@ -838,9 +863,9 @@
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         const bars = [
-          { x: 48, lbl: 'N₂ (' + vN2 + ' L)', w: 90, count: 4, col: pal.primary },
-          { x: 185, lbl: '3H₂ (' + (vN2 * 3) + ' L)', w: 165, count: 12, col: pal.accent },
-          { x: 425, lbl: '2NH₃ (' + (vN2 * 2) + ' L)', w: 140, count: 8, col: pal.secondary }
+          { x: 48, lbl: 'N₂ (' + vN2 + ' L)', w: 90, count: reacted ? 1 : 4, col: pal.primary },
+          { x: 185, lbl: '3H₂ (' + (vN2 * 3) + ' L)', w: 165, count: reacted ? 2 : 12, col: pal.accent },
+          { x: 425, lbl: '2NH₃ (' + (vN2 * 2) + ' L)', w: 140, count: reacted ? 14 : 4, col: pal.secondary }
         ];
         bars.forEach(function (b) {
           ctx.fillStyle = pal.tint;
@@ -1246,10 +1271,14 @@
           el('p', { style: 'margin:0; font-weight:700; font-size:1.15rem;', html: lesson.focus.prompt }),
           revealBox
         ]));
-        frag.appendChild(el('h3', { style: 'margin:0.5rem 0 0.35rem; color:var(--primary); font-size:1rem;', text: 'المفردات الأساسية' }));
-        const chips = el('div', { className: 'vocab-chips' });
-        lesson.vocab.forEach(function (v) { chips.appendChild(el('span', { className: 'vocab-chip', html: v })); });
-        frag.appendChild(chips);
+        if (window.createVocabFlashcards) {
+          frag.appendChild(window.createVocabFlashcards(lesson.vocab, { compact: true }));
+        } else {
+          frag.appendChild(el('h3', { style: 'margin:0.5rem 0 0.35rem; color:var(--primary); font-size:1rem;', text: 'المفردات الأساسية' }));
+          const chips = el('div', { className: 'vocab-chips' });
+          lesson.vocab.forEach(function (v) { chips.appendChild(el('span', { className: 'vocab-chip', html: v })); });
+          frag.appendChild(chips);
+        }
         return frag;
       }
     });
@@ -1274,41 +1303,51 @@
       });
     }
 
+    const bookFigs = (window.CHEM_BOOK_FIGURES && window.CHEM_BOOK_FIGURES[lesson.id]) || [];
+
     lesson.concepts.forEach(function (c, cIdx) {
       const isLast = cIdx === totalCycles - 1;
       const illusHtml = window.CHEM_ILLUSTRATIONS && window.CHEM_ILLUSTRATIONS[lesson.id + '-' + cIdx];
+      const bookFig = bookFigs[cIdx === 0 && totalCycles > 1 && bookFigs.length < 2 ? -1 : (bookFigs.length > 1 ? Math.min(cIdx, bookFigs.length - 1) : (isLast ? 0 : -1))];
 
       slides.push({
         sectionId: 'content',
         tone: 'concept',
         sectionLabel: 'شرح المفهوم ' + (cIdx + 1),
         title: c.title,
-        badge: illusHtml ? 'شرح + رسم توضيحي' : lesson.pages,
+        badge: bookFig ? 'شرح + شكل من الكتاب' : (illusHtml ? 'شرح + رسم توضيحي' : lesson.pages),
         render: function () {
           const bodyNode = el('div', { className: 'concept-slide-body', html: c.bodyHtml });
-          if (!illusHtml) return bodyNode;
-          return el('div', { className: 'concept-split' }, [
-            bodyNode,
-            el('div', { className: 'concept-visual-card' }, [
-              el('div', { html: illusHtml }),
-              el('span', { className: 'muted-note', style: 'font-size:0.84rem; font-weight:700;', text: 'رسم توضيحي للمفهوم' })
-            ])
-          ]);
+          if (!illusHtml && !bookFig) return bodyNode;
+          const visualCard = el('div', { className: 'concept-visual-card' });
+          if (bookFig && illusHtml && window.createBookFigureCard) {
+            let showBook = true;
+            const swRow = el('div', { style: 'display:flex;gap:0.4rem;justify-content:center;margin-bottom:0.45rem;flex-wrap:wrap;' });
+            const btnBook = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: '📖 شكل من الكتاب' });
+            const btnIllus = el('button', { type: 'button', className: 'btn btn-sm', text: '🎨 رسم توضيحي' });
+            const bookNode = window.createBookFigureCard(bookFig);
+            const illusNode = el('div', { html: illusHtml, hidden: '' });
+            function syncView() {
+              bookNode.hidden = !showBook;
+              illusNode.hidden = showBook;
+              btnBook.classList.toggle('btn-primary', showBook);
+              btnIllus.classList.toggle('btn-primary', !showBook);
+            }
+            btnBook.addEventListener('click', function () { showBook = true; syncView(); });
+            btnIllus.addEventListener('click', function () { showBook = false; syncView(); });
+            swRow.appendChild(btnBook); swRow.appendChild(btnIllus);
+            visualCard.appendChild(swRow);
+            visualCard.appendChild(bookNode);
+            visualCard.appendChild(illusNode);
+          } else if (bookFig && window.createBookFigureCard) {
+            visualCard.appendChild(window.createBookFigureCard(bookFig));
+          } else {
+            visualCard.appendChild(el('div', { html: illusHtml }));
+            visualCard.appendChild(el('span', { className: 'muted-note', style: 'font-size:0.84rem; font-weight:700;', text: 'رسم توضيحي للمفهوم' }));
+          }
+          return el('div', { className: 'concept-split' }, [bodyNode, visualCard]);
         }
       });
-
-      if (cIdx === 0 && window.CHEM_VIDEOS && typeof window.CHEM_VIDEOS.createPlayer === 'function') {
-        slides.push({
-          sectionId: 'content',
-          tone: 'video',
-          sectionLabel: 'فيديو تفاعلي متحرك',
-          title: 'عرض فيديو تفاعلي: الظواهر والمصطلحات',
-          badge: 'فيديو تفاعلي',
-          render: function () {
-            return window.CHEM_VIDEOS.createPlayer(lesson);
-          }
-        });
-      }
 
       if (cIdx === simSlot && lesson.simulation) {
         slides.push({

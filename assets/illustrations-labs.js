@@ -612,7 +612,7 @@
       box.appendChild(controls);
       box.appendChild(canvasWrap);
 
-      let mode = 'solid';
+      let mode = 'solid', tempLvl = 1.5;
       const modes = {
         solid: { label: 'صلب (اهتزاز ثابت)', desc: 'صلب: الجسيمات متقاربة جداً ومرتبة بانتظام، وتهتز في أماكن ثابتة لقوة التجاذب.' },
         liquid: { label: 'سائل (انزلاق وانسياب)', desc: 'سائل: الجسيمات متقاربة لكنها تنزلق فوق بعضها فتأخذ شكل الوعاء وتحتفظ بحجم ثابت.' },
@@ -646,18 +646,27 @@
       });
       btns.solid.classList.add('btn-primary');
       readout.textContent = modes.solid.desc;
+      const speedCtrl = el('div', { className: 'sim-controls' });
+      const speedRange = el('input', { type: 'range', min: '0.5', max: '3.5', step: '0.5', value: '1.5', 'aria-label': 'سرعة حركة الجسيمات والطاقة الحركية' });
+      const speedLbl = el('span', { className: 'page-ref', text: ' 1.5x' });
+      const resetDropsBtn = el('button', { type: 'button', className: 'btn btn-sm', text: 'إعادة سكب القطرات 💧' });
+      resetDropsBtn.addEventListener('click', function () { dropCold = 34; dropHot = 34; });
+      speedRange.addEventListener('input', function () { tempLvl = Number(speedRange.value); speedLbl.textContent = ' ' + tempLvl.toFixed(1) + 'x'; });
+      speedCtrl.appendChild(el('label', { text: 'تحكمي بالطاقة الحركية (الحرارة): ' }, [speedRange, speedLbl]));
+      speedCtrl.appendChild(resetDropsBtn);
+      box.insertBefore(speedCtrl, canvasWrap);
 
       const ctx = canvas.getContext('2d');
       let t = 0;
       function tick() {
         if (!document.body.contains(canvas)) return;
-        t += 0.08;
+        t += 0.05 * tempLvl;
         const pal = themePal();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
         if (mode === 'viscosity') {
-          dropHot += 1.65;
-          dropCold += 0.42;
+          dropHot += 0.85 * tempLvl;
+          dropCold += 0.25 * tempLvl;
           if (dropHot > 180) dropHot = 34;
           if (dropCold > 180) dropCold = 34;
           ctx.strokeStyle = pal.wall;
@@ -682,18 +691,18 @@
           particles.forEach(function (p, idx) {
             let px, py;
             if (mode === 'solid') {
-              px = p.gx + Math.sin(t * 2 + p.phase) * 2.2;
-              py = p.gy + Math.cos(t * 2 + p.phase) * 2.2;
+              px = p.gx + Math.sin(t * 2 + p.phase) * (1.2 + tempLvl * 0.7);
+              py = p.gy + Math.cos(t * 2 + p.phase) * (1.2 + tempLvl * 0.7);
             } else if (mode === 'liquid') {
-              p.x += Math.sin(t + p.phase) * 1.1;
-              p.y += Math.cos(t * 0.8 + p.phase) * 0.7;
+              p.x += Math.sin(t + p.phase) * (0.65 * tempLvl);
+              p.y += Math.cos(t * 0.8 + p.phase) * (0.45 * tempLvl);
               if (p.x < 40) p.x = canvas.width - 40;
               if (p.x > canvas.width - 40) p.x = 40;
               if (p.y < 105) p.y = 105 + (idx % 5) * 17;
               if (p.y > 186) p.y = 186;
               px = p.x; py = p.y;
             } else {
-              p.x += p.vx; p.y += p.vy;
+              p.x += p.vx * (tempLvl * 0.65); p.y += p.vy * (tempLvl * 0.65);
               if (p.x < 30 || p.x > canvas.width - 30) p.vx *= -1;
               if (p.y < 26 || p.y > canvas.height - 26) p.vy *= -1;
               px = p.x; py = p.y;
@@ -771,7 +780,24 @@
       selB.addEventListener('change', function () { runTube(true); });
       launchBtn.addEventListener('click', function () { runTube(true); });
       runTube(false);
-      box.appendChild(controls); box.appendChild(tubeWrap); box.appendChild(readout);
+
+      // Dalton Partial Pressure interactive mixer alongside Graham's tube
+      const daltonBox = el('div', { className: 'sim-controls', style: 'margin-top:0.55rem;padding-top:0.55rem;border-top:1.5px dashed var(--border);' });
+      const p1In = el('input', { type: 'range', min: '0.2', max: '3.0', step: '0.2', value: '1.2', 'aria-label': 'الضغط الجزئي الأول' });
+      const p2In = el('input', { type: 'range', min: '0.2', max: '3.0', step: '0.2', value: '0.8', 'aria-label': 'الضغط الجزئي الثاني' });
+      const daltonOut = el('span', { className: 'sim-pill' });
+      function updDalton() {
+        const p1 = Number(p1In.value), p2 = Number(p2In.value);
+        daltonOut.innerHTML = 'قانون دالتون: <span class="chem">P_total = ' + p1.toFixed(1) + ' + ' + p2.toFixed(1) + ' = ' + (p1 + p2).toFixed(1) + ' atm</span>';
+      }
+      p1In.addEventListener('input', updDalton);
+      p2In.addEventListener('input', updDalton);
+      updDalton();
+      daltonBox.appendChild(el('label', { text: 'P₁ (He): ' }, [p1In]));
+      daltonBox.appendChild(el('label', { text: 'P₂ (N₂): ' }, [p2In]));
+      daltonBox.appendChild(daltonOut);
+
+      box.appendChild(controls); box.appendChild(tubeWrap); box.appendChild(readout); box.appendChild(daltonBox);
     } else if (simType === 'gas-laws') {
       const controls = el('div', { className: 'sim-controls' });
       const lawSel = el('select', { className: 'btn btn-sm', 'aria-label': 'اختر القانون' });

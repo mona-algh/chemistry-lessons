@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
   <script src="../assets/theme.js"></script>
+  <script src="../assets/vocab-flashcards.js"></script>
   <link rel="stylesheet" href="../assets/chem3-board.css">
 </head>
 <body>
@@ -135,6 +136,7 @@
           <button type="button" class="rv" style="--c:#7c5ce6">🚀 الليثيوم وخلية الوقود<span><b>أعلى جهد ونظافة بيئية</b><br>الليثيوم أخف فلز (<code>-3.04 V</code>)<br>خلية الوقود: <code>2H₂ + O₂ → 2H₂O</code></span></button>
         </div>
         <div class="mnem">أولية = <span>تُستعمل مرة</span> (جافة · قلوية · فضة) &nbsp;|&nbsp; ثانوية = <span>تُشحن عكسياً</span> (المركم · الليثيوم · نيكل-كادميوم)</div>
+        <div class="book-fig-grid" id="bookFig42"></div>
       </div>
 
       <div class="card" style="--c:var(--red)">
@@ -292,6 +294,7 @@
     let rustDone = false, labStep = 0;
     const B = window.initChem3Board({
       lessonId: '4-2',
+      vocab: ['البطارية', 'الخلية الجافة', 'البطارية الأولية', 'البطارية الثانوية', 'خلية الوقود', 'التآكل', 'الجلفنة', 'الأنود المضحي'],
       challengeQuestions: QS,
       onReset() {
         rustDone = false; labStep = 0;
@@ -359,6 +362,9 @@
       };
     });
     initBatLab();
+    if (window.createBookFigureCard && window.CHEM_BOOK_FIGURES && window.CHEM_BOOK_FIGURES['4-2']) {
+      window.CHEM_BOOK_FIGURES['4-2'].forEach(f => document.getElementById('bookFig42').appendChild(window.createBookFigureCard(f)));
+    }
   </script>
 </body>
 </html>

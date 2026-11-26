@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
   <script src="../assets/theme.js"></script>
+  <script src="../assets/vocab-flashcards.js"></script>
   <style>
     :root {
       --ink: #1d2742; --muted: #5d6886; --bg: #f7f5f0; --card: #ffffff; --soft: #faf8f3; --line: #e6e1d6;
@@ -349,6 +350,7 @@
         <div class="goal"><b>٣</b>أتنبأ بتلقائية تفاعل الأكسدة والاختزال من إشارة الجهد</div>
         <div class="goal"><b>٤</b>أبني خلية جلفانية في المعمل الافتراضي وأسجّل القراءات وأتحقق منها</div>
       </div>
+      <div class="card" style="--c:var(--blue)" id="vocabBox41"></div>
       <div class="next"><button type="button" class="big" style="--c:#e4572e" data-go="1">إلى التهيئة العملية 🔍 ←</button></div>
     </div>
 
@@ -398,6 +400,7 @@
           <button type="button" class="rv" data-k="el" style="--c:#d79b14">⚡ الإلكترونات<span>تسري عبر السلك الخارجي <b>من الأنود إلى الكاثود</b></span></button>
         </div>
         <div class="mnem"><span>أ</span>نود ← <span>أ</span>كسدة &nbsp;|&nbsp; <span>ك</span>اثود ← اختزال <small>(قاعدة الحفظ: «الأنود يؤكسد، والكاثود يكسب»)</small></div>
+        <div id="bookFig41"></div>
       </div>
 
       <div class="card" style="--c:var(--red)">
@@ -915,6 +918,21 @@
     }
     $('#resetAll').onclick = resetBoard;
     $$('#cls button').forEach((b, i) => b.onclick = () => { if (b.classList.contains('on')) return; $$('#cls button').forEach(z => z.classList.remove('on')); b.classList.add('on'); curClass = i; resetBoard(); });
+
+    if (window.createVocabFlashcards) {
+      document.getElementById('vocabBox41').appendChild(window.createVocabFlashcards([
+        'الخلية الكهروكيميائية', 'الخلية الجلفانية', 'نصف الخلية', 'الأنود (المصعد)',
+        'الكاثود (المهبط)', 'القنطرة الملحية', 'جهد الاختزال', 'قطب الهيدروجين القياسي'
+      ], {
+        title: '🃏 المفردات الأساسية (اضغطي على الكلمة لكشف التعريف ⚡ +1)',
+        onFlip: function (_t, card) { if (!card.dataset.scored) { card.dataset.scored = '1'; good(); addPts(1); } }
+      }));
+    }
+    if (window.createBookFigureCard && window.CHEM_BOOK_FIGURES && window.CHEM_BOOK_FIGURES['4-1']) {
+      window.CHEM_BOOK_FIGURES['4-1'].forEach(function (fig) {
+        document.getElementById('bookFig41').appendChild(window.createBookFigureCard(fig));
+      });
+    }
   </script>
 </body>
 </html>
