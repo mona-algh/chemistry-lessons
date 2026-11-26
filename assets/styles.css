@@ -918,6 +918,25 @@ button, input, select {
   font-weight: 600;
 }
 
+.link-illus-wrap {
+  width: 100%;
+  margin-bottom: 0.25rem;
+}
+
+.link-svg {
+  width: 100%;
+  max-height: 122px;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  transition: transform 0.2s ease;
+}
+
+.interactive-link-card:hover .link-svg {
+  transform: scale(1.02);
+}
+
 @media (max-width: 900px) {
   .concept-split {
     grid-template-columns: 1fr;

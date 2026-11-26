@@ -799,12 +799,18 @@
 
       box.appendChild(controls); box.appendChild(tubeWrap); box.appendChild(readout); box.appendChild(daltonBox);
     } else if (simType === 'gas-laws') {
+      const modeRow = el('div', { className: 'sim-controls' });
+      const btnBalloon = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: '🎈 مختبر منطاد الهواء الساخن' });
+      const btnPiston = el('button', { type: 'button', className: 'btn btn-sm', text: '🔩 مختبر المكبس المغلق' });
+      modeRow.appendChild(btnBalloon);
+      modeRow.appendChild(btnPiston);
+
       const controls = el('div', { className: 'sim-controls' });
       const lawSel = el('select', { className: 'btn btn-sm', 'aria-label': 'اختر القانون' });
       [
-        { v: 'boyle', t: 'قانون بويل (ثبوت T): P و V عكسياً' },
-        { v: 'charles', t: 'قانون شارل (ثبوت P): V و T(K) طردياً' },
-        { v: 'gay', t: 'قانون جاي-لوساك (ثبوت V): P و T(K) طردياً' }
+        { v: 'charles', t: 'قانون شارل (ثبوت P): V و T(K) طردياً — تسخين المنطاد' },
+        { v: 'boyle', t: 'قانون بويل (ثبوت T): P و V عكسياً — صعود البالون بالضغط' },
+        { v: 'gay', t: 'قانون جاي-لوساك (ثبوت V): P و T(K) طردياً — الوعاء المغلق' }
       ].forEach(function (o) { lawSel.appendChild(el('option', { value: o.v, text: o.t })); });
       const slider = el('input', { type: 'range', min: '1', max: '5', step: '0.25', value: '2', 'aria-label': 'قيمة المتغير المستقل' });
       const sliderVal = el('span', { className: 'page-ref' });
@@ -814,18 +820,22 @@
       controls.appendChild(recBtn);
 
       const canvasWrap = el('div', { className: 'sim-canvas-wrap' });
-      const canvas = el('canvas', { width: '620', height: '175' });
+      const canvas = el('canvas', { width: '620', height: '205' });
       const readout = el('div', { className: 'sim-readout' });
       const tableWrap = el('div', { className: 'data-table-wrap' });
       const rows = [];
       canvasWrap.appendChild(canvas); canvasWrap.appendChild(readout);
-      box.appendChild(controls); box.appendChild(canvasWrap); box.appendChild(tableWrap);
+      box.appendChild(modeRow); box.appendChild(controls); box.appendChild(canvasWrap); box.appendChild(tableWrap);
+
+      let visualMode = 'balloon';
+      btnBalloon.addEventListener('click', function () { visualMode = 'balloon'; btnBalloon.classList.add('btn-primary'); btnPiston.classList.remove('btn-primary'); });
+      btnPiston.addEventListener('click', function () { visualMode = 'piston'; btnPiston.classList.add('btn-primary'); btnBalloon.classList.remove('btn-primary'); });
 
       const ctx = canvas.getContext('2d');
       const gPts = Array.from({ length: 26 }, function () {
         return { u: Math.random(), v: Math.random(), a: Math.random() * Math.PI * 2 };
       });
-      let state = { law: 'boyle', p: 2, v: 5, tK: 300, cylW: 260 };
+      let state = { law: 'charles', p: 1, v: 4.8, tK: 300, cylW: 240 };
 
       function update() {
         const law = lawSel.value, x = Number(slider.value);
@@ -833,11 +843,11 @@
         if (law === 'boyle') {
           p = x; v = 10 / p;
           sliderVal.textContent = ' P = ' + p.toFixed(2) + ' atm';
-          readout.innerHTML = 'قانون بويل: <span class="chem">P₁V₁ = P₂V₂ = 10 atm·L</span> ← الحجم الجديد <span class="chem">V = ' + v.toFixed(2) + ' L</span>';
+          readout.innerHTML = 'قانون بويل (المنطاد/المكبس): <span class="chem">P₁V₁ = 10 atm·L</span> ← انخفاض الضغط الخارجي يوسّع الحجم إلى <span class="chem">V = ' + v.toFixed(2) + ' L</span>';
         } else if (law === 'charles') {
           tK = Math.round(x * 150); v = (tK / 150) * 2.4;
           sliderVal.textContent = ' T = ' + tK + ' K';
-          readout.innerHTML = 'قانون شارل: <span class="chem">V₁/T₁ = V₂/T₂</span> ← الحجم عند ' + tK + ' K يساوي <span class="chem">' + v.toFixed(1) + ' L</span>';
+          readout.innerHTML = 'قانون شارل (منطاد الهواء الساخن): <span class="chem">V₁/T₁ = V₂/T₂</span> ← التسخين إلى ' + tK + ' K يتمدد به المنطاد إلى <span class="chem">' + v.toFixed(1) + ' L</span>';
         } else {
           tK = Math.round(x * 150); p = (tK / 150) * 1.5; v = 6;
           sliderVal.textContent = ' T = ' + tK + ' K';
@@ -857,11 +867,71 @@
       });
       update();
 
+      let skyT = 0;
       function animateCylinder() {
         if (!document.body.contains(canvas)) return;
+        skyT += 0.04;
         const pal = themePal();
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        const x0 = 40, y0 = 18, ch = 112, cw = state.cylW;
+
+        if (visualMode === 'balloon') {
+          // Sky background & clouds
+          ctx.fillStyle = pal.dark ? 'rgba(42,125,225,0.14)' : '#e6f3ff';
+          ctx.fillRect(16, 12, canvas.width - 32, 162);
+          ctx.fillStyle = 'rgba(255,255,255,0.8)';
+          ctx.beginPath(); ctx.arc(105 + Math.sin(skyT * 0.4) * 20, 48, 18, 0, Math.PI * 2); ctx.arc(124 + Math.sin(skyT * 0.4) * 20, 44, 22, 0, Math.PI * 2); ctx.fill();
+          ctx.beginPath(); ctx.arc(495 - Math.sin(skyT * 0.35) * 18, 62, 16, 0, Math.PI * 2); ctx.arc(515 - Math.sin(skyT * 0.35) * 18, 58, 20, 0, Math.PI * 2); ctx.fill();
+
+          const scale = Math.min(1.38, Math.max(0.62, state.v / 5.5));
+          const cx = 310;
+          const lift = state.law === 'charles' ? ((state.tK - 150) / 600) * 38 : state.law === 'boyle' ? ((5 - state.p) / 4) * 42 : 12;
+          const cy = 96 - lift * 0.55;
+          const rx = 44 * scale, ry = 52 * scale;
+
+          // Envelope
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+          ctx.fillStyle = state.law === 'gay' ? pal.violet : (state.tK > 380 ? pal.coral : pal.primary);
+          ctx.fill();
+          ctx.strokeStyle = pal.ink; ctx.lineWidth = 2.5; ctx.stroke();
+          // Vertical stripes on balloon
+          ctx.strokeStyle = 'rgba(255,255,255,0.55)'; ctx.lineWidth = 3;
+          ctx.beginPath(); ctx.ellipse(cx, cy, rx * 0.48, ry, 0, 0, Math.PI * 2); ctx.stroke();
+
+          // Ropes & basket
+          ctx.strokeStyle = pal.ink; ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(cx - rx * 0.35, cy + ry * 0.85); ctx.lineTo(cx - 12, cy + ry + 26);
+          ctx.moveTo(cx + rx * 0.35, cy + ry * 0.85); ctx.lineTo(cx + 12, cy + ry + 26);
+          ctx.stroke();
+          ctx.fillStyle = '#b45309';
+          ctx.fillRect(cx - 16, cy + ry + 25, 32, 18);
+
+          // Flame when heating (Charles / Gay-Lussac)
+          if (state.law !== 'boyle' && state.tK >= 250) {
+            const fh = 8 + (state.tK / 750) * 14 + Math.sin(skyT * 6) * 2.5;
+            ctx.fillStyle = '#ffc93c';
+            ctx.beginPath(); ctx.moveTo(cx - 6, cy + ry + 23); ctx.lineTo(cx, cy + ry + 23 - fh); ctx.lineTo(cx + 6, cy + ry + 23); ctx.closePath(); ctx.fill();
+          }
+          // Particles moving inside balloon
+          const speed = 0.015 * Math.sqrt(state.tK / 300);
+          for (let i = 0; i < 10; i++) {
+            const pt = gPts[i];
+            pt.u += Math.cos(pt.a) * speed; pt.v += Math.sin(pt.a) * speed;
+            if (pt.u < 0.1 || pt.u > 0.9) pt.a = Math.PI - pt.a;
+            if (pt.v < 0.1 || pt.v > 0.9) pt.a = -pt.a;
+            ctx.beginPath();
+            ctx.arc(cx - rx * 0.65 + pt.u * (rx * 1.3), cy - ry * 0.65 + pt.v * (ry * 1.3), 4, 0, Math.PI * 2);
+            ctx.fillStyle = '#ffffff'; ctx.fill();
+          }
+
+          ctx.fillStyle = pal.ink; ctx.font = 'bold 14px Tajawal, sans-serif'; ctx.textAlign = 'center';
+          ctx.fillText('P = ' + state.p.toFixed(2) + ' atm   |   V = ' + state.v.toFixed(2) + ' L   |   T = ' + state.tK + ' K   (' + (state.law === 'gay' ? 'حجم ثابت' : 'منطاد حر التمدد') + ')', canvas.width / 2, 194);
+          requestAnimationFrame(animateCylinder);
+          return;
+        }
+
+        const x0 = 40, y0 = 18, ch = 122, cw = state.cylW;
         ctx.fillStyle = pal.tint; ctx.fillRect(x0, y0, cw, ch);
         ctx.strokeStyle = pal.primary; ctx.lineWidth = 3.5;
         ctx.beginPath(); ctx.moveTo(x0 + 500, y0); ctx.lineTo(x0, y0); ctx.lineTo(x0, y0 + ch); ctx.lineTo(x0 + 500, y0 + ch); ctx.stroke();
@@ -878,8 +948,8 @@
           ctx.beginPath(); ctx.arc(x0 + 10 + pt.u * (cw - 20), y0 + 10 + pt.v * (ch - 20), 6.5, 0, Math.PI * 2);
           ctx.fillStyle = heat > 0.45 ? pal.coral : pal.primary; ctx.fill();
         });
-        ctx.fillStyle = pal.ink; ctx.font = 'bold 14px Tajawal, sans-serif';
-        ctx.fillText('P = ' + state.p.toFixed(2) + ' atm   |   V = ' + state.v.toFixed(2) + ' L   |   T = ' + state.tK + ' K', 42, 160);
+        ctx.fillStyle = pal.ink; ctx.font = 'bold 14px Tajawal, sans-serif'; ctx.textAlign = 'left';
+        ctx.fillText('P = ' + state.p.toFixed(2) + ' atm   |   V = ' + state.v.toFixed(2) + ' L   |   T = ' + state.tK + ' K', 42, 178);
         requestAnimationFrame(animateCylinder);
       }
       requestAnimationFrame(animateCylinder);
@@ -895,6 +965,42 @@
   };
   window.CHEM_VIRTUAL_LABS = {
     createLab: createVirtualLabNode
+  };
+
+  /* Rich illustrated SVG scenes for real-world examples & cross-science links */
+  const LINK_SVGS = {
+    lungs: '<svg viewBox="0 0 260 110" class="link-svg" aria-label="الرئتان والشهيق والزفير"><rect width="260" height="110" rx="12" fill="var(--teal-l)"/><path d="M130 14 V44" stroke="var(--ink)" stroke-width="6" stroke-linecap="round"/><path d="M130 42 Q100 32 82 54 Q70 78 96 92 Q122 96 125 65 Z" fill="#fda4af" stroke="#e11d48" stroke-width="2.5" class="anim-pulse"/><path d="M130 42 Q160 32 178 54 Q190 78 164 92 Q138 96 135 65 Z" fill="#fda4af" stroke="#e11d48" stroke-width="2.5" class="anim-pulse"/><path d="M68 96 Q130 82 192 96" fill="none" stroke="var(--primary)" stroke-width="3" stroke-dasharray="5 4"/><text x="130" y="106" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">اتساع الصدر ← انخفاض الضغط ← دخول الهواء</text></svg>',
+    balloon: '<svg viewBox="0 0 260 110" class="link-svg" aria-label="منطاد الهواء الساخن"><rect width="260" height="110" rx="12" fill="#e0f2fe"/><ellipse cx="130" cy="46" rx="34" ry="38" fill="var(--coral)" stroke="#9a3412" stroke-width="2"/><ellipse cx="130" cy="46" rx="16" ry="38" fill="#ffc93c" opacity="0.85"/><line x1="115" y1="80" x2="122" y2="94" stroke="#451a03" stroke-width="2"/><line x1="145" y1="80" x2="138" y2="94" stroke="#451a03" stroke-width="2"/><rect x="118" y="93" width="24" height="12" rx="3" fill="#92400e"/><circle cx="130" cy="86" r="4" fill="#fde047" class="anim-pulse"/><text x="46" y="45" font-size="11" font-weight="800" fill="#0369a1">T ↑ ← V ↑</text></svg>',
+    weather: '<svg viewBox="0 0 260 110" class="link-svg" aria-label="بالون الطقس في الأجواء العليا"><rect width="260" height="110" rx="12" fill="var(--violet-l)"/><circle cx="80" cy="72" r="14" fill="var(--primary)" opacity="0.75"/><circle cx="178" cy="38" r="28" fill="var(--coral)" opacity="0.9" class="anim-pulse"/><path d="M98 66 L144 46" stroke="var(--ink)" stroke-width="2.5" stroke-dasharray="4 3"/><text x="80" y="98" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">الأرض P عالٍ</text><text x="178" y="82" text-anchor="middle" font-size="11" font-weight="800" fill="var(--coral)">الأعلى P↓ فـ V↑</text></svg>',
+    tire: '<svg viewBox="0 0 260 110" class="link-svg" aria-label="إطار السيارة وضغط الغاز"><rect width="260" height="110" rx="12" fill="var(--gold-l)"/><circle cx="130" cy="54" r="38" fill="#1e293b" stroke="#0f172a" stroke-width="3"/><circle cx="130" cy="54" r="20" fill="#cbd5e1"/><circle cx="110" cy="30" r="4" fill="#ffc93c"/><circle cx="152" cy="32" r="4" fill="#ffc93c"/><circle cx="154" cy="72" r="4" fill="#ffc93c"/><text x="130" y="104" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">تصادمات جزيئات الهواء تحفظ الضغط</text></svg>',
+    perfume: '<svg viewBox="0 0 260 110" class="link-svg" aria-label="انتشار رائحة العطر"><rect width="260" height="110" rx="12" fill="var(--coral-l)"/><rect x="44" y="42" width="40" height="50" rx="8" fill="var(--primary)"/><rect x="54" y="28" width="20" height="14" rx="3" fill="#0f172a"/><circle cx="115" cy="40" r="6" fill="var(--coral)" class="anim-bubble-1"/><circle cx="148" cy="55" r="7" fill="var(--violet)" class="anim-bubble-2"/><circle cx="188" cy="36" r="5" fill="var(--green)" class="anim-bubble-3"/><circle cx="215" cy="60" r="6" fill="var(--coral)" class="anim-bubble-1"/><text x="155" y="96" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">انتشار عشوائي سريع من التركيز الأعلى</text></svg>',
+    dive: '<svg viewBox="0 0 260 110" class="link-svg" aria-label="الضغط والغوص وخليط الغازات"><rect width="260" height="110" rx="12" fill="#dbeafe"/><rect x="45" y="34" width="26" height="58" rx="10" fill="#0284c7"/><circle cx="135" cy="45" r="9" fill="#22c55e"/><circle cx="170" cy="45" r="9" fill="#3b82f6"/><circle cx="205" cy="45" r="9" fill="#ef4444"/><text x="135" y="72" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">He + O₂ + N₂ ← P_total</text><text x="130" y="100" text-anchor="middle" font-size="11" font-weight="800" fill="#1e3a8a">دالتون وتخفيض النيتروجين في أعماق الغوص</text></svg>',
+    dna: '<svg viewBox="0 0 260 110" class="link-svg" aria-label="الماء والروابط الهيدروجينية في DNA"><rect width="260" height="110" rx="12" fill="var(--surface-tint)"/><path d="M55 24 Q105 55 155 24 Q205 55 235 28" fill="none" stroke="var(--primary)" stroke-width="5"/><path d="M55 82 Q105 51 155 82 Q205 51 235 78" fill="none" stroke="var(--coral)" stroke-width="5"/><line x1="82" y1="41" x2="82" y2="65" stroke="var(--green)" stroke-width="3" stroke-dasharray="4 3"/><line x1="130" y1="43" x2="130" y2="63" stroke="var(--green)" stroke-width="3" stroke-dasharray="4 3"/><line x1="180" y1="39" x2="180" y2="67" stroke="var(--green)" stroke-width="3" stroke-dasharray="4 3"/><text x="130" y="102" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">روابط هيدروجينية تربط سلسلتي DNA وقطبية الماء</text></svg>',
+    iceFloat: '<svg viewBox="0 0 260 110" class="link-svg" aria-label="طفو الجليد فوق الماء والخاصية الشعرية"><rect width="260" height="110" rx="12" fill="#e0f2fe"/><rect x="0" y="54" width="260" height="56" fill="rgba(42,125,225,0.28)"/><polygon points="75,38 145,38 158,64 62,64" fill="#ffffff" stroke="#38bdf8" stroke-width="2.5"/><text x="110" y="56" text-anchor="middle" font-size="12" font-weight="900" fill="#0369a1">جليد طافٍ 🧊</text><circle cx="205" cy="78" r="10" fill="#f97316"/><text x="130" y="98" text-anchor="middle" font-size="11" font-weight="800" fill="#0c4a6e">تمدد الجليد وقلة كثافته تحمي الحياة المائية</text></svg>',
+    capillary: '<svg viewBox="0 0 260 110" class="link-svg" aria-label="اللزوجة والخاصية الشعرية"><rect width="260" height="110" rx="12" fill="var(--teal-l)"/><rect x="30" y="76" width="200" height="24" fill="rgba(42,125,225,0.35)"/><rect x="75" y="20" width="26" height="68" fill="#fff" stroke="var(--ink)" stroke-width="2"/><rect x="77" y="52" width="22" height="34" fill="var(--primary)" opacity="0.7"/><rect x="130" y="20" width="12" height="68" fill="#fff" stroke="var(--ink)" stroke-width="2"/><rect x="132" y="28" width="8" height="58" fill="var(--primary)" opacity="0.85"/><text x="195" y="55" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">تلاصق + شعرية</text></svg>',
+    phaseLife: '<svg viewBox="0 0 260 110" class="link-svg" aria-label="الجليد الجاف والسحب وتنظيم الحرارة"><rect width="260" height="110" rx="12" fill="#f1f5f9"/><path d="M55 50 Q70 28 96 34 Q118 22 138 38 Q158 34 162 54 Q162 68 142 68 H65 Q48 68 55 50 Z" fill="#cbd5e1" stroke="#64748b" stroke-width="2"/><circle cx="88" cy="82" r="4" fill="var(--primary)" class="anim-bubble-2"/><circle cx="115" cy="86" r="4" fill="var(--primary)" class="anim-bubble-1"/><rect x="186" y="48" width="44" height="30" rx="6" fill="#e2e8f0" stroke="#94a3b8" stroke-width="2"/><text x="208" y="67" text-anchor="middle" font-size="11" font-weight="900" fill="#1e293b">CO₂</text><text x="130" y="102" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">تكاثف السحب وتسامي الثلج الجاف</text></svg>',
+    co2Pop: '<svg viewBox="0 0 260 110" class="link-svg" aria-label="خزانات الغاز وفرقعة الفشار وPV=nRT"><rect width="260" height="110" rx="12" fill="var(--gold-l)"/><rect x="44" y="26" width="38" height="68" rx="12" fill="#dc2626"/><text x="63" y="64" text-anchor="middle" font-size="12" font-weight="900" fill="#fff">CO₂</text><circle cx="155" cy="52" r="24" fill="#fef08a" stroke="#ca8a04" stroke-width="2.5" class="anim-pulse"/><text x="155" y="56" text-anchor="middle" font-size="18">🍿</text><text x="155" y="98" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">تمدد البخار والغاز عند تطبيق PV = nRT</text></svg>',
+    haberHbot: '<svg viewBox="0 0 260 110" class="link-svg" aria-label="مصانع الأمونيا وغرفة الأكسجين المضغوط"><rect width="260" height="110" rx="12" fill="var(--green-l)"/><rect x="34" y="32" width="76" height="46" rx="16" fill="#ffffff" stroke="var(--green)" stroke-width="3"/><text x="72" y="59" text-anchor="middle" font-size="12" font-weight="900" fill="var(--green)">O₂ HBOT</text><rect x="148" y="26" width="80" height="52" rx="8" fill="#0284c7" opacity="0.2" stroke="#0284c7" stroke-width="2.5"/><text x="188" y="56" text-anchor="middle" font-size="12" font-weight="900" fill="#0369a1">2NH₃ ⚗️</text><text x="130" y="100" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)">النسب الحجمية في الطب والصناعة والزراعة</text></svg>'
+  };
+
+  window.CHEM_LINK_SVGS = {
+    getFor: function (lessonId, lk, idx) {
+      const text = ((lk && (lk.title + ' ' + lk.tag + ' ' + lk.text)) || '');
+      if (text.includes('التنفس') || text.includes('بويل')) return LINK_SVGS.lungs;
+      if (text.includes('بالون')) return LINK_SVGS.weather;
+      if (text.includes('منطاد') || text.includes('أواني')) return LINK_SVGS.balloon;
+      if (text.includes('إطارات') || text.includes('مرتبة')) return LINK_SVGS.tire;
+      if (text.includes('عطر') || text.includes('رائحة') || text.includes('تسرب')) return LINK_SVGS.perfume;
+      if (text.includes('الغوص') || text.includes('الفيزياء والأرض')) return LINK_SVGS.dive;
+      if (text.includes('DNA') || text.includes('الماء') || text.includes('أبو بريص')) return LINK_SVGS.dna;
+      if (text.includes('الجليد') || text.includes('البيئة')) return LINK_SVGS.iceFloat;
+      if (text.includes('المناديل') || text.includes('اللزوجة') || text.includes('زيوت')) return LINK_SVGS.capillary;
+      if (text.includes('الجاف') || text.includes('السحب') || text.includes('التعرق')) return LINK_SVGS.phaseLife;
+      if (text.includes('طفايات') || text.includes('الفشار') || text.includes('البروبان')) return LINK_SVGS.co2Pop;
+      if (text.includes('الأسمدة') || text.includes('HBOT') || text.includes('الأمونيا') || text.includes('الزراعة')) return LINK_SVGS.haberHbot;
+      const byLesson = { '6-1': LINK_SVGS.tire, '6-2': LINK_SVGS.dna, '6-3': LINK_SVGS.iceFloat, '6-4': LINK_SVGS.phaseLife, '7-1': LINK_SVGS.balloon, '7-2': LINK_SVGS.co2Pop, '7-3': LINK_SVGS.haberHbot };
+      return byLesson[lessonId] || LINK_SVGS.lungs;
+    }
   };
 
   window.CHEM21_LAB_GUIDES = {
@@ -951,12 +1057,12 @@
       ]
     },
     '7-1': {
-      safety: ['🥽 نظارة السلامة', '📏 قراءة مقياس الضغط والحجم بثبات', '🌡️ تحويل درجات الحرارة إلى كلفن قبل الحساب'],
+      safety: ['🥽 نظارة السلامة', '🔥 مراقبة لهب تسخين المنطاد بحذر', '🌡️ تحويل درجات الحرارة إلى كلفن قبل الحساب'],
       steps: [
-        { label: '١ اختيار قانون بويل ومضاعفة الضغط إلى 2 atm', msg: '🔩 تقلص الحجم من 10 L إلى 5 L مع بقاء حاصل P×V = 10 ثابتاً.' },
-        { label: '٢ تسجيل قراءة بويل والانتقال لقانون شارل', msg: '🔥 عند ثبوت الضغط يزداد الحجم طردياً برفع الحرارة بالكلفن.' },
-        { label: '٣ اختبار قانون جاي-لوساك (حجم ثابت)', msg: '⚡ يتضاعف الضغط بارتفاع درجة الحرارة بالكلفن داخل الوعاء المغلق.' },
-        { label: '٤ التحقق الحسابي من القوانين', msg: '✅ أجيبي عن التحقق المخبري بالأسفل.' }
+        { label: '١ تسخين منطاد الهواء الساخن (قانون شارل)', msg: '🎈 بارتفاع T بالكلفن يتمدد الهواء داخل المنطاد (V ↑) فيرتفع في السماء!' },
+        { label: '٢ اختبار قانون بويل (تغيير الضغط الخارجي)', msg: '💨 عند صعود البالون وانخفاض P الخارجي يتضاعف الحجم عكسياً (P₁V₁ = P₂V₂).' },
+        { label: '٣ تثبيت الحجم واختبار جاي-لوساك + المكبس', msg: '⚡ في الحجم الثابت يزداد الضغط طردياً مع الحرارة بالكلفن.' },
+        { label: '٤ التحقق الحسابي في جدول القياس', msg: '✅ اكتملت التجارب! أجيبي عن جدول التحقق بالأسفل.' }
       ],
       checks: [
         { label: '١) في قانون بويل (P₁V₁ = 10 atm·L)، ما الحجم باللتر عند P = 2 atm؟', type: 'number', ans: 5, tol: 0.1 },

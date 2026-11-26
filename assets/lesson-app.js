@@ -627,19 +627,26 @@
       requestAnimationFrame(drawIMF);
     } else if (simType === 'phase-diagram') {
       const transitions = [
-        { id: 'melt', label: '🔥 الانصهار (صلب ← سائل)', kind: 'endo', target: 'liquid', t: 15, p: 1, eq: 'صلب + طاقة حرارية ← سائل', ex: 'ذوبان الجليد إلى ماء عند امتصاص حرارة (تغيّر ماص للطاقة +ΔH).' },
-        { id: 'vap', label: '🔥 التبخر (سائل ← غاز)', kind: 'endo', target: 'gas', t: 110, p: 1, eq: 'سائل + طاقة حرارية ← بخار/غاز', ex: 'تبخر الماء المغلي وجفاف الملابس بالهواء (تغيّر ماص للطاقة +ΔH).' },
-        { id: 'sub', label: '🔥 التسامي (صلب ← غاز)', kind: 'endo', target: 'gas', t: -5, p: 0.002, eq: 'صلب + طاقة حرارية ← غاز مباشرة', ex: 'تسامي الثلج الجاف CO₂(s) واليود دون المرور بالحالة السائلة (ماص +ΔH).' },
-        { id: 'freeze', label: '❄️ التجمد (سائل ← صلب)', kind: 'exo', target: 'solid', t: -15, p: 1, eq: 'سائل ← صلب + طاقة منطلقة', ex: 'تحوّل الماء إلى ثلج عند التبريد وفقدان الطاقة الحركية (تغيّر طارد −ΔH).' },
-        { id: 'cond', label: '❄️ التكاثف (غاز ← سائل)', kind: 'exo', target: 'liquid', t: 60, p: 1, eq: 'بخار/غاز ← سائل + طاقة منطلقة', ex: 'تكون الندى والسحب وقطرات الماء على كأس باردة (تغيّر طارد −ΔH).' },
-        { id: 'dep', label: '❄️ الترسب (غاز ← صلب)', kind: 'exo', target: 'solid', t: -18, p: 0.002, eq: 'غاز ← صلب مباشرة + طاقة منطلقة', ex: 'تكوّن الصقيع وبخار الثلج مباشرة على الأسطح الباردة (تغيّر طارد −ΔH).' }
+        { id: 'melt', mat: 'water', label: '🔥 الانصهار (صلب ← سائل)', kind: 'endo', target: 'liquid', t: 15, p: 1, eq: 'H₂O(s) + حرارة ← H₂O(l)', ex: 'ذوبان قطع الثلج إلى ماء عند تسخين الكأس (تغيّر ماص للطاقة +ΔH).' },
+        { id: 'vap', mat: 'water', label: '🔥 التبخر (سائل ← غاز)', kind: 'endo', target: 'gas', t: 110, p: 1, eq: 'H₂O(l) + حرارة ← H₂O(g)', ex: 'غليان الماء وتصاعد البخار بالحرارة المستمرة (تغيّر ماص للطاقة +ΔH).' },
+        { id: 'freeze', mat: 'water', label: '❄️ التجمد (سائل ← صلب)', kind: 'exo', target: 'solid', t: -15, p: 1, eq: 'H₂O(l) ← H₂O(s) + حرارة', ex: 'تبريد الماء السائل فيتحول إلى بلورات ثلج صلبة (تغيّر طارد −ΔH).' },
+        { id: 'cond', mat: 'water', label: '❄️ التكاثف (غاز ← سائل)', kind: 'exo', target: 'condense', t: 60, p: 1, eq: 'H₂O(g) ← H₂O(l) + حرارة', ex: 'ملامسة البخار لغطاء بارد فيتكثف إلى قطرات ماء (تغيّر طارد −ΔH).' },
+        { id: 'sub', mat: 'iodine', label: '🔥 التسامي (يود صلب ← بخار)', kind: 'endo', target: 'sublimate', t: -5, p: 0.002, eq: 'I₂(s) + حرارة ← I₂(g)', ex: 'تسامي اليود الصلب (أو الثلج الجاف) بالحرارة مباشرة إلى أبخرة بنفسجية دون انصهار (تغيّر ماص للطاقة +ΔH).' },
+        { id: 'dep', mat: 'iodine', label: '❄️ الترسب (بخار ← يود صلب)', kind: 'exo', target: 'deposit', t: -18, p: 0.002, eq: 'I₂(g) ← I₂(s) + حرارة', ex: 'تبلور أبخرة اليود البنفسجية مباشرة إلى بلورات صلبة لامعة على السطح المبرّد (تغيّر طارد للطاقة −ΔH).' }
       ];
-      let activeTr = null;
-      const endoRow = el('div', { className: 'sim-controls' }, [el('span', { className: 'page-ref', style: 'background:var(--coral-l);color:var(--coral);', text: 'تغيرات ماصة (+ΔH):' })]);
-      const exoRow = el('div', { className: 'sim-controls' }, [el('span', { className: 'page-ref', style: 'background:var(--surface-tint);color:var(--primary);', text: 'تغيرات طاردة (−ΔH):' })]);
+      let activeTr = transitions[0];
+      let sampleMat = 'water';
+      const matRow = el('div', { className: 'sim-controls' });
+      const btnWater = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: '🧊 دورق الثلج والماء (H₂O)' });
+      const btnIodine = el('button', { type: 'button', className: 'btn btn-sm', text: '💜 دورق اليود الصلب (I₂)' });
+      matRow.appendChild(btnWater);
+      matRow.appendChild(btnIodine);
+
+      const endoRow = el('div', { className: 'sim-controls' }, [el('span', { className: 'page-ref', style: 'background:var(--coral-l);color:var(--coral);', text: 'تغيرات ماصة (+ΔH تسخين):' })]);
+      const exoRow = el('div', { className: 'sim-controls' }, [el('span', { className: 'page-ref', style: 'background:var(--surface-tint);color:var(--primary);', text: 'تغيرات طاردة (−ΔH تبريد):' })]);
 
       const controls = el('div', { className: 'sim-controls' });
-      const tInput = el('input', { type: 'range', min: '-20', max: '400', value: '25', 'aria-label': 'درجة الحرارة بالسيليزية' });
+      const tInput = el('input', { type: 'range', min: '-20', max: '400', value: '15', 'aria-label': 'درجة الحرارة بالسيليزية' });
       const pInput = el('input', { type: 'range', min: '0.001', max: '230', step: '0.5', value: '1', 'aria-label': 'الضغط الجوي' });
       const tLbl = el('span', { className: 'page-ref' });
       const pLbl = el('span', { className: 'page-ref' });
@@ -647,16 +654,17 @@
       controls.appendChild(el('label', { text: 'الضغط (atm): ' }, [pInput, pLbl]));
       const presetRow = el('div', { className: 'sim-controls' });
       const canvasWrap = el('div', { className: 'sim-canvas-wrap' });
-      const canvas = el('canvas', { width: '620', height: '190' });
+      const canvas = el('canvas', { width: '620', height: '215' });
       const readout = el('div', { className: 'sim-readout' });
       canvasWrap.appendChild(canvas);
       canvasWrap.appendChild(readout);
 
       let phaseState = 'liquid';
-      const pts = Array.from({ length: 24 }, function (_, i) {
-        return { gx: 90 + (i % 6) * 26, gy: 52 + Math.floor(i / 6) * 24, x: 75 + Math.random() * 160, y: 55 + Math.random() * 95, vx: (Math.random() - 0.5) * 4, vy: (Math.random() - 0.5) * 4, ph: i };
-      });
 
+      function syncMatBtns() {
+        btnWater.classList.toggle('btn-primary', sampleMat === 'water');
+        btnIodine.classList.toggle('btn-primary', sampleMat === 'iodine');
+      }
       function highlightTr(id) {
         [endoRow, exoRow].forEach(function (r) {
           r.querySelectorAll('button[data-tr]').forEach(function (b) {
@@ -683,22 +691,35 @@
           phaseState = 'critical';
           msg = 'فوق النقطة الحرجة (373.99°C, 217.75 atm): مائع فوق حرج لا يمكن إسالته بزيادة الضغط.';
         } else if (T < 0) {
-          phaseState = 'solid';
-          msg = 'الحالة الصلبة (جليد): الجسيمات مقيدة في شبكة بلورية مفتوحة بروابط هيدروجينية.';
+          phaseState = sampleMat === 'iodine' ? 'deposit' : 'solid';
+          msg = sampleMat === 'iodine' ? 'الحالة الصلبة (I₂): بلورات اليود متماسكة بالبرودة.' : 'الحالة الصلبة (جليد): قطع الثلج مترابطة بشبكة بلورية.';
         } else if (P >= 1 && T >= 0 && T < 100) {
-          phaseState = 'liquid';
-          msg = 'الحالة السائلة (ماء): ضغط البخار أقل من الضغط الخارجي وتنساب الجسيمات.';
+          phaseState = sampleMat === 'iodine' ? 'sublimate' : 'liquid';
+          msg = sampleMat === 'iodine' ? 'تسامي اليود (I₂): أبخرة بنفسجية تتصاعد بالتسخين!' : 'الحالة السائلة (ماء): انصهر الثلج وتنساب الجزيئات في الكأس.';
         } else {
-          phaseState = 'gas';
-          msg = 'الحالة الغازية (بخار ماء): طاقة الجسيمات عالية فتتغلب على قوى التجاذب وتتباعد.';
+          phaseState = sampleMat === 'iodine' ? 'sublimate' : 'gas';
+          msg = sampleMat === 'iodine' ? 'بخار اليود البنفسجي: تملأ الأبخرة الدورق دون طور سائل.' : 'الحالة الغازية (بخار ماء): يتصاعد البخار بقوة من السطح!';
         }
         readout.textContent = msg;
       }
+
+      btnWater.addEventListener('click', function () {
+        sampleMat = 'water'; syncMatBtns();
+        if (!activeTr || activeTr.mat !== 'water') { activeTr = transitions[0]; highlightTr('melt'); tInput.value = 15; pInput.value = 1; }
+        evaluate();
+      });
+      btnIodine.addEventListener('click', function () {
+        sampleMat = 'iodine'; syncMatBtns();
+        if (!activeTr || activeTr.mat !== 'iodine') { activeTr = transitions[4]; highlightTr('sub'); tInput.value = -5; pInput.value = 0.002; }
+        evaluate();
+      });
 
       transitions.forEach(function (tr) {
         const b = el('button', { type: 'button', className: 'btn btn-sm', 'data-tr': tr.id, text: tr.label });
         b.addEventListener('click', function () {
           activeTr = tr;
+          sampleMat = tr.mat;
+          syncMatBtns();
           tInput.value = tr.t;
           pInput.value = tr.p;
           highlightTr(tr.id);
@@ -715,17 +736,17 @@
       ].forEach(function (pr) {
         const b = el('button', { type: 'button', className: 'btn btn-sm', text: pr.label });
         b.addEventListener('click', function () {
-          activeTr = null;
-          highlightTr('');
-          tInput.value = pr.t;
-          pInput.value = pr.p;
+          activeTr = null; highlightTr('');
+          tInput.value = pr.t; pInput.value = pr.p;
           evaluate();
         });
         presetRow.appendChild(b);
       });
       tInput.addEventListener('input', function () { activeTr = null; highlightTr(''); evaluate(); });
       pInput.addEventListener('input', function () { activeTr = null; highlightTr(''); evaluate(); });
+      highlightTr('melt');
       evaluate();
+      box.appendChild(matRow);
       box.appendChild(endoRow);
       box.appendChild(exoRow);
       box.appendChild(controls);
@@ -742,39 +763,122 @@
         const P = Number(pInput.value);
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Left: animated particle chamber
-        ctx.strokeStyle = pal.wall;
-        ctx.lineWidth = 2.5;
-        ctx.strokeRect(30, 18, 250, 154);
-        pts.forEach(function (p) {
-          let px, py;
-          if (phaseState === 'solid') {
-            px = p.gx + Math.sin(tm * 2 + p.ph) * 1.6;
-            py = p.gy + Math.cos(tm * 2 + p.ph) * 1.6;
-          } else if (phaseState === 'liquid' || phaseState === 'triple') {
-            p.x += Math.sin(tm + p.ph) * 1.0;
-            p.y += Math.cos(tm * 0.9 + p.ph) * 0.8;
-            if (p.x < 46) p.x = 264;
-            if (p.x > 264) p.x = 46;
-            if (p.y < 88) p.y = 95;
-            if (p.y > 160) p.y = 155;
-            px = p.x; py = p.y;
-          } else {
-            const sp = phaseState === 'critical' ? 2.1 : 1.4;
-            p.x += p.vx * sp;
-            p.y += p.vy * sp;
-            if (p.x < 42 || p.x > 268) p.vx *= -1;
-            if (p.y < 30 || p.y > 160) p.vy *= -1;
-            px = p.x; py = p.y;
-          }
+        // Left: Visual Apparatus (Water Beaker OR Iodine Sublimation Flask)
+        const bx = 55, by = 26, bw = 200, bh = 148;
+        const isHot = phaseState === 'liquid' || phaseState === 'gas' || phaseState === 'sublimate' || (activeTr && activeTr.kind === 'endo');
+        const isCold = phaseState === 'solid' || phaseState === 'condense' || phaseState === 'deposit' || (activeTr && activeTr.kind === 'exo');
+
+        if (sampleMat === 'iodine') {
+          // Iodine flask body
+          ctx.fillStyle = phaseState === 'sublimate' ? 'rgba(124,92,230,0.34)' : 'rgba(124,92,230,0.12)';
           ctx.beginPath();
-          ctx.arc(px, py, 7, 0, Math.PI * 2);
-          ctx.fillStyle = phaseState === 'solid' ? pal.primary : (phaseState === 'gas' || phaseState === 'critical') ? pal.accent : pal.secondary;
+          ctx.roundRect(bx + 20, by + 20, bw - 40, bh - 20, 26);
           ctx.fill();
-        });
+          ctx.strokeStyle = pal.wall; ctx.lineWidth = 3; ctx.stroke();
+          // Purple vapor plumes during sublimation
+          if (phaseState === 'sublimate' || phaseState === 'deposit') {
+            for (let v = 0; v < 7; v++) {
+              const vy = by + 132 - ((tm * 16 + v * 20) % 92);
+              const vx = bx + 60 + v * 14 + Math.sin(tm * 1.4 + v) * 8;
+              ctx.beginPath();
+              ctx.arc(vx, vy, phaseState === 'sublimate' ? 11 : 7, 0, Math.PI * 2);
+              ctx.fillStyle = phaseState === 'sublimate' ? 'rgba(139,92,246,0.52)' : 'rgba(139,92,246,0.22)';
+              ctx.fill();
+            }
+          }
+          // Solid dark-violet iodine crystals at bottom
+          ctx.fillStyle = '#4c1d95';
+          for (let c = 0; c < 6; c++) {
+            const sz = phaseState === 'sublimate' ? 5 : 10;
+            ctx.fillRect(bx + 54 + c * 16, by + bh - 18, sz, sz);
+          }
+          // Cold watch glass / crystal deposition at top
+          ctx.fillStyle = '#bae6fd';
+          ctx.fillRect(bx + 36, by + 8, bw - 72, 14);
+          if (phaseState === 'deposit') {
+            ctx.fillStyle = '#5b21b6';
+            for (let d = 0; d < 7; d++) {
+              ctx.beginPath();
+              ctx.moveTo(bx + 52 + d * 15, by + 22);
+              ctx.lineTo(bx + 46 + d * 15, by + 35);
+              ctx.lineTo(bx + 58 + d * 15, by + 35);
+              ctx.closePath(); ctx.fill();
+            }
+            ctx.fillStyle = pal.primary; ctx.font = 'bold 12px Tajawal, sans-serif'; ctx.textAlign = 'center';
+            ctx.fillText('❄️ بلورات يود مترسبة بالبرودة', bx + bw / 2, by + 4);
+          } else {
+            ctx.fillStyle = '#6d28d9'; ctx.font = 'bold 12px Tajawal, sans-serif'; ctx.textAlign = 'center';
+            ctx.fillText('💜 أبخرة اليود تتسامى مباشرة (+ΔH)', bx + bw / 2, by + 4);
+          }
+        } else {
+          // Water Beaker + lid
+          ctx.strokeStyle = pal.wall; ctx.lineWidth = 3;
+          ctx.strokeRect(bx + 22, by + 18, bw - 44, bh - 18);
+          if (phaseState === 'condense' || phaseState === 'solid') {
+            ctx.fillStyle = '#bae6fd'; ctx.fillRect(bx + 18, by + 10, bw - 36, 10);
+          }
+          // Liquid water level
+          if (phaseState === 'liquid' || phaseState === 'gas' || phaseState === 'condense' || phaseState === 'triple') {
+            const waterH = phaseState === 'gas' ? 42 : 76;
+            ctx.fillStyle = 'rgba(42,125,225,0.28)';
+            ctx.fillRect(bx + 24, by + bh - waterH, bw - 48, waterH - 2);
+            ctx.strokeStyle = pal.primary; ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (let wx = 0; wx <= bw - 48; wx += 12) {
+              const wy = by + bh - waterH + Math.sin(tm * 2 + wx * 0.12) * 3;
+              if (wx === 0) ctx.moveTo(bx + 24 + wx, wy);
+              else ctx.lineTo(bx + 24 + wx, wy);
+            }
+            ctx.stroke();
+          }
+          // Ice cubes (solid or melting)
+          if (phaseState === 'solid' || (activeTr && activeTr.id === 'melt')) {
+            const iceSz = phaseState === 'solid' ? 28 : Math.max(12, 22 - Math.abs(Math.sin(tm * 0.7)) * 8);
+            const iceY = phaseState === 'solid' ? by + bh - iceSz - 8 : by + bh - 82;
+            for (let k = 0; k < 3; k++) {
+              ctx.fillStyle = 'rgba(186,230,253,0.92)';
+              ctx.strokeStyle = '#38bdf8'; ctx.lineWidth = 2;
+              ctx.fillRect(bx + 44 + k * 40, iceY + (k % 2) * 4, iceSz, iceSz);
+              ctx.strokeRect(bx + 44 + k * 40, iceY + (k % 2) * 4, iceSz, iceSz);
+            }
+          }
+          // Rising steam or falling condensed drops
+          if (phaseState === 'gas' || phaseState === 'condense' || phaseState === 'critical') {
+            for (let s = 0; s < 6; s++) {
+              const sy = phaseState === 'gas'
+                ? by + bh - 45 - ((tm * 18 + s * 22) % 85)
+                : by + 26 + ((tm * 15 + s * 20) % 72);
+              const sx = bx + 52 + s * 20 + Math.sin(tm + s) * 5;
+              ctx.beginPath();
+              ctx.arc(sx, sy, phaseState === 'condense' ? 4.5 : 8, 0, Math.PI * 2);
+              ctx.fillStyle = phaseState === 'condense' ? pal.primary : 'rgba(148,163,184,0.55)';
+              ctx.fill();
+            }
+          }
+          ctx.fillStyle = pal.ink; ctx.font = 'bold 12px Tajawal, sans-serif'; ctx.textAlign = 'center';
+          ctx.fillText(phaseState === 'solid' ? '🧊 تجمد وتكوّن الجليد' : phaseState === 'gas' ? '💨 تبخر وغليان الماء' : phaseState === 'condense' ? '💧 تكثف البخار على الغطاء البارد' : '💧 انصهار الثلج إلى سائل', bx + bw / 2, by + 4);
+        }
+
+        // Flame or cooling badge at base
+        if (isHot) {
+          for (let f = 0; f < 3; f++) {
+            const fh = 12 + Math.sin(tm * 3 + f) * 4;
+            ctx.fillStyle = f === 1 ? '#ffc93c' : '#e4572e';
+            ctx.beginPath();
+            ctx.moveTo(bx + 76 + f * 22, by + bh + 20);
+            ctx.lineTo(bx + 84 + f * 22, by + bh + 20 - fh);
+            ctx.lineTo(bx + 92 + f * 22, by + bh + 20);
+            ctx.closePath(); ctx.fill();
+          }
+          ctx.fillStyle = '#e4572e'; ctx.font = 'bold 12px Tajawal, sans-serif'; ctx.textAlign = 'center';
+          ctx.fillText('🔥 تسخين (+ΔH ماص)', bx + bw / 2, by + bh + 34);
+        } else if (isCold) {
+          ctx.fillStyle = pal.primary; ctx.font = 'bold 12px Tajawal, sans-serif'; ctx.textAlign = 'center';
+          ctx.fillText('❄️ تبريد (−ΔH طارد للحرارة)', bx + bw / 2, by + bh + 28);
+        }
 
         // Right: Phase diagram curves + live dot
-        const ox = 335, oy = 158, w = 250, h = 135;
+        const ox = 335, oy = 172, w = 250, h = 140;
         ctx.strokeStyle = pal.ink;
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -783,7 +887,6 @@
         ctx.lineTo(ox + w, oy);
         ctx.stroke();
 
-        // Phase lines meeting at triple point (tx, ty)
         const tx = ox + 55, ty = oy - 34;
         ctx.strokeStyle = pal.primary;
         ctx.lineWidth = 2.5;
@@ -1633,15 +1736,19 @@
           tone: 'link',
           sectionLabel: 'الربط بالواقع والعلوم الأخرى',
           title: 'الربط بالواقع والعلوم الأخرى · المفهوم ' + (cIdx + 1),
-          badge: 'تطبيق حياتي وعلمي',
+          badge: 'أمثلة مصورة من الحياة والعلوم',
           render: function () {
             const grid = el('div', { className: 'spotlight-grid' });
-            cycleLinks.forEach(function (lk) {
-              grid.appendChild(el('div', { className: 'link-spotlight-card' }, [
-                el('span', { className: 'discovery-tag', style: 'color:var(--teal);', html: lk.tag }),
-                el('h4', { html: lk.title }),
-                el('p', { html: lk.text })
-              ]));
+            cycleLinks.forEach(function (lk, lkIdx) {
+              const svgHtml = window.CHEM_LINK_SVGS && window.CHEM_LINK_SVGS.getFor(lesson.id, lk, lkIdx);
+              const children = [];
+              if (svgHtml) {
+                children.push(el('div', { className: 'link-illus-wrap', html: svgHtml }));
+              }
+              children.push(el('span', { className: 'discovery-tag', style: 'color:var(--teal);', html: lk.tag }));
+              children.push(el('h4', { html: lk.title }));
+              children.push(el('p', { html: lk.text }));
+              grid.appendChild(el('div', { className: 'link-spotlight-card interactive-link-card' }, children));
             });
             return grid;
           }
