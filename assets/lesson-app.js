@@ -626,6 +626,18 @@
       }
       requestAnimationFrame(drawIMF);
     } else if (simType === 'phase-diagram') {
+      const transitions = [
+        { id: 'melt', label: '🔥 الانصهار (صلب ← سائل)', kind: 'endo', target: 'liquid', t: 15, p: 1, eq: 'صلب + طاقة حرارية ← سائل', ex: 'ذوبان الجليد إلى ماء عند امتصاص حرارة (تغيّر ماص للطاقة +ΔH).' },
+        { id: 'vap', label: '🔥 التبخر (سائل ← غاز)', kind: 'endo', target: 'gas', t: 110, p: 1, eq: 'سائل + طاقة حرارية ← بخار/غاز', ex: 'تبخر الماء المغلي وجفاف الملابس بالهواء (تغيّر ماص للطاقة +ΔH).' },
+        { id: 'sub', label: '🔥 التسامي (صلب ← غاز)', kind: 'endo', target: 'gas', t: -5, p: 0.002, eq: 'صلب + طاقة حرارية ← غاز مباشرة', ex: 'تسامي الثلج الجاف CO₂(s) واليود دون المرور بالحالة السائلة (ماص +ΔH).' },
+        { id: 'freeze', label: '❄️ التجمد (سائل ← صلب)', kind: 'exo', target: 'solid', t: -15, p: 1, eq: 'سائل ← صلب + طاقة منطلقة', ex: 'تحوّل الماء إلى ثلج عند التبريد وفقدان الطاقة الحركية (تغيّر طارد −ΔH).' },
+        { id: 'cond', label: '❄️ التكاثف (غاز ← سائل)', kind: 'exo', target: 'liquid', t: 60, p: 1, eq: 'بخار/غاز ← سائل + طاقة منطلقة', ex: 'تكون الندى والسحب وقطرات الماء على كأس باردة (تغيّر طارد −ΔH).' },
+        { id: 'dep', label: '❄️ الترسب (غاز ← صلب)', kind: 'exo', target: 'solid', t: -18, p: 0.002, eq: 'غاز ← صلب مباشرة + طاقة منطلقة', ex: 'تكوّن الصقيع وبخار الثلج مباشرة على الأسطح الباردة (تغيّر طارد −ΔH).' }
+      ];
+      let activeTr = null;
+      const endoRow = el('div', { className: 'sim-controls' }, [el('span', { className: 'page-ref', style: 'background:var(--coral-l);color:var(--coral);', text: 'تغيرات ماصة (+ΔH):' })]);
+      const exoRow = el('div', { className: 'sim-controls' }, [el('span', { className: 'page-ref', style: 'background:var(--surface-tint);color:var(--primary);', text: 'تغيرات طاردة (−ΔH):' })]);
+
       const controls = el('div', { className: 'sim-controls' });
       const tInput = el('input', { type: 'range', min: '-20', max: '400', value: '25', 'aria-label': 'درجة الحرارة بالسيليزية' });
       const pInput = el('input', { type: 'range', min: '0.001', max: '230', step: '0.5', value: '1', 'aria-label': 'الضغط الجوي' });
@@ -645,11 +657,24 @@
         return { gx: 90 + (i % 6) * 26, gy: 52 + Math.floor(i / 6) * 24, x: 75 + Math.random() * 160, y: 55 + Math.random() * 95, vx: (Math.random() - 0.5) * 4, vy: (Math.random() - 0.5) * 4, ph: i };
       });
 
+      function highlightTr(id) {
+        [endoRow, exoRow].forEach(function (r) {
+          r.querySelectorAll('button[data-tr]').forEach(function (b) {
+            b.classList.toggle('btn-primary', b.getAttribute('data-tr') === id);
+          });
+        });
+      }
+
       function evaluate() {
         const T = Number(tInput.value);
         const P = Number(pInput.value);
         tLbl.textContent = ' ' + T + ' °C';
         pLbl.textContent = ' ' + P + ' atm';
+        if (activeTr) {
+          phaseState = activeTr.target;
+          readout.innerHTML = '<strong>' + activeTr.label + '</strong> · <span class="chem">' + activeTr.eq + '</span> : ' + activeTr.ex;
+          return;
+        }
         let msg = '';
         if (Math.abs(T - 0.01) < 1 && P < 0.5) {
           phaseState = 'triple';
@@ -670,6 +695,19 @@
         readout.textContent = msg;
       }
 
+      transitions.forEach(function (tr) {
+        const b = el('button', { type: 'button', className: 'btn btn-sm', 'data-tr': tr.id, text: tr.label });
+        b.addEventListener('click', function () {
+          activeTr = tr;
+          tInput.value = tr.t;
+          pInput.value = tr.p;
+          highlightTr(tr.id);
+          playChime(tr.kind === 'endo' ? 660 : 520, 0.14);
+          evaluate();
+        });
+        (tr.kind === 'endo' ? endoRow : exoRow).appendChild(b);
+      });
+
       [
         { label: 'ظروف الغرفة (25°C, 1 atm)', t: 25, p: 1 },
         { label: 'النقطة الثلاثية (~0°C, 0.006 atm)', t: 0, p: 0.006 },
@@ -677,15 +715,19 @@
       ].forEach(function (pr) {
         const b = el('button', { type: 'button', className: 'btn btn-sm', text: pr.label });
         b.addEventListener('click', function () {
+          activeTr = null;
+          highlightTr('');
           tInput.value = pr.t;
           pInput.value = pr.p;
           evaluate();
         });
         presetRow.appendChild(b);
       });
-      tInput.addEventListener('input', evaluate);
-      pInput.addEventListener('input', evaluate);
+      tInput.addEventListener('input', function () { activeTr = null; highlightTr(''); evaluate(); });
+      pInput.addEventListener('input', function () { activeTr = null; highlightTr(''); evaluate(); });
       evaluate();
+      box.appendChild(endoRow);
+      box.appendChild(exoRow);
       box.appendChild(controls);
       box.appendChild(presetRow);
       box.appendChild(canvasWrap);
