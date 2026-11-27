@@ -1559,6 +1559,7 @@
     lesson.concepts.forEach(function (c, cIdx) {
       const isLast = cIdx === totalCycles - 1;
       const illusHtml = window.CHEM_ILLUSTRATIONS && window.CHEM_ILLUSTRATIONS[lesson.id + '-' + cIdx];
+      const widgetNode = c.widgetId && window.CHEM_INTERACTIVE_WIDGETS && window.CHEM_INTERACTIVE_WIDGETS.createForConcept(c.widgetId);
       const bookFig = bookFigs[cIdx === 0 && totalCycles > 1 && bookFigs.length < 2 ? -1 : (bookFigs.length > 1 ? Math.min(cIdx, bookFigs.length - 1) : (isLast ? 0 : -1))];
 
       slides.push({
@@ -1566,12 +1567,33 @@
         tone: 'concept',
         sectionLabel: 'شرح المفهوم ' + (cIdx + 1),
         title: c.title,
-        badge: bookFig ? 'شرح + شكل من الكتاب' : (illusHtml ? 'شرح + رسم توضيحي' : lesson.pages),
+        badge: widgetNode ? 'شرح + تفاعل بصري' : (bookFig ? 'شرح + شكل من الكتاب' : (illusHtml ? 'شرح + رسم توضيحي' : lesson.pages)),
         render: function () {
           const bodyNode = el('div', { className: 'concept-slide-body', html: c.bodyHtml });
-          if (!illusHtml && !bookFig) return bodyNode;
+          if (!illusHtml && !bookFig && !widgetNode) return bodyNode;
           const visualCard = el('div', { className: 'concept-visual-card' });
-          if (bookFig && illusHtml && window.createBookFigureCard) {
+          if (widgetNode && bookFig && window.createBookFigureCard) {
+            let showWidget = true;
+            const swRow = el('div', { style: 'display:flex;gap:0.4rem;justify-content:center;margin-bottom:0.45rem;flex-wrap:wrap;' });
+            const btnW = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: '✨ تفاعل توضيحي' });
+            const btnBook = el('button', { type: 'button', className: 'btn btn-sm', text: '📖 شكل من الكتاب' });
+            const bookNode = window.createBookFigureCard(bookFig);
+            bookNode.hidden = true;
+            function syncW() {
+              widgetNode.hidden = !showWidget;
+              bookNode.hidden = showWidget;
+              btnW.classList.toggle('btn-primary', showWidget);
+              btnBook.classList.toggle('btn-primary', !showWidget);
+            }
+            btnW.addEventListener('click', function () { showWidget = true; syncW(); });
+            btnBook.addEventListener('click', function () { showWidget = false; syncW(); });
+            swRow.appendChild(btnW); swRow.appendChild(btnBook);
+            visualCard.appendChild(swRow);
+            visualCard.appendChild(widgetNode);
+            visualCard.appendChild(bookNode);
+          } else if (widgetNode) {
+            visualCard.appendChild(widgetNode);
+          } else if (bookFig && illusHtml && window.createBookFigureCard) {
             let showBook = true;
             const swRow = el('div', { style: 'display:flex;gap:0.4rem;justify-content:center;margin-bottom:0.45rem;flex-wrap:wrap;' });
             const btnBook = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: '📖 شكل من الكتاب' });
@@ -1751,6 +1773,19 @@
               grid.appendChild(el('div', { className: 'link-spotlight-card interactive-link-card' }, children));
             });
             return grid;
+          }
+        });
+      }
+
+      if (isLast && lesson.hasCrystalGame && window.CHEM_INTERACTIVE_WIDGETS && window.CHEM_INTERACTIVE_WIDGETS.createCrystalExplorerSlide) {
+        slides.push({
+          sectionId: 'content',
+          tone: 'sim',
+          sectionLabel: 'تفاعل وأنشطة البلورات',
+          title: '💎 مستكشف الأنظمة البلورية السبعة ولعبة التصنيف (ص 239–240)',
+          badge: 'تفاعلي · الجدول 6-4 و 6-5',
+          render: function () {
+            return window.CHEM_INTERACTIVE_WIDGETS.createCrystalExplorerSlide();
           }
         });
       }

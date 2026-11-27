@@ -1096,4 +1096,178 @@
       ]
     }
   };
+
+  /* Interactive Visual Widgets & Games imported cleanly for 6-3 */
+  window.CHEM_INTERACTIVE_WIDGETS = {
+    createForConcept: function (widgetId) {
+      if (widgetId === '6-3-syrup') {
+        const box = el('div', { style: 'display:flex;flex-direction:column;align-items:center;gap:0.45rem;width:100%;' });
+        const btns = el('div', { style: 'display:flex;gap:0.4rem;flex-wrap:wrap;justify-content:center;' });
+        const bCold = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: '❄️ القَطْر من الثلاجة' });
+        const bHot = el('button', { type: 'button', className: 'btn btn-sm', text: '🔥 القَطْر بعد التسخين' });
+        const svgWrap = el('div', { html: '<svg viewBox="0 0 220 220" class="concept-svg" style="max-width:210px;" aria-label="قنينة قطر تقطر"><path d="M80 12 h60 v36 c0 14 34 20 34 50 v90 c0 14 -12 22 -26 22 h-76 c-14 0 -26 -8 -26 -22 v-90 c0 -30 34 -36 34 -50z" fill="var(--gold-l)" stroke="var(--primary)" stroke-width="4"/><rect x="58" y="110" width="104" height="86" rx="10" fill="var(--gold)"/><circle id="syrupDrop" cx="110" cy="206" r="9" fill="var(--coral)"><animate attributeName="cy" values="196;216;196" dur="3.4s" repeatCount="indefinite"/></circle></svg>' });
+        const note = el('span', { className: 'page-ref', text: 'بارد ← لزوجة عالية ← يتدفق ببطء' });
+        bCold.addEventListener('click', function () {
+          bCold.classList.add('btn-primary'); bHot.classList.remove('btn-primary');
+          const anim = svgWrap.querySelector('animate'); if (anim) anim.setAttribute('dur', '3.4s');
+          note.textContent = 'بارد ← لزوجة عالية ← يتدفق ببطء';
+        });
+        bHot.addEventListener('click', function () {
+          bHot.classList.add('btn-primary'); bCold.classList.remove('btn-primary');
+          const anim = svgWrap.querySelector('animate'); if (anim) anim.setAttribute('dur', '0.9s');
+          note.textContent = 'ساخن ← طاقة حركية أعلى ← لزوجة أقل';
+        });
+        btns.appendChild(bCold); btns.appendChild(bHot);
+        box.appendChild(btns); box.appendChild(svgWrap); box.appendChild(note);
+        return box;
+      }
+      if (widgetId === '6-3-tension') {
+        const box = el('div', { style: 'display:flex;flex-direction:column;align-items:center;gap:0.45rem;width:100%;' });
+        const btns = el('div', { style: 'display:flex;gap:0.35rem;flex-wrap:wrap;justify-content:center;' });
+        const bTension = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: '🧲 أسهم التوتر السطحي' });
+        const bWater = el('button', { type: 'button', className: 'btn btn-sm', text: '💧 مخبار الماء (مقعر)' });
+        const bMerc = el('button', { type: 'button', className: 'btn btn-sm', text: '☿️ مخبار الزئبق (محدب)' });
+        const stage = el('div', { style: 'width:100%;display:flex;justify-content:center;' });
+        const note = el('span', { className: 'muted-note', style: 'font-size:0.85rem;font-weight:700;text-align:center;' });
+
+        function showTension() {
+          [bTension, bWater, bMerc].forEach(x => x.classList.remove('btn-primary')); bTension.classList.add('btn-primary');
+          stage.innerHTML = '<svg viewBox="0 0 320 200" class="concept-svg" aria-label="قوى الجذب على السطح وفي الداخل"><rect x="18" y="45" width="284" height="140" rx="14" fill="var(--surface-tint)"/><circle cx="160" cy="45" r="16" fill="var(--coral)"/><circle cx="105" cy="45" r="13" fill="var(--primary)" opacity=".5"/><circle cx="215" cy="45" r="13" fill="var(--primary)" opacity=".5"/><circle cx="160" cy="128" r="16" fill="var(--primary)"/><line x1="160" y1="45" x2="160" y2="85" stroke="var(--coral)" stroke-width="4"/><line x1="160" y1="45" x2="122" y2="45" stroke="var(--coral)" stroke-width="4"/><line x1="160" y1="45" x2="198" y2="45" stroke="var(--coral)" stroke-width="4"/><line x1="160" y1="128" x2="160" y2="92" stroke="var(--green)" stroke-width="3.5"/><line x1="160" y1="128" x2="160" y2="164" stroke="var(--green)" stroke-width="3.5"/><line x1="160" y1="128" x2="122" y2="128" stroke="var(--green)" stroke-width="3.5"/><line x1="160" y1="128" x2="198" y2="128" stroke="var(--green)" stroke-width="3.5"/><text x="160" y="24" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ink)">جسيم السطح يُجذب للداخل والجانبين فقط</text></svg>';
+          note.textContent = 'عدم تكافؤ القوى على السطح يجعله مشدوداً كالطبلة!';
+        }
+        function showMeniscus(isMerc) {
+          [bTension, bWater, bMerc].forEach(x => x.classList.remove('btn-primary'));
+          (isMerc ? bMerc : bWater).classList.add('btn-primary');
+          const dPath = isMerc ? 'M112 105 Q160 65 208 105 L208 182 L112 182z' : 'M112 90 Q160 125 208 90 L208 182 L112 182z';
+          const fill = isMerc ? '#94a3b8' : 'var(--primary)';
+          stage.innerHTML = '<svg viewBox="0 0 320 200" class="concept-svg" aria-label="تقعر وتحدب سطح السائل"><rect x="110" y="20" width="100" height="164" fill="var(--bg)" stroke="var(--ink)" stroke-width="4"/><path d="' + dPath + '" fill="' + fill + '" opacity="0.82"/><text x="160" y="196" text-anchor="middle" font-size="13" font-weight="800" fill="var(--ink)">' + (isMerc ? 'الزئبق: التماسك > التلاصق ← محدّب' : 'الماء: التلاصق > التماسك ← مقعّر') + '</text></svg>';
+          note.textContent = isMerc ? 'التماسك بين ذرات الزئبق أقوى من تلاصقها بالزجاج.' : 'التلاصق بين الماء والزجاج أقوى من تماسك جزيئات الماء.';
+        }
+        bTension.addEventListener('click', showTension);
+        bWater.addEventListener('click', function () { showMeniscus(false); });
+        bMerc.addEventListener('click', function () { showMeniscus(true); });
+        showTension();
+        btns.appendChild(bTension); btns.appendChild(bWater); btns.appendChild(bMerc);
+        box.appendChild(btns); box.appendChild(stage); box.appendChild(note);
+        return box;
+      }
+      if (widgetId === '6-3-crystals') {
+        const box = el('div', { style: 'display:flex;flex-direction:column;align-items:center;gap:0.4rem;width:100%;' });
+        const btns = el('div', { style: 'display:flex;gap:0.35rem;flex-wrap:wrap;justify-content:center;' });
+        const names = ['مكعب بسيط', 'مركزي الجسم', 'مركزي الوجه'];
+        const descs = [
+          'مكعب بسيط: الجسيمات عند زوايا المكعب الثماني فقط.',
+          'مكعب مركزي الجسم: زوايا المكعب + جسيم واحد في المركز.',
+          'مكعب مركزي الوجه: الزوايا + وسط الأوجه الستة للمكعب.'
+        ];
+        const stage = el('div', { style: 'width:100%;display:flex;justify-content:center;' });
+        const note = el('span', { className: 'muted-note', style: 'font-size:0.84rem;font-weight:700;text-align:center;' });
+        function drawCube(t) {
+          btns.querySelectorAll('button').forEach((b, i) => b.classList.toggle('btn-primary', i === t));
+          const A = [[70, 72], [170, 72], [170, 172], [70, 172]];
+          const B = A.map(p => [p[0] + 42, p[1] - 42]);
+          let svg = '<svg viewBox="0 0 280 205" class="concept-svg" style="max-width:250px;" aria-label="وحدة البناء المكعبة">';
+          for (let i = 0; i < 4; i++) {
+            const n = (i + 1) % 4;
+            svg += '<line x1="' + A[i][0] + '" y1="' + A[i][1] + '" x2="' + A[n][0] + '" y2="' + A[n][1] + '" stroke="var(--primary)" stroke-width="3"/>';
+            svg += '<line x1="' + B[i][0] + '" y1="' + B[i][1] + '" x2="' + B[n][0] + '" y2="' + B[n][1] + '" stroke="var(--primary)" stroke-width="3"' + ((i === 2 || i === 3) ? ' stroke-dasharray="5 5"' : '') + '/>';
+            svg += '<line x1="' + A[i][0] + '" y1="' + A[i][1] + '" x2="' + B[i][0] + '" y2="' + B[i][1] + '" stroke="var(--primary)" stroke-width="3"' + (i === 3 ? ' stroke-dasharray="5 5"' : '') + '/>';
+          }
+          A.concat(B).forEach(p => { svg += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="8" fill="var(--primary)"/>'; });
+          if (t === 1) svg += '<circle cx="141" cy="101" r="10" fill="var(--coral)"/>';
+          if (t === 2) {
+            [[120, 122], [162, 80], [141, 51], [141, 151], [91, 101], [191, 101]].forEach(p => {
+              svg += '<circle cx="' + p[0] + '" cy="' + p[1] + '" r="8" fill="var(--coral)"/>';
+            });
+          }
+          svg += '</svg>';
+          stage.innerHTML = svg;
+          note.textContent = descs[t];
+        }
+        names.forEach((n, i) => {
+          const b = el('button', { type: 'button', className: 'btn btn-sm', text: n });
+          b.addEventListener('click', () => drawCube(i));
+          btns.appendChild(b);
+        });
+        drawCube(0);
+        box.appendChild(btns); box.appendChild(stage); box.appendChild(note);
+        return box;
+      }
+      return null;
+    },
+    createCrystalExplorerSlide: function () {
+      const wrap = el('div', { className: 'vlab-grid' });
+      const sysBox = el('div', { className: 'vlab-steps-col' }, [
+        el('h4', { className: 'vlab-steps-title', text: '💎 الأنظمة البلورية السبعة (الجدول 6-4 · ص 239)' })
+      ]);
+      const SYS = [
+        ['مكعب', 'a = b = c', 'α = β = γ = 90°', 'مثال: الهالايت (NaCl)'],
+        ['رباعي الأوجه', 'a = b ≠ c', 'α = β = γ = 90°', 'مثال: الفيزوفيانايت'],
+        ['متوازي مستطيلات', 'a ≠ b ≠ c', 'α = β = γ = 90°', 'مثال: الأراجونايت'],
+        ['سداسي الأوجه', 'a = b ≠ c', 'α = β = 90°, γ = 120°', 'مثال: التورمالين / الجرافيت'],
+        ['معيني', 'a = b = c', 'α = β = γ ≠ 90°', 'مثال: الزمرد / الكالسيت'],
+        ['أحادي الميل', 'a ≠ b ≠ c', 'α = γ = 90° ≠ β', 'مثال: الكروسيت'],
+        ['ثلاثي الميل', 'a ≠ b ≠ c', 'α ≠ β ≠ γ ≠ 90°', 'مثال: الميكروكلاين']
+      ];
+      const sysBtns = el('div', { className: 'sim-controls' });
+      const sysOut = el('div', { className: 'vlab-step-msg', style: 'text-align:center;' });
+      SYS.forEach((s, i) => {
+        const b = el('button', { type: 'button', className: 'btn btn-sm' + (i === 0 ? ' btn-primary' : ''), text: s[0] });
+        b.addEventListener('click', () => {
+          sysBtns.querySelectorAll('button').forEach(x => x.classList.remove('btn-primary'));
+          b.classList.add('btn-primary');
+          sysOut.innerHTML = '<strong>' + s[0] + '</strong><br><span class="chem">' + s[1] + ' | ' + s[2] + '</span><br>' + s[3];
+        });
+        sysBtns.appendChild(b);
+      });
+      sysOut.innerHTML = '<strong>' + SYS[0][0] + '</strong><br><span class="chem">' + SYS[0][1] + ' | ' + SYS[0][2] + '</span><br>' + SYS[0][3];
+      sysBox.appendChild(sysBtns); sysBox.appendChild(sysOut);
+
+      const gameBox = el('div', { className: 'vlab-verify-card' }, [
+        el('h4', { text: '🎮 لعبة التصنيف: حدّدي نوع المادة الصلبة البلورية (الجدول 6-5)' })
+      ]);
+      const TYPES = ['ذرية', 'جزيئية', 'تساهمية شبكية', 'أيونية', 'فلزية'];
+      const ITEMS = [
+        ['Ar', 0, 'من عناصر المجموعة 18 وبين ذراتها قوى تشتت ضعيفة.'],
+        ['SiO₂ (الكوارتز)', 2, 'ذرات مترابطة بروابط تساهمية في شبكة ثلاثية الأبعاد.'],
+        ['NaCl', 3, 'بلورة أيونية من أيونات موجبة وسالبة صلبة وهشة.'],
+        ['Cu (النحاس)', 4, 'أيونات موجبة في بحر من الإلكترونات الحرة.'],
+        ['C₁₂H₂₂O₁₁ (السكر)', 1, 'مادة صلبة جزيئية رديئة التوصيل.'],
+        ['C (الألماس)', 2, 'شبكة تساهمية من ذرات الكربون شديدة الصلابة.']
+      ];
+      let gi = 0, gScore = 0, gLocked = false;
+      const gPrompt = el('div', { className: 'chem', style: 'font-size:1.35rem;font-weight:900;text-align:center;margin:0.35rem 0;' });
+      const gOpts = el('div', { className: 'sim-controls' });
+      const gFb = el('div', { className: 'vlab-step-msg', style: 'text-align:center;min-height:36px;' });
+      const gFoot = el('div', { style: 'display:flex;justify-content:space-between;align-items:center;margin-top:0.4rem;' });
+      const gNext = el('button', { type: 'button', className: 'btn btn-sm btn-primary', text: 'المادة التالية ←' });
+      const gScLbl = el('span', { className: 'page-ref', text: 'النقاط: 0' });
+      function renderGame() {
+        const it = ITEMS[gi]; gLocked = false;
+        gPrompt.textContent = it[0];
+        gFb.textContent = 'اختاري نوع المادة الصلبة المناسب من الخيارات أعلاه.';
+        gOpts.innerHTML = '';
+        TYPES.forEach((t, i) => {
+          const b = el('button', { type: 'button', className: 'btn btn-sm', text: t });
+          b.addEventListener('click', () => {
+            if (gLocked) return;
+            if (i === it[1]) {
+              gLocked = true; gScore++; b.classList.add('btn-primary');
+              gFb.textContent = '✅ صحيح! ' + it[2];
+              gScLbl.textContent = 'النقاط: ' + gScore;
+            } else {
+              gFb.textContent = '❌ حاولي مرة أخرى بالرجوع للجدول.';
+            }
+          });
+          gOpts.appendChild(b);
+        });
+      }
+      gNext.addEventListener('click', () => { gi = (gi + 1) % ITEMS.length; renderGame(); });
+      renderGame();
+      gFoot.appendChild(gNext); gFoot.appendChild(gScLbl);
+      gameBox.appendChild(gPrompt); gameBox.appendChild(gOpts); gameBox.appendChild(gFb); gameBox.appendChild(gFoot);
+      wrap.appendChild(sysBox); wrap.appendChild(gameBox);
+      return wrap;
+    }
+  };
 })();
