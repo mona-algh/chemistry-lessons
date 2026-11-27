@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔬 مختبر الغازات الافتراضي | معمل افتراضي مستقل</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><polygon points='18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5' stroke='%232a7de1' stroke-width='2.4' fill='none'/><circle cx='18' cy='18' r='4.5' fill='%230b8a4a'/></svg>">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <script src="../assets/theme.js"></script>
+  <style>
+    :root {
+      --lab-bg: #f7f5f0;
+      --lab-surface: #ffffff;
+      --lab-surface2: #faf8f3;
+      --lab-ink: #1d2742;
+      --lab-muted: #5d6886;
+      --lab-line: #e6e1d6;
+      --lab-accent: #2a7de1;
+      --lab-accent-ink: #ffffff;
+      --lab-accentbg: #e6f0fd;
+      --lab-hot: #e4572e;
+      --lab-hotbg: #fdebe5;
+      --lab-cold: #2a7de1;
+      --lab-coldbg: #e6f0fd;
+      --lab-gold: #d79b14;
+      --lab-goldbg: #fff4d6;
+      --lab-ok: #0b8a4a;
+      --lab-okbg: #e5f6ec;
+      --lab-glass: #eef5fc;
+      --lab-metal: #64748b;
+      --lab-water-c: #cfe4f7;
+      --lab-water-h: #f7d2b8;
+    }
+    [data-theme="dark"] {
+      --lab-bg: #101729;
+      --lab-surface: #18223b;
+      --lab-surface2: #1e2a48;
+      --lab-ink: #f2f5ff;
+      --lab-muted: #aab8d6;
+      --lab-line: #2e3e66;
+      --lab-accent: #5aa9ff;
+      --lab-accent-ink: #101729;
+      --lab-accentbg: #1a2d52;
+      --lab-hot: #ff7c54;
+      --lab-hotbg: #361d17;
+      --lab-cold: #5aa9ff;
+      --lab-coldbg: #1a2d52;
+      --lab-gold: #ffc93c;
+      --lab-goldbg: #332812;
+      --lab-ok: #34c77b;
+      --lab-okbg: #123324;
+      --lab-glass: #1e2d4a;
+      --lab-metal: #94a3b8;
+      --lab-water-c: #22405e;
+      --lab-water-h: #5a3524;
+    }
+    html, body { overflow-x: hidden; }
+    body { background: var(--lab-bg); color: var(--lab-ink); font-family: 'Tajawal', Tahoma, sans-serif; font-size: 18px; line-height: 1.7; }
+    .page { max-width: 1280px; margin: 0 auto; padding: 18px 16px 48px; display: flex; flex-direction: column; gap: 18px; }
+    .ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; }
+    .num { font-variant-numeric: tabular-nums; }
+    .top {
+      background: linear-gradient(120deg, #0b8a4a 0%, #0e9aa7 45%, #2a7de1 100%);
+      color: #ffffff; border-radius: 22px; padding: 1.25rem 1.6rem;
+      display: flex; flex-wrap: wrap; gap: 12px 24px; align-items: flex-end; justify-content: space-between;
+      box-shadow: 0 10px 26px rgba(42, 125, 225, 0.2);
+    }
+    .top .eyebrow { margin: 0; font-weight: 800; opacity: 0.92; font-size: 0.95rem; }
+    .top h1 { margin: 0; font-size: clamp(24px, 3.4vw, 36px); font-weight: 900; line-height: 1.3; }
+    .top .note { color: rgba(255, 255, 255, 0.92); margin: 0; font-size: 1rem; }
+    .who { display: flex; flex-wrap: wrap; gap: 8px; }
+    .who input { border: 2px solid rgba(255, 255, 255, 0.45); background: rgba(255, 255, 255, 0.16); color: #ffffff; border-radius: 12px; min-height: 44px; padding: 0 12px; width: 170px; max-width: 100%; font-weight: 700; }
+    .who input::placeholder { color: rgba(255, 255, 255, 0.85); }
+    .picker { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    .picker a { display: flex; flex-direction: column; gap: 2px; text-decoration: none; color: var(--lab-ink); background: var(--lab-surface); border: 2px solid var(--lab-line); border-radius: 16px; padding: 12px 14px; min-width: 0; }
+    .picker a b { font-size: 19px; font-weight: 900; }
+    .picker a small { color: var(--lab-muted); font-size: 14px; font-weight: 600; }
+    .picker a[aria-current="true"] { border-color: var(--lab-accent); background: var(--lab-accentbg); }
+    @media (max-width: 640px) { .picker { grid-template-columns: 1fr; } }
+    .bench { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+    @media (max-width: 900px) { .bench { grid-template-columns: 1fr; } }
+    .rig { position: sticky; top: 76px; display: flex; flex-direction: column; gap: 12px; background: var(--lab-surface); border: 2px solid var(--lab-line); border-top: 7px solid var(--lab-accent); border-radius: 20px; padding: 14px; box-shadow: var(--shadow-sm); }
+    @media (max-width: 900px) { .rig { position: static; } }
+    #cv { width: 100%; aspect-ratio: 560/380; max-width: 100%; display: block; border-radius: 14px; background: var(--lab-surface2); border: 1px solid var(--lab-line); }
+    .reads { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+    .rd { background: var(--lab-surface2); border: 1.5px solid var(--lab-line); border-radius: 12px; padding: 6px 10px; text-align: center; min-width: 0; }
+    .rd small { display: block; color: var(--lab-muted); font-size: 13px; font-weight: 700; }
+    .rd b { font-weight: 900; font-size: 23px; line-height: 1.3; font-variant-numeric: tabular-nums; direction: ltr; unicode-bidi: isolate; display: block; }
+    .rd.wait b { color: var(--lab-gold); }
+    .ctrl { display: flex; flex-direction: column; gap: 8px; }
+    .ctrl label { font-weight: 800; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .ctrl input[type=range] { width: 100%; height: 34px; accent-color: var(--lab-accent); }
+    .quick { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { border: 2px solid var(--lab-line); background: var(--lab-surface); color: var(--lab-ink); border-radius: 999px; min-height: 40px; padding: 0 13px; font-weight: 700; cursor: pointer; }
+    .chip.cold { border-color: var(--lab-cold); color: var(--lab-cold); }
+    .chip.hot { border-color: var(--lab-hot); color: var(--lab-hot); }
+    .chip[aria-pressed="true"] { background: var(--lab-accent); border-color: var(--lab-accent); color: var(--lab-accent-ink); }
+    .lbtn { border: 0; border-radius: 14px; min-height: 48px; padding: 0 18px; font-weight: 800; font-size: 16px; background: var(--lab-accent); color: var(--lab-accent-ink); cursor: pointer; }
+    .lbtn.ghost { background: transparent; color: var(--lab-accent); border: 2px solid var(--lab-accent); }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .status { min-height: 1.6em; font-weight: 700; color: var(--lab-muted); margin: 0; }
+    .status.ok { color: var(--lab-ok); }
+    .status.warn { color: var(--lab-hot); }
+    .sheet { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+    .step { background: var(--lab-surface); border: 2px solid var(--lab-line); border-radius: 18px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+    .step header { display: flex; gap: 10px; align-items: center; }
+    .step header h2 { margin: 0; font-size: 21px; font-weight: 900; }
+    .step header .n { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--lab-accentbg); color: var(--lab-accent); display: grid; place-items: center; font-weight: 900; }
+    .q { font-size: 19px; font-weight: 700; margin: 0; }
+    .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .opt { border: 2px solid var(--lab-line); background: var(--lab-surface2); color: var(--lab-ink); border-radius: 12px; min-height: 44px; padding: 0 16px; font-weight: 700; cursor: pointer; }
+    .opt[aria-pressed="true"] { border-color: var(--lab-accent); background: var(--lab-accentbg); }
+    .opt.right { border-color: var(--lab-ok); background: var(--lab-okbg); color: var(--lab-ok); }
+    .opt.wrong { border-color: var(--lab-hot); background: var(--lab-hotbg); color: var(--lab-hot); }
+    .tools { display: flex; flex-wrap: wrap; gap: 6px; padding: 0; margin: 0; list-style: none; }
+    .tools li { background: var(--lab-surface2); border: 1px solid var(--lab-line); border-radius: 999px; padding: 2px 12px; font-size: 15px; font-weight: 700; }
+    .tablewrap { overflow-x: auto; border: 1.5px solid var(--lab-line); border-radius: 12px; }
+    .tablewrap table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 16px; }
+    .tablewrap th, .tablewrap td { padding: 6px 10px; text-align: center; border-bottom: 1px solid var(--lab-line); white-space: nowrap; }
+    .tablewrap th { background: var(--lab-surface2); font-weight: 800; }
+    .tablewrap td .x { border: 0; background: none; color: var(--lab-muted); min-height: 36px; min-width: 36px; font-size: 18px; cursor: pointer; }
+    .empty { color: var(--lab-muted); text-align: center; padding: 14px; }
+    #plot { width: 100%; aspect-ratio: 16/10; max-width: 100%; display: block; border-radius: 12px; background: var(--lab-surface2); border: 1.5px solid var(--lab-line); }
+    .callout { border-radius: 12px; padding: 10px 14px; font-weight: 700; margin: 0; }
+    .callout.ok { background: var(--lab-okbg); color: var(--lab-ok); }
+    .callout.info { background: var(--lab-accentbg); color: var(--lab-accent); }
+    .callout.warn { background: var(--lab-hotbg); color: var(--lab-hot); }
+    .callout.gold { background: var(--lab-goldbg); }
+    .law { font-weight: 900; font-size: 25px; text-align: center; direction: ltr; unicode-bidi: isolate; margin: 6px 0; }
+    .safety { background: var(--lab-goldbg); border: 1.5px solid var(--lab-gold); border-radius: 14px; padding: 10px 14px; font-weight: 700; }
+    .report textarea { width: 100%; min-height: 150px; border: 1.5px solid var(--lab-line); border-radius: 12px; background: var(--lab-surface2); color: var(--lab-ink); padding: 10px; font: 600 15px/1.6 'Tajawal', sans-serif; direction: rtl; }
+    .mission { background: linear-gradient(135deg, var(--lab-okbg), var(--lab-accentbg)); border: 2px solid var(--lab-ok); border-radius: 16px; padding: 14px 18px; font-weight: 700; font-size: 19px; margin: 0; }
+    .mission b { color: var(--lab-ok); font-weight: 900; }
+    .badge { text-align: center; font-weight: 900; font-size: 22px; color: var(--lab-ok); margin: 4px 0; }
+    .note { color: var(--lab-muted); font-size: 15px; margin: 0; }
+  </style>
+</head>
+<body>
+  <header class="classroom-bar">
+    <div class="classroom-bar-inner">
+      <div class="lesson-crumb">
+        <a class="btn btn-sm" href="../index.html">الرئيسية</a>
+        <a class="btn btn-sm" href="../experiments.html">تجارب</a>
+        <a class="btn btn-sm" href="viscosity-race.html">🏁 سباق الكرات واللزوجة</a>
+        <h1>🔬 مختبر الغازات الافتراضي</h1>
+        <span class="page-ref">معمل افتراضي مستقل</span>
+      </div>
+      <div class="header-tools">
+        <button id="themeToggleBtn" type="button" class="btn btn-sm" aria-pressed="false">الوضع الليلي</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="top">
+      <div>
+        <p class="eyebrow">كيمياء 2-1 · الفصل السابع: الغازات (تجربة مستقلة)</p>
+        <h1>🔬 مختبر الغازات الافتراضي</h1>
+        <p class="note">جرّبي، وسجّلي القراءات، وارسمي البيانات، واستنتجي القانون بنفسك.</p>
+      </div>
+      <div class="who">
+        <input id="nm" placeholder="اسمك" aria-label="اسم الطالبة" autocomplete="off">
+        <input id="cls" placeholder="فصلك (مثل: ثاني أول)" aria-label="الفصل" autocomplete="off">
+      </div>
+    </div>
+
+    <nav class="picker" aria-label="اختاري التجربة">
+      <a href="#boyle" data-x="boyle"><b>تجربة 1 · بويل</b><small>محقن مغلق ومقياس ضغط: الضغط والحجم</small></a>
+      <a href="#charles" data-x="charles"><b>تجربة 2 · شارل</b><small>محقن حر في حمّام مائي: الحجم والحرارة</small></a>
+      <a href="#gay" data-x="gay"><b>تجربة 3 · جاي-لوساك</b><small>دورق مغلق في حمّام مائي: الضغط والحرارة</small></a>
+    </nav>
+
+    <p class="mission" id="mission"></p>
+    <div class="bench">
+      <section class="rig" aria-label="أدوات التجربة">
+        <canvas id="cv" aria-label="رسم متحرك لأدوات التجربة وجسيمات الغاز"></canvas>
+        <div class="reads">
+          <div class="rd" id="rdP"><small>الضغط P</small><b id="vP">—</b></div>
+          <div class="rd" id="rdV"><small>الحجم V</small><b id="vV">—</b></div>
+          <div class="rd" id="rdT"><small>درجة الحرارة T</small><b id="vT">—</b></div>
+        </div>
+        <div class="ctrl">
+          <label for="sl"><span id="slLbl"></span><span class="ltr num" id="slVal"></span></label>
+          <input type="range" id="sl">
+          <div class="quick" id="quick"></div>
+        </div>
+        <div class="row">
+          <button type="button" class="lbtn" id="rec">📝 سجّلي القراءة</button>
+          <button type="button" class="lbtn ghost" id="clr">↺ ابدئي من جديد</button>
+        </div>
+        <p class="status" id="st" aria-live="polite"></p>
+      </section>
+
+      <div class="sheet">
+        <article class="step"><header><span class="n">1</span><h2>سؤال التجربة</h2></header><p class="q" id="question"></p>
+          <ul class="tools" id="tools"></ul></article>
+        <article class="step"><header><span class="n">2</span><h2>فرضيتي قبل التجربة</h2></header><p id="hypQ"></p><div class="opts" id="hyp"></div></article>
+        <article class="step"><header><span class="n">3</span><h2>خطوات العمل</h2></header><ol id="proc" style="margin:0;padding-inline-start:22px"></ol>
+          <div class="safety" id="safety"></div></article>
+        <article class="step"><header><span class="n">4</span><h2>جدول البيانات</h2></header>
+          <div class="tablewrap"><table id="tbl"></table></div><p class="note" id="need"></p></article>
+        <article class="step"><header><span class="n">5</span><h2>الرسم البياني</h2></header>
+          <canvas id="plot" aria-label="رسم بياني للقراءات المسجلة"></canvas>
+          <div class="row" id="plotBtns"></div><p class="callout gold" id="extra" hidden></p></article>
+        <article class="step"><header><span class="n">6</span><h2>التحليل والاستنتاج</h2></header>
+          <div id="anal" class="callout info">سجّلي 4 قراءات على الأقل ليظهر التحليل.</div>
+          <div id="concl" hidden><p class="q" id="cq"></p><div class="opts" id="copts"></div><div id="cres"></div></div></article>
+        <article class="step report"><header><span class="n">7</span><h2>تقريري</h2></header>
+          <p class="note">انسخي التقرير والصقيه في دردشة Teams.</p>
+          <div class="row"><button type="button" class="lbtn" id="cp">📋 انسخي تقريري</button><span class="status" id="cpSt" aria-live="polite"></span></div>
+          <textarea id="rep" readonly aria-label="نص التقرير"></textarea></article>
+      </div>
+    </div>
+  </main>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const fx=(x,d)=>Number(x).toFixed(d);
+const gauss=()=>{let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);};
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+const X={
+ boyle:{name:'قانون بويل',
+  question:'كيف يتغيّر ضغط كمية محددة من الغاز عندما نغيّر حجمها، مع بقاء درجة الحرارة ثابتة؟',
+  tools:['محقن طبي <span class="ltr">60 mL</span> مغلق الفوهة','مقياس ضغط رقمي','أنبوب توصيل','ميزان حرارة'],
+  hypQ:'عند تقليل حجم الغاز (بثبات درجة الحرارة)، ضغطه:',
+  proc:['اسحبي المكبس إلى <span class="ltr">60 mL</span> ثم أغلقي الفوهة بالمقياس.','حرّكي المكبس إلى حجم جديد.','انتظري ثبات القراءة ثم اضغطي «سجّلي القراءة».','كرّري لخمسة أحجام مختلفة على الأقل.'],
+  safety:'🛡️ سلامة: لا تضغطي المكبس بقوة زائدة؛ قد تنفصل الفوهة أو ينكسر المحقن.',
+  slider:{lbl:'حجم الغاز (حرّكي المكبس)',min:10,max:60,step:1,val:60,unit:'mL'},
+  quick:[[60,'<span class="ltr">60 mL</span>'],[40,'<span class="ltr">40 mL</span>'],[30,'<span class="ltr">30 mL</span>'],[20,'<span class="ltr">20 mL</span>'],[15,'<span class="ltr">15 mL</span>']],
+  cq:'من البيانات، العلاقة بين الضغط والحجم عند ثبات درجة الحرارة:',copts:['طردية','عكسية','لا توجد علاقة'],cans:1,
+  law:'P₁V₁ = P₂V₂',lawName:'قانون بويل',
+  mission:'أنتِ مهندسة سلامة غوص في مشاريع البحر الأحمر. قبل أن ينزل الغواصون، اكتشفي كيف يتغيّر ضغط الهواء المحبوس عندما يقل حجمه.'},
+ charles:{name:'قانون شارل',
+  question:'كيف يتغيّر حجم كمية محددة من الغاز عندما نغيّر درجة حرارتها، مع بقاء الضغط ثابتًا؟',
+  tools:['محقن زجاجي بمكبس حر الحركة','كأس ماء وحمّام ثلج','سخان كهربائي','ميزان حرارة','ماسك وقفازات حرارية'],
+  hypQ:'عند تسخين الغاز (بثبات الضغط)، حجمه:',
+  proc:['ضعي المحقن في حمّام الثلج (<span class="ltr">0°C</span>) وانتظري.','ارفعي حرارة الماء تدريجيًا بالسخان.','انتظري حتى تستقر حرارة الغاز ثم سجّلي الحجم.','كرّري لخمس درجات حرارة على الأقل.'],
+  safety:'🛡️ سلامة: استخدمي الماسك والقفازات الحرارية مع الماء الساخن، ولا تلمسي سطح السخان.',
+  slider:{lbl:'حرارة الحمّام المائي',min:0,max:95,step:1,val:0,unit:'°C'},
+  quick:[[0,'🧊 ثلج <span class="ltr">0°C</span>'],[25,'🌡️ الغرفة <span class="ltr">25°C</span>'],[50,'<span class="ltr">50°C</span>'],[75,'<span class="ltr">75°C</span>'],[95,'🔥 <span class="ltr">95°C</span>']],
+  cq:'من البيانات، العلاقة بين الحجم ودرجة الحرارة (بالكلفن) عند ثبات الضغط:',copts:['طردية','عكسية','لا توجد علاقة'],cans:0,
+  law:'V₁ / T₁ = V₂ / T₂',lawName:'قانون شارل',
+  mission:'أنتِ مهندسة في فريق مهرجان العُلا للمناطيد. اكتشفي كيف يتمدد الهواء داخل المنطاد عندما نسخّنه.'},
+ gay:{name:'قانون جاي-لوساك',
+  question:'كيف يتغيّر ضغط كمية محددة من الغاز عندما نغيّر درجة حرارتها، مع بقاء الحجم ثابتًا؟',
+  tools:['دورق <span class="ltr">250 mL</span> بسدادة محكمة','مقياس ضغط رقمي','كأس ماء وحمّام ثلج','سخان كهربائي','ميزان حرارة'],
+  hypQ:'عند تسخين غاز داخل وعاء صلب مغلق، ضغطه:',
+  proc:['ضعي الدورق المغلق في حمّام الثلج (<span class="ltr">0°C</span>) وانتظري.','ارفعي حرارة الماء تدريجيًا.','انتظري ثبات حرارة الغاز ثم سجّلي الضغط.','كرّري لخمس درجات حرارة على الأقل.'],
+  safety:'🛡️ سلامة: في المختبر الحقيقي لا نسخّن أي وعاء مغلق إلا إذا كان مصممًا لتحمّل الضغط ومتصلًا بمقياس، لأن الضغط المرتفع قد يكسره.',
+  slider:{lbl:'حرارة الحمّام المائي',min:0,max:95,step:1,val:0,unit:'°C'},
+  quick:[[0,'🧊 ثلج <span class="ltr">0°C</span>'],[25,'🌡️ الغرفة <span class="ltr">25°C</span>'],[50,'<span class="ltr">50°C</span>'],[75,'<span class="ltr">75°C</span>'],[95,'🔥 <span class="ltr">95°C</span>']],
+  cq:'من البيانات، العلاقة بين الضغط ودرجة الحرارة (بالكلفن) عند ثبات الحجم:',copts:['طردية','عكسية','لا توجد علاقة'],cans:0,
+  law:'P₁ / T₁ = P₂ / T₂',lawName:'قانون جاي-لوساك',
+  mission:'أنتِ مهندسة سلامة في مصنع إطارات سعودي. اكتشفي كيف يرتفع ضغط الهواء داخل إطار مغلق في صيف الرياض.'}};
+const HYP=['يزداد','يقل','لا يتغير'];
+
+let ex='boyle',S={};
+const fresh=()=>({rows:[],hyp:null,concl:null,extrap:false,inv:false,set:null,Tg:null});
+for(const k in X)S[k]=fresh();
+let set=60,Tg=25;
+const E=()=>X[ex],st=()=>S[ex];
+
+function phys(){const T=Tg+273;
+  if(ex==='boyle')return {P:3000/set,V:set,t:25,T:298};
+  if(ex==='charles')return {P:101,V:30*T/298,t:Tg,T};
+  return {P:101*T/298,V:250,t:Tg,T};}
+const stable=()=>ex==='boyle'||Math.abs(Tg-set)<0.25;
+
+function build(){const e=E(),s=st();
+  $$('.picker a').forEach(a=>a.setAttribute('aria-current',a.dataset.x===ex));
+  $('#mission').innerHTML=`🇸🇦 <b>مهمتك يا مهندسة الوطن:</b> ${e.mission}`;
+  $('#question').textContent=e.question;
+  $('#tools').innerHTML=e.tools.map(t=>`<li>${t}</li>`).join('');
+  $('#hypQ').textContent=e.hypQ;
+  $('#hyp').innerHTML=HYP.map((h,i)=>`<button type="button" class="opt" data-h="${i}" aria-pressed="${s.hyp===i}">${h}</button>`).join('');
+  $$('#hyp .opt').forEach(b=>b.onclick=()=>{s.hyp=+b.dataset.h;$$('#hyp .opt').forEach(x=>x.setAttribute('aria-pressed',x===b));report();});
+  $('#proc').innerHTML=e.proc.map(p=>`<li>${p}</li>`).join('');
+  $('#safety').textContent=e.safety;
+  const sl=$('#sl'),c=e.slider;sl.min=c.min;sl.max=c.max;sl.step=c.step;
+  set=s.set??c.val;sl.value=set;Tg=s.Tg??(ex==='boyle'?25:set);$('#slLbl').textContent=c.lbl;
+  $('#quick').innerHTML=e.quick.map(([v,t])=>`<button type="button" class="chip${ex!=='boyle'&&v<=5?' cold':ex!=='boyle'&&v>=75?' hot':''}" data-v="${v}">${t}</button>`).join('');
+  $$('#quick .chip').forEach(b=>b.onclick=()=>{sl.value=b.dataset.v;onSlide();});
+  $('#plotBtns').innerHTML=ex==='boyle'
+    ?`<button type="button" class="chip" id="pv" aria-pressed="${!s.inv}">P مقابل V</button><button type="button" class="chip" id="pinv" aria-pressed="${s.inv}">P مقابل 1/V</button>`
+    :`<button type="button" class="chip" id="ext" aria-pressed="${s.extrap}">🔍 مدّي الخط إلى الصفر</button>`;
+  if(ex==='boyle'){$('#pv').onclick=()=>{s.inv=false;build();};$('#pinv').onclick=()=>{s.inv=true;build();};}
+  else $('#ext').onclick=()=>{s.extrap=!s.extrap;build();};
+  table();onSlide(true);}
+
+function onSlide(silent){set=+$('#sl').value;st().set=set;const c=E().slider;
+  $('#slVal').textContent=set+' '+c.unit;
+  $$('#quick .chip').forEach(b=>b.setAttribute('aria-pressed',+b.dataset.v===set));
+  if(!silent)$('#st').textContent='';}
+$('#sl').addEventListener('input',()=>onSlide());
+
+function readouts(){const p=phys(),ok=stable();
+  $('#vP').textContent=fx(p.P,ex==='boyle'?0:1)+' kPa';
+  $('#vV').textContent=fx(p.V,ex==='charles'?1:0)+' mL';
+  $('#vT').textContent=fx(p.t,0)+'°C';
+  $('#rdT').classList.toggle('wait',!ok);$('#rdV').classList.toggle('wait',!ok&&ex==='charles');$('#rdP').classList.toggle('wait',!ok&&ex==='gay');}
+
+$('#rec').onclick=()=>{const s=st();
+  if(!stable()){$('#st').className='status warn';$('#st').textContent='⏳ انتظري حتى تستقر حرارة الغاز (الأرقام الذهبية تتغير).';return;}
+  const p=phys(),n=1+gauss()*0.003;
+  let row;
+  if(ex==='boyle')row={x:p.V,y:Math.round(p.P*n),t:25};
+  else if(ex==='charles')row={x:Math.round(p.t),y:+fx(p.V*n,1),t:Math.round(p.t)};
+  else row={x:Math.round(p.t),y:+fx(p.P*n,1),t:Math.round(p.t)};
+  if(s.rows.some(r=>r.x===row.x)){$('#st').className='status warn';$('#st').textContent='سجّلتِ هذه القيمة من قبل، جرّبي قيمة مختلفة.';return;}
+  if(s.rows.length>=8){$('#st').className='status warn';$('#st').textContent='الجدول ممتلئ (8 قراءات). احذفي قراءة أو ابدئي من جديد.';return;}
+  s.rows.push(row);s.rows.sort((a,b)=>a.x-b.x);
+  $('#st').className='status ok';$('#st').textContent=`✅ سُجّلت القراءة رقم ${s.rows.length}`;table();};
+$('#clr').onclick=()=>{S[ex]=fresh();$('#st').className='status';$('#st').textContent='';build();};
+
+const K=c=>c+273;
+function cols(){return ex==='boyle'
+  ?{h:['V (mL)','P (kPa)','P × V (kPa·mL)','1/V (mL⁻¹)'],r:r=>[r.x,r.y,Math.round(r.x*r.y),fx(1/r.x,4)],k:r=>r.x*r.y,kn:'P × V',ku:'kPa·mL',kd:0}
+  :ex==='charles'
+  ?{h:['t (°C)','T (K)','V (mL)','V / T (mL/K)'],r:r=>[r.x,K(r.x),fx(r.y,1),fx(r.y/K(r.x),4)],k:r=>r.y/K(r.x),kn:'V / T',ku:'mL/K',kd:4}
+  :{h:['t (°C)','T (K)','P (kPa)','P / T (kPa/K)'],r:r=>[r.x,K(r.x),fx(r.y,1),fx(r.y/K(r.x),4)],k:r=>r.y/K(r.x),kn:'P / T',ku:'kPa/K',kd:4};}
+function table(){const s=st(),c=cols();
+  $('#tbl').innerHTML=`<thead><tr><th>#</th>${c.h.map(h=>`<th dir="ltr">${h}</th>`).join('')}<th></th></tr></thead><tbody>`+
+   (s.rows.length?s.rows.map((r,i)=>`<tr><td>${i+1}</td>${c.r(r).map(v=>`<td dir="ltr">${v}</td>`).join('')}<td><button type="button" class="x" data-i="${i}" aria-label="احذفي القراءة ${i+1}">✕</button></td></tr>`).join('')
+   :`<tr><td colspan="6" class="empty">لا توجد قراءات بعد. غيّري ${ex==='boyle'?'الحجم':'الحرارة'} واضغطي «سجّلي القراءة».</td></tr>`)+'</tbody>';
+  $$('#tbl .x').forEach(b=>b.onclick=()=>{s.rows.splice(+b.dataset.i,1);table();});
+  $('#need').textContent=s.rows.length<4?`سجّلي 4 قراءات على الأقل (سجّلتِ ${s.rows.length}).`:'ممتاز! عندك بيانات كافية للتحليل 👏';
+  analyse();plot();report();}
+function analyse(){const s=st(),c=cols(),e=E();
+  if(s.rows.length<4){$('#anal').className='callout info';$('#anal').textContent='سجّلي 4 قراءات على الأقل ليظهر التحليل.';$('#concl').hidden=true;return;}
+  const ks=s.rows.map(c.k),m=ks.reduce((a,b)=>a+b)/ks.length,spread=(Math.max(...ks)-Math.min(...ks))/2/m*100;
+  $('#anal').className='callout ok';
+  $('#anal').innerHTML=`متوسط <span class="ltr">${c.kn}</span> = <span class="ltr num">${fx(m,c.kd)} ${c.ku}</span>، والقيم تختلف بنحو <span class="ltr num">±${fx(spread,1)}%</span> فقط.<br>`+
+    (spread<2?`المقدار <span class="ltr">${c.kn}</span> شبه ثابت في كل القراءات، والفروق الصغيرة سببها دقة أدوات القياس.`:`الفروق كبيرة نسبيًا؛ راجعي القراءات.`);
+  $('#concl').hidden=false;$('#cq').textContent=e.cq;
+  $('#copts').innerHTML=e.copts.map((o,i)=>`<button type="button" class="opt${s.concl===null?'':i===e.cans?' right':i===s.concl?' wrong':''}" data-c="${i}">${o}</button>`).join('');
+  $$('#copts .opt').forEach(b=>b.onclick=()=>{s.concl=+b.dataset.c;analyse();report();});
+  if(s.concl===null){$('#cres').innerHTML='';return;}
+  if(s.concl!==e.cans){$('#cres').innerHTML='<p class="callout warn">انظري لعمود الثابت والرسم البياني مرة ثانية، ثم جرّبي.</p>';return;}
+  const hypOK=s.hyp===0;
+  $('#cres').innerHTML=`<p class="callout ok">✅ صحيح! هذا هو <b>${e.lawName}</b>:</p><p class="law">${e.law}</p><p class="badge">🏅 أنجزتِ مهمة مهندسة الوطن!</p>`+
+    (s.hyp===null?'':`<p class="callout ${hypOK?'ok':'gold'}">${hypOK?'🎯 فرضيتك كانت صحيحة: البيانات تدعمها.':'🔁 فرضيتك تحتاج تعديل، وهذا طبيعي في العلم: البيانات هي الحكم.'}</p>`);}
+
+const pc=$('#plot'),px=pc.getContext('2d');
+function linfit(P){const n=P.length,mx=P.reduce((a,p)=>a+p[0],0)/n,my=P.reduce((a,p)=>a+p[1],0)/n;let sxy=0,sxx=0;P.forEach(([x,y])=>{sxy+=(x-mx)*(y-my);sxx+=(x-mx)**2;});const m=sxy/sxx;return {m,b:my-m*mx};}
+function nice(a,b,n){const span=b-a,step0=span/n,mag=10**Math.floor(Math.log10(step0)),f=step0/mag,step=(f<1.5?1:f<3?2:f<7?5:10)*mag;return {lo:Math.floor(a/step)*step,hi:Math.ceil(b/step)*step,step};}
+function plot(){const s=st(),d=Math.min(devicePixelRatio||1,2),W=pc.clientWidth,H=pc.clientHeight;if(!W)return;
+  pc.width=W*d;pc.height=H*d;px.setTransform(d,0,0,d,0,0);px.clearRect(0,0,W,H);
+  const ink=css('--lab-ink'),mut=css('--lab-muted'),line=css('--lab-line'),acc=css('--lab-accent'),hot=css('--lab-hot'),gold=css('--lab-gold');
+  px.font='14px Tajawal, sans-serif';px.direction='ltr';
+  let pts=s.rows.map(r=>[ex==='boyle'&&s.inv?1/r.x:r.x,r.y]);
+  const xl=ex==='boyle'?(s.inv?'1/V (mL⁻¹)':'V (mL)'):'t (°C)',yl=ex==='charles'?'V (mL)':'P (kPa)';
+  let xmin,xmax,ymin,ymax;
+  if(ex==='boyle'){xmin=0;xmax=s.inv?0.1:60;ymin=0;ymax=320;}
+  else if(s.extrap){xmin=-300;xmax=100;ymin=0;ymax=ex==='charles'?40:140;}
+  else{xmin=0;xmax=100;ymin=ex==='charles'?26:90;ymax=ex==='charles'?40:136;}
+  const gx=nice(xmin,xmax,ex==='boyle'&&s.inv?5:6),gy=nice(ymin,ymax,5);
+  const L=58,R=16,T=16,B=46,X=v=>L+(v-gx.lo)/(gx.hi-gx.lo)*(W-L-R),Y=v=>H-B-(v-gy.lo)/(gy.hi-gy.lo)*(H-T-B);
+  px.strokeStyle=line;px.lineWidth=1;px.fillStyle=mut;px.textAlign='center';
+  for(let v=gx.lo;v<=gx.hi+1e-9;v+=gx.step){px.beginPath();px.moveTo(X(v),T);px.lineTo(X(v),H-B);px.stroke();px.fillText(+v.toFixed(4),X(v),H-B+18);}
+  px.textAlign='right';
+  for(let v=gy.lo;v<=gy.hi+1e-9;v+=gy.step){px.beginPath();px.moveTo(L,Y(v));px.lineTo(W-R,Y(v));px.stroke();px.fillText(+v.toFixed(2),L-6,Y(v)+5);}
+  px.fillStyle=ink;px.textAlign='center';px.fillText(xl,(L+W-R)/2,H-6);
+  px.save();px.translate(14,(T+H-B)/2);px.rotate(-Math.PI/2);px.fillText(yl,0,0);px.restore();
+  if(ex!=='boyle'&&s.extrap&&xmin<=0){px.strokeStyle=hot;px.setLineDash([4,4]);px.beginPath();px.moveTo(X(-273),T);px.lineTo(X(-273),H-B);px.stroke();px.setLineDash([]);px.fillStyle=hot;px.fillText('−273°C',X(-273),T+14);}
+  $('#extra').hidden=true;
+  if(pts.length>=2){px.strokeStyle=acc;px.lineWidth=2.5;
+    if(ex==='boyle'){const k=s.rows.reduce((a,r)=>a+r.x*r.y,0)/s.rows.length;px.beginPath();
+      if(s.inv){px.moveTo(X(0),Y(0));px.lineTo(X(gx.hi),Y(k*gx.hi));}
+      else{let first=true;for(let v=Math.max(8,gx.lo);v<=gx.hi;v+=0.5){const y=k/v;if(y>gy.hi)continue;first?px.moveTo(X(v),Y(y)):px.lineTo(X(v),Y(y));first=false;}}
+      px.save();px.beginPath();px.rect(L,T,W-L-R,H-T-B);px.clip();px.stroke();px.restore();
+      if(s.inv){$('#extra').hidden=false;$('#extra').innerHTML='📏 الرسم أصبح خطًا مستقيمًا يمر بنقطة الأصل! أي أن P يتناسب طرديًا مع 1/V، وهذا معنى «التناسب العكسي» بين P و V.';}}
+    else{const f=linfit(pts),x0=s.extrap?gx.lo:Math.min(...pts.map(p=>p[0])),x1=gx.hi;
+      px.beginPath();px.moveTo(X(x0),Y(f.m*x0+f.b));px.lineTo(X(x1),Y(f.m*x1+f.b));
+      if(s.extrap)px.setLineDash([7,5]);px.save();px.beginPath();px.rect(L,T,W-L-R,H-T-B);px.clip();px.beginPath();px.moveTo(X(Math.max(x0,-f.b/f.m)),Y(Math.max(0,f.m*Math.max(x0,-f.b/f.m)+f.b)));px.lineTo(X(x1),Y(f.m*x1+f.b));px.stroke();px.restore();px.setLineDash([]);
+      if(s.extrap){const z=-f.b/f.m;px.fillStyle=gold;px.beginPath();px.arc(X(z),Y(0),6,0,7);px.fill();
+        $('#extra').hidden=false;$('#extra').innerHTML=`🔍 مدّ الخط يقطع محور الحرارة عند <span class="ltr num">${fx(z,0)}°C</span> تقريبًا. هنا يصبح ${ex==='charles'?'الحجم':'الضغط'} صفرًا نظريًا، وهي درجة <b>الصفر المطلق</b> (<span class="ltr">0 K = −273°C</span>). لهذا نستخدم الكلفن في قوانين الغازات!`;}}}
+  px.fillStyle=hot;pts.forEach(([x,y])=>{px.beginPath();px.arc(X(x),Y(y),5.5,0,7);px.fill();});
+  if(!pts.length){px.fillStyle=mut;px.textAlign='center';px.fillText('النقاط تظهر هنا بعد تسجيل القراءات',(L+W-R)/2,(T+H-B)/2);}}
+
+function report(){const s=st(),e=E(),c=cols(),nm=$('#nm').value.trim()||'—',cl=$('#cls').value.trim()||'—';
+  const rows=s.rows.map((r,i)=>`${i+1}) `+c.h.slice(0,3).map((h,j)=>`${h.split(' (')[0].replace(/\s/g,'')}=${c.r(r)[j]}`).join(' ، ')).join('\n');
+  let k='';if(s.rows.length>=4){const ks=s.rows.map(c.k),m=ks.reduce((a,b)=>a+b)/ks.length;k=`متوسط ${c.kn} = ${fx(m,c.kd)} ${c.ku}`;}
+  $('#rep').value=`🔬 تقرير مختبر الغازات\nالاسم: ${nm} · الفصل: ${cl}\nالتجربة: ${e.name}\nفرضيتي: ${s.hyp===null?'—':e.hypQ+' '+HYP[s.hyp]}\nالقراءات:\n${rows||'—'}\n${k}\nالاستنتاج: ${s.concl===null?'—':e.copts[s.concl]+(s.concl===e.cans?' ✅ ('+e.lawName+': '+e.law+')':' ❌')}`;}
+['nm','cls'].forEach(id=>{const el=$('#'+id);try{el.value=localStorage.getItem('lab-'+id)||'';}catch(_){}
+  el.addEventListener('input',()=>{try{localStorage.setItem('lab-'+id,el.value)}catch(_){}report();});});
+$('#cp').onclick=()=>{const t=$('#rep').value,o=$('#cpSt');
+  const fb=()=>{$('#rep').focus();$('#rep').select();o.className='status';o.textContent='حددنا النص، انسخيه يدويًا.';};
+  try{navigator.clipboard.writeText(t).then(()=>{o.className='status ok';o.textContent='نُسخ! الصقيه في دردشة الاجتماع.';},fb);}catch(_){fb();}};
+
+const cv=$('#cv'),cx=cv.getContext('2d');
+const parts=Array.from({length:40},()=>({x:Math.random(),y:Math.random(),a:Math.random()*6.28}));
+let last=performance.now();
+function mix(a,b,t){const h=s=>s.match(/\w\w/g).map(v=>parseInt(v,16)),A=h(a.replace('#','')),B=h(b.replace('#',''));return `rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(',')})`;}
+function particles(x,y,w,h,T,shape){const sp=RM?0:0.0045*Math.sqrt((T+273)/298),col=mix(css('--lab-cold'),css('--lab-hot'),Math.min(1,Math.max(0,T/95)));
+  cx.fillStyle=col;for(const p of parts){p.x+=Math.cos(p.a)*sp*(300/w);p.y+=Math.sin(p.a)*sp*(300/h);
+    if(p.x<0){p.x=-p.x;p.a=Math.PI-p.a}if(p.x>1){p.x=2-p.x;p.a=Math.PI-p.a}if(p.y<0){p.y=-p.y;p.a=-p.a}if(p.y>1){p.y=2-p.y;p.a=-p.a}
+    let px_=x+5+p.x*(w-10),py_=y+5+p.y*(h-10);
+    if(shape==='circle'){const r=Math.min(w,h)/2-6,dx=(p.x-.5)*2,dy=(p.y-.5)*2;if(dx*dx+dy*dy>1){p.a+=Math.PI;continue;}px_=x+w/2+dx*r;py_=y+h/2+dy*r;}
+    cx.beginPath();cx.arc(px_,py_,3.6,0,7);cx.fill();}}
+function gauge(x,y,r,P,max){const ink=css('--lab-ink'),mut=css('--lab-muted');cx.fillStyle=css('--lab-surface');cx.strokeStyle=css('--lab-metal');cx.lineWidth=5;cx.beginPath();cx.arc(x,y,r,0,7);cx.fill();cx.stroke();
+  cx.lineWidth=1.5;cx.strokeStyle=mut;cx.fillStyle=mut;cx.font='11px Tajawal, sans-serif';cx.textAlign='center';
+  for(let i=0;i<=4;i++){const a=Math.PI*0.75+i/4*Math.PI*1.5;cx.beginPath();cx.moveTo(x+Math.cos(a)*(r-4),y+Math.sin(a)*(r-4));cx.lineTo(x+Math.cos(a)*(r-11),y+Math.sin(a)*(r-11));cx.stroke();cx.fillText(Math.round(max*i/4),x+Math.cos(a)*(r-22),y+Math.sin(a)*(r-22)+4);}
+  const a=Math.PI*0.75+Math.min(1,P/max)*Math.PI*1.5;cx.strokeStyle=css('--lab-hot');cx.lineWidth=3;cx.beginPath();cx.moveTo(x,y);cx.lineTo(x+Math.cos(a)*(r-10),y+Math.sin(a)*(r-10));cx.stroke();
+  cx.fillStyle=ink;cx.beginPath();cx.arc(x,y,4,0,7);cx.fill();cx.font='bold 12px Tajawal, sans-serif';cx.fillText('kPa',x,y+r-12);}
+function thermo(x,y,h,t){cx.fillStyle=css('--lab-surface');cx.strokeStyle=css('--lab-metal');cx.lineWidth=2;cx.beginPath();cx.roundRect(x-6,y,12,h,6);cx.fill();cx.stroke();
+  cx.fillStyle=css('--lab-hot');const f=Math.max(0.05,(t+10)/110);cx.fillRect(x-3,y+h-f*h,6,f*h);cx.beginPath();cx.arc(x,y+h+6,9,0,7);cx.fill();}
+function bath(x,y,w,h,t){const wc=mix(css('--lab-water-c'),css('--lab-water-h'),Math.min(1,t/95));
+  cx.fillStyle=wc;cx.fillRect(x,y+20,w,h-20);cx.strokeStyle=css('--lab-metal');cx.lineWidth=3;cx.beginPath();cx.moveTo(x,y);cx.lineTo(x,y+h);cx.lineTo(x+w,y+h);cx.lineTo(x+w,y);cx.stroke();
+  const g=Math.min(1,t/95);cx.fillStyle=css('--lab-metal');cx.fillRect(x-10,y+h+2,w+20,16);cx.fillStyle=`rgba(230,70,40,${0.15+0.75*g})`;cx.fillRect(x,y+h+5,w,6);
+  if(t<6){cx.fillStyle='rgba(255,255,255,.75)';cx.strokeStyle=css('--lab-cold');cx.lineWidth=1.5;[[x+16,y+30],[x+w-50,y+40],[x+28,y+h-50],[x+w-40,y+h-60]].forEach(([a,b])=>{cx.beginPath();cx.roundRect(a,b,26,22,5);cx.fill();cx.stroke();});}
+  if(t>82&&!RM){cx.strokeStyle='rgba(255,255,255,.8)';cx.lineWidth=1.5;for(let i=0;i<8;i++){const bx=x+12+((i*53+performance.now()/9)%(w-24)),by=y+h-((performance.now()/6+i*40)%(h-30));cx.beginPath();cx.arc(bx,by,3+i%3,0,7);cx.stroke();}}}
+function draw(now){requestAnimationFrame(draw);const dt=Math.min(0.1,(now-last)/1000);last=now;
+  if(ex!=='boyle'){Tg+=(set-Tg)*Math.min(1,dt*1.1);if(Math.abs(set-Tg)<0.05)Tg=set;st().Tg=Tg;}else Tg=25;
+  readouts();
+  const d=Math.min(devicePixelRatio||1,2),W=cv.clientWidth,H=cv.clientHeight;if(!W)return;
+  if(cv.width!==Math.round(W*d)){cv.width=Math.round(W*d);cv.height=Math.round(H*d);}
+  cx.setTransform(d*W/560,0,0,d*H/380,0,0);cx.direction='ltr';cx.clearRect(0,0,560,380);
+  const p=phys(),glass=css('--lab-glass'),metal=css('--lab-metal'),ink=css('--lab-ink'),mut=css('--lab-muted');
+  cx.fillStyle=css('--lab-line');cx.fillRect(0,362,560,18);
+  cx.font='13px Tajawal, sans-serif';cx.textAlign='center';
+  if(ex==='boyle'){const x0=120,len=380,gy=200,gh=56,gw=len*p.V/60;
+    cx.fillStyle=glass;cx.fillRect(x0,gy-gh/2,len,gh);cx.strokeStyle=metal;cx.lineWidth=3;cx.strokeRect(x0,gy-gh/2,len,gh);
+    particles(x0,gy-gh/2,gw,gh,25);
+    cx.fillStyle=ink;cx.fillRect(x0+gw-4,gy-gh/2+2,10,gh-4);cx.fillStyle=metal;cx.fillRect(x0+gw+6,gy-6,len-gw+40,12);cx.fillRect(x0+len+40,gy-34,12,68);
+    cx.fillStyle=mut;cx.strokeStyle=mut;cx.lineWidth=1;for(let v=0;v<=60;v+=10){const xx=x0+len*v/60;cx.beginPath();cx.moveTo(xx,gy-gh/2);cx.lineTo(xx,gy-gh/2-8);cx.stroke();cx.fillText(v,xx,gy-gh/2-12);}
+    cx.fillText('mL',x0+len+18,gy-gh/2-12);
+    cx.strokeStyle=metal;cx.lineWidth=6;cx.beginPath();cx.moveTo(x0,gy);cx.lineTo(70,gy);cx.lineTo(70,150);cx.stroke();gauge(70,98,52,p.P,400);
+    thermo(520,40,90,25);cx.fillStyle=ink;cx.fillText('25°C',520,160);}
+  else{const bx=150,by=120,bw=260,bh=232;bath(bx,by,bw,bh,Tg);thermo(bx+bw-30,by-30,190,Tg);
+    if(ex==='charles'){const sx=bx+90,sw=56,bottom=by+bh-20,scale=5.2,top=bottom-60*scale,gh=p.V*scale;
+      cx.fillStyle=glass;cx.globalAlpha=.85;cx.fillRect(sx,top,sw,bottom-top);cx.globalAlpha=1;cx.strokeStyle=metal;cx.lineWidth=3;cx.strokeRect(sx,top,sw,bottom-top);
+      particles(sx,bottom-gh,sw,gh,Tg);cx.fillStyle=ink;cx.fillRect(sx+2,bottom-gh-10,sw-4,10);cx.fillStyle=metal;cx.fillRect(sx+sw/2-5,bottom-gh-10-(top-20<0?0:110),10,110);
+      cx.fillStyle=mut;cx.strokeStyle=mut;cx.lineWidth=1;cx.textAlign='left';for(let v=0;v<=60;v+=10){const yy=bottom-v*scale;cx.beginPath();cx.moveTo(sx+sw,yy);cx.lineTo(sx+sw+8,yy);cx.stroke();cx.fillText(v,sx+sw+11,yy+4);}cx.fillText('mL',sx+sw+11,top-6);cx.textAlign='center';}
+    else{const fx_=bx+110,fy=by+140,r=70;cx.fillStyle=glass;cx.globalAlpha=.9;cx.beginPath();cx.arc(fx_,fy,r,0,7);cx.fill();cx.fillRect(fx_-14,fy-r-70,28,74);cx.globalAlpha=1;
+      cx.strokeStyle=metal;cx.lineWidth=3;cx.beginPath();cx.arc(fx_,fy,r,-1.37,4.51);cx.stroke();cx.beginPath();cx.moveTo(fx_-14,fy-r+3);cx.lineTo(fx_-14,fy-r-70);cx.moveTo(fx_+14,fy-r+3);cx.lineTo(fx_+14,fy-r-70);cx.stroke();
+      particles(fx_-r,fy-r,2*r,2*r,Tg,'circle');cx.fillStyle=css('--lab-gold');cx.fillRect(fx_-18,fy-r-84,36,18);
+      cx.strokeStyle=metal;cx.lineWidth=6;cx.beginPath();cx.moveTo(fx_,fy-r-84);cx.lineTo(fx_,30);cx.lineTo(80,30);cx.lineTo(80,62);cx.stroke();gauge(80,112,50,p.P,200);
+      if(Tg>90){cx.fillStyle=css('--lab-hot');cx.font='bold 14px Tajawal, sans-serif';cx.fillText('⚠️ ضغط مرتفع',80,190);}}
+    cx.fillStyle=ink;cx.font='13px Tajawal, sans-serif';cx.fillText(Math.round(Tg)+'°C',bx+bw-30,by-40);}}
+
+function route(){const h=location.hash.slice(1);ex=X[h]?h:'boyle';build();}
+addEventListener('hashchange',route);addEventListener('resize',()=>plot());
+if('ResizeObserver' in window)new ResizeObserver(()=>plot()).observe(pc);
+route();requestAnimationFrame(draw);
+</script>
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🏁 سباق الكرات واللزوجة | معمل افتراضي مستقل</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><polygon points='18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5' stroke='%232a7de1' stroke-width='2.4' fill='none'/><circle cx='18' cy='18' r='4.5' fill='%230b8a4a'/></svg>">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <script src="../assets/theme.js"></script>
+  <style>
+    :root {
+      --lab-bg: #f7f5f0;
+      --lab-card: #ffffff;
+      --lab-soft: #faf8f3;
+      --lab-ink: #1d2742;
+      --lab-muted: #5d6886;
+      --lab-line: #e6e1d6;
+      --lab-accent: #e4572e;
+      --lab-accent-ink: #ffffff;
+      --lab-accentbg: #fdebe5;
+      --lab-ok: #0b8a4a;
+      --lab-okbg: #e5f6ec;
+      --lab-bad: #e4572e;
+      --lab-badbg: #fdebe5;
+      --lab-blue: #2a7de1;
+      --lab-bluebg: #e6f0fd;
+      --lab-glass: #eef5fc;
+      --lab-metal: #64748b;
+      --lab-steel: #334155;
+    }
+    [data-theme="dark"] {
+      --lab-bg: #101729;
+      --lab-card: #18223b;
+      --lab-soft: #1e2a48;
+      --lab-ink: #f2f5ff;
+      --lab-muted: #aab8d6;
+      --lab-line: #2e3e66;
+      --lab-accent: #ff7c54;
+      --lab-accent-ink: #101729;
+      --lab-accentbg: #361d17;
+      --lab-ok: #34c77b;
+      --lab-okbg: #123324;
+      --lab-bad: #ff7c54;
+      --lab-badbg: #361d17;
+      --lab-blue: #5aa9ff;
+      --lab-bluebg: #1a2d52;
+      --lab-glass: #1e2d4a;
+      --lab-metal: #94a3b8;
+      --lab-steel: #cbd5e1;
+    }
+    html, body { overflow-x: hidden; }
+    body {
+      background: var(--lab-bg);
+      color: var(--lab-ink);
+      font-family: 'Tajawal', Tahoma, sans-serif;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+    .page { max-width: 1280px; margin: 0 auto; padding: 18px 16px 48px; display: flex; flex-direction: column; gap: 18px; }
+    .lab-hero {
+      background: linear-gradient(120deg, #0b8a4a 0%, #0e9aa7 45%, #2a7de1 100%);
+      color: #ffffff;
+      border-radius: 22px;
+      padding: 1.25rem 1.6rem;
+      box-shadow: 0 10px 26px rgba(42, 125, 225, 0.2);
+    }
+    .lab-hero .eyebrow { margin: 0 0 0.2rem; font-weight: 800; opacity: 0.92; font-size: 0.95rem; }
+    .lab-hero h1 { margin: 0 0 0.35rem; font-size: clamp(24px, 3.4vw, 36px); font-weight: 900; line-height: 1.3; }
+    .lab-hero .note { color: rgba(255, 255, 255, 0.93); font-size: 1rem; margin: 0; }
+    .ltr { direction: ltr; unicode-bidi: isolate; display: inline-block; }
+    .num { font-variant-numeric: tabular-nums; }
+    .bench { display: grid; grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+    @media (max-width: 920px) { .bench { grid-template-columns: 1fr; } }
+    .rig {
+      position: sticky; top: 76px;
+      background: var(--lab-card); border: 2px solid var(--lab-line); border-top: 7px solid var(--lab-blue);
+      border-radius: 20px; padding: 14px; display: flex; flex-direction: column; gap: 12px;
+      box-shadow: var(--shadow-sm);
+    }
+    @media (max-width: 920px) { .rig { position: static; } }
+    #cv { width: 100%; aspect-ratio: 560/430; max-width: 100%; display: block; border-radius: 14px; background: var(--lab-soft); border: 1px solid var(--lab-line); cursor: pointer; }
+    .timers { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+    .tm { background: var(--lab-soft); border: 1.5px solid var(--lab-line); border-radius: 12px; padding: 4px 6px; text-align: center; min-width: 0; }
+    .tm small { display: block; font-size: 13px; color: var(--lab-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-weight: 700; }
+    .tm b { display: block; font-weight: 900; font-size: 20px; line-height: 1.3; font-variant-numeric: tabular-nums; direction: ltr; }
+    .tm.done b { color: var(--lab-ok); }
+    .ctrl label { font-weight: 800; display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+    .ctrl input[type=range] { width: 100%; height: 34px; accent-color: var(--lab-accent); }
+    .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+    .lbtn { border: 0; border-radius: 14px; min-height: 48px; padding: 0 18px; font-weight: 800; font-size: 16px; background: var(--lab-accent); color: var(--lab-accent-ink); cursor: pointer; }
+    .lbtn.ghost { background: transparent; color: var(--lab-accent); border: 2px solid var(--lab-accent); }
+    .lbtn:disabled { opacity: 0.45; cursor: not-allowed; }
+    .chip { border: 2px solid var(--lab-line); background: var(--lab-card); color: var(--lab-ink); border-radius: 999px; min-height: 42px; padding: 0 14px; font-weight: 700; cursor: pointer; }
+    .chip[aria-pressed="true"] { background: var(--lab-blue); border-color: var(--lab-blue); color: #ffffff; }
+    .sheet { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+    .step { background: var(--lab-card); border: 2px solid var(--lab-line); border-radius: 18px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+    .step header { display: flex; gap: 10px; align-items: center; }
+    .step header h2 { margin: 0; font-size: 21px; font-weight: 900; }
+    .step header .n { flex: none; width: 34px; height: 34px; border-radius: 50%; background: var(--lab-accentbg); color: var(--lab-accent); display: grid; place-items: center; font-weight: 900; }
+    .q { font-size: 19px; font-weight: 700; margin: 0; }
+    .opts { display: flex; flex-wrap: wrap; gap: 8px; }
+    .opt { border: 2px solid var(--lab-line); background: var(--lab-soft); color: var(--lab-ink); border-radius: 12px; min-height: 44px; padding: 0 15px; font-weight: 700; cursor: pointer; }
+    .opt.right { border-color: var(--lab-ok); background: var(--lab-okbg); color: var(--lab-ok); }
+    .opt.wrong { border-color: var(--lab-bad); background: var(--lab-badbg); color: var(--lab-bad); }
+    .pred { display: flex; flex-wrap: wrap; gap: 8px; min-height: 48px; align-items: center; background: var(--lab-soft); border: 2px dashed var(--lab-line); border-radius: 12px; padding: 6px 10px; }
+    .pred span { background: var(--lab-accentbg); color: var(--lab-accent); border-radius: 999px; padding: 2px 12px; font-weight: 800; }
+    .callout { border-radius: 12px; padding: 10px 14px; font-weight: 700; margin: 0; }
+    .callout.ok { background: var(--lab-okbg); color: var(--lab-ok); }
+    .callout.bad { background: var(--lab-badbg); color: var(--lab-bad); }
+    .callout.info { background: var(--lab-bluebg); color: var(--lab-blue); }
+    .tablewrap { overflow-x: auto; border: 1.5px solid var(--lab-line); border-radius: 12px; }
+    .tablewrap table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; font-size: 16px; }
+    .tablewrap th, .tablewrap td { padding: 6px 10px; text-align: center; border-bottom: 1px solid var(--lab-line); white-space: nowrap; }
+    .tablewrap th { background: var(--lab-soft); font-weight: 800; }
+    .why { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; }
+    .wcard { border: 2px solid var(--lab-line); border-radius: 14px; padding: 12px; background: var(--lab-soft); color: var(--lab-ink); display: flex; flex-direction: column; gap: 6px; text-align: start; cursor: pointer; }
+    .wcard b { font-size: 18px; font-weight: 900; }
+    .wcard .hid { display: none; font-size: 16px; }
+    .wcard.open .hid { display: block; }
+    .wcard.open { border-color: var(--lab-ok); background: var(--lab-okbg); }
+    .wcard .tap { color: var(--lab-muted); font-size: 14px; font-weight: 700; }
+    .wcard.open .tap { display: none; }
+    .life { background: var(--lab-bluebg); border: 1.5px solid var(--lab-blue); border-radius: 14px; padding: 12px 16px; margin: 0; font-weight: 600; }
+    .note { color: var(--lab-muted); font-size: 15px; margin: 0; }
+  </style>
+</head>
+<body>
+  <header class="classroom-bar">
+    <div class="classroom-bar-inner">
+      <div class="lesson-crumb">
+        <a class="btn btn-sm" href="../index.html">الرئيسية</a>
+        <a class="btn btn-sm" href="../experiments.html">تجارب</a>
+        <a class="btn btn-sm" href="gas-lab.html">🔬 مختبر الغازات الافتراضي</a>
+        <h1>🏁 سباق الكرات واللزوجة</h1>
+        <span class="page-ref">معمل افتراضي مستقل</span>
+      </div>
+      <div class="header-tools">
+        <button id="themeToggleBtn" type="button" class="btn btn-sm" aria-pressed="false">الوضع الليلي</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="lab-hero">
+      <p class="eyebrow">كيمياء 2-1 · حالات المادة · اللزوجة (تجربة مستقلة)</p>
+      <h1>🏁 سباق الكرات: أي سائل يُبطئ الكرة أكثر؟</h1>
+      <p class="note">نُسقط كرات فولاذية متماثلة (قطرها <span class="ltr">6 mm</span>) في أربعة سوائل، ونقيس زمن قطع <span class="ltr">15 cm</span> بين الخطين.</p>
+    </section>
+
+    <div class="bench">
+      <section class="rig" aria-label="أدوات التجربة">
+        <canvas id="cv" aria-label="أربع مخابير مدرجة فيها ماء وزيت وجليسرين وعسل، وكرات تسقط فيها"></canvas>
+        <div class="timers" id="timers"></div>
+        <div class="ctrl">
+          <label for="temp"><span>🌡️ درجة حرارة السوائل</span><span class="ltr num" id="tempV"></span></label>
+          <input type="range" id="temp" min="10" max="60" step="5" value="25">
+        </div>
+        <div class="row">
+          <button type="button" class="lbtn" id="go">🔴 أسقطي الكرات معًا</button>
+          <button type="button" class="lbtn ghost" id="reset">↺ أعيدي الكرات</button>
+          <button type="button" class="chip" id="fast" aria-pressed="false">⏩ تسريع ×5</button>
+        </div>
+        <p class="note" id="msg" aria-live="polite">اضغطي على أي مخبار لإسقاط كرته وحدها، أو أسقطي الكرات معًا.</p>
+      </section>
+
+      <div class="sheet">
+        <article class="step"><header><span class="n">1</span><h2>توقّعي قبل السباق</h2></header>
+          <p class="note">اضغطي على السوائل بالترتيب من <b>الأسرع</b> إلى <b>الأبطأ</b>:</p>
+          <div class="opts" id="pBtns"></div>
+          <div class="pred" id="pred" aria-live="polite"><span class="note">توقعك يظهر هنا</span></div>
+          <div class="row"><button type="button" class="chip" id="pClr">مسح التوقع</button></div>
+          <div id="pRes"></div>
+        </article>
+
+        <article class="step"><header><span class="n">2</span><h2>جدول النتائج</h2></header>
+          <div class="tablewrap"><table id="tbl"></table></div>
+          <p class="note">كل سباق كامل يُسجَّل هنا تلقائيًا. جرّبي السباق عند <span class="ltr">10°C</span> ثم عند <span class="ltr">60°C</span> وقارني.</p>
+        </article>
+
+        <article class="step"><header><span class="n">3</span><h2>ماذا نستنتج؟</h2></header>
+          <div class="mcq" data-ans="1"><p class="q">كلما زادت لزوجة السائل، سرعة الكرة فيه:</p><div class="opts"><button type="button" class="opt">تزيد</button><button type="button" class="opt">تقل</button><button type="button" class="opt">لا تتغير</button></div><p class="fbk"></p></div>
+          <div class="mcq" data-ans="1"><p class="q">عند تسخين السائل، لزوجته:</p><div class="opts"><button type="button" class="opt">تزيد</button><button type="button" class="opt">تقل</button><button type="button" class="opt">لا تتغير</button></div><p class="fbk"></p></div>
+        </article>
+
+        <article class="step"><header><span class="n">4</span><h2>لماذا؟ اضغطي البطاقة</h2></header>
+          <div class="why">
+            <button type="button" class="wcard"><b>💧 ما اللزوجة؟</b><span class="tap">اضغطي للكشف</span><span class="hid">مقاومة السائل للجريان والحركة خلاله. السائل الأعلى لزوجة «أثقل» في الحركة، فيُبطئ الكرة أكثر.</span></button>
+            <button type="button" class="wcard"><b>🧲 قوى التجاذب</b><span class="tap">اضغطي للكشف</span><span class="hid">كلما زادت قوى التجاذب بين الجزيئات زادت اللزوجة. في الجليسرين والسكريات التي في العسل مجموعات OH كثيرة تكوّن روابط هيدروجينية قوية.</span></button>
+            <button type="button" class="wcard"><b>🧬 حجم الجزيئات وشكلها</b><span class="tap">اضغطي للكشف</span><span class="hid">الجزيئات الكبيرة والطويلة، مثل جزيئات الزيت، تتشابك فيصعب انزلاقها فوق بعضها، فتزيد اللزوجة.</span></button>
+            <button type="button" class="wcard"><b>🔥 أثر الحرارة</b><span class="tap">اضغطي للكشف</span><span class="hid">التسخين يزيد الطاقة الحركية للجزيئات فتتغلب على قوى التجاذب بسهولة أكبر، فتقل اللزوجة وتسرع الكرة.</span></button>
+          </div>
+          <div class="tablewrap"><table><thead><tr><th>السائل</th><th>اللزوجة التقريبية عند <span class="ltr">25°C</span></th></tr></thead>
+            <tbody><tr><td>الماء</td><td dir="ltr">≈ 0.9 mPa·s</td></tr><tr><td>زيت الطبخ</td><td dir="ltr">≈ 50 mPa·s</td></tr><tr><td>الجليسرين</td><td dir="ltr">≈ 950 mPa·s</td></tr><tr><td>العسل</td><td dir="ltr">≈ 2000–10000 mPa·s</td></tr></tbody></table></div>
+          <p class="note">لزوجة العسل تختلف حسب نوعه ونسبة الماء فيه؛ المحاكاة تستخدم <span class="ltr">6000 mPa·s</span>.</p>
+        </article>
+
+        <article class="step"><header><span class="n">5</span><h2>من واقعي</h2></header>
+          <p class="life">🍯 في الشتاء يصبح العسل ودبس التمر أثقل في الصب، فنضع العلبة في ماء دافئ قليلًا ليسيلا بسهولة.<br>🚗 ويُكتب على زيت محرك السيارة رقم مثل <span class="ltr">5W-30</span> يدل على لزوجته في البرد والحر، ولذلك يختار السائقون في صيف السعودية الحار زيتًا مناسبًا للحرارة العالية.</p>
+          <div class="mcq" data-ans="2"><p class="q">🧠 تحدٍّ: لماذا يُسخّن العسل قليلًا قبل تعبئته في المصنع؟</p><div class="opts"><button type="button" class="opt">لتزيد لزوجته</button><button type="button" class="opt">ليتغير لونه فقط</button><button type="button" class="opt">لتقل لزوجته فيجري بسرعة في الأنابيب</button></div><p class="fbk"></p></div>
+        </article>
+      </div>
+    </div>
+  </main>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const RM=matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* liquids: viscosity at 25°C (Pa·s), density (kg/m3), temperature factor B (K) for eta = eta25*exp(B(1/T-1/298)) */
+const LQ=[{k:'water',n:'الماء',eta:0.00089,rho:997,B:1800,c:'#60a5fa',a:.45},
+ {k:'oil',n:'زيت الطبخ',eta:0.05,rho:920,B:2900,c:'#eab308',a:.72},
+ {k:'gly',n:'الجليسرين',eta:0.95,rho:1260,B:7000,c:'#99f6e4',a:.65},
+ {k:'honey',n:'العسل',eta:6,rho:1420,B:8860,c:'#d97706',a:.88}];
+const RS=0.003,RHOS=7850,G=9.81;
+function eta(l,t){return l.eta*Math.exp(l.B*(1/(t+273)-1/298));}
+function vterm(l,t){const e=eta(l,t);let v=2/9*(RHOS-l.rho)*G*RS*RS/e;
+  for(let i=0;i<60;i++){const Re=l.rho*v*2*RS/e,Cd=Re<1000?24/Re*(1+0.15*Math.pow(Re,0.687)):0.44;v=Math.sqrt(8/3*RS*G*(RHOS-l.rho)/(l.rho*Cd));}return v;}
+const TOP=3,BOT=18,DEPTH=20;
+let T=25,speed=1,balls=LQ.map(()=>({y:-1.2,t:0,run:false,v:0,t1:null,t2:null,done:false})),results=[],raceOn=false;
+function setT(){T=+$('#temp').value;$('#tempV').textContent=T+'°C';}
+$('#temp').oninput=()=>{setT();resetBalls();};
+function resetBalls(){balls=LQ.map(()=>({y:-1.2,t:0,run:false,v:0,t1:null,t2:null,done:false}));raceOn=false;timers();$('#go').disabled=false;}
+function drop(i){const b=balls[i];if(b.run||b.done)return;Object.assign(b,{y:0,t:0,run:true,v:vterm(LQ[i],T)*100,t1:null,t2:null});}
+$('#go').onclick=()=>{resetBalls();raceOn=true;LQ.forEach((_,i)=>drop(i));$('#go').disabled=true;$('#msg').textContent='🏁 انطلق السباق!';};
+$('#reset').onclick=()=>{resetBalls();$('#msg').textContent='اضغطي على أي مخبار لإسقاط كرته، أو أسقطي الكرات معًا.';};
+$('#fast').onclick=()=>{speed=speed===1?5:1;$('#fast').setAttribute('aria-pressed',speed===5);};
+function timers(){$('#timers').innerHTML=LQ.map((l,i)=>{const b=balls[i],t=b.t2!=null?b.t2-b.t1:b.t1!=null?b.t-b.t1:null;
+  return `<div class="tm${b.t2!=null?' done':''}"><small>${l.n}</small><b>${t==null?'0.00':t.toFixed(2)} s</b></div>`;}).join('');}
+function step(dt){let changed=false;balls.forEach((b,i)=>{if(!b.run)return;b.t+=dt;const v=b.v,tau=Math.min(0.08,v/100/G);
+  b.y=v*(b.t-tau*(1-Math.exp(-b.t/tau)));
+  if(b.t1==null&&b.y>=TOP){b.t1=b.t-(b.y-TOP)/v;}
+  if(b.t2==null&&b.y>=BOT){b.t2=b.t-(b.y-BOT)/v;changed=true;}
+  if(b.y>=DEPTH-0.4){b.y=DEPTH-0.4;b.run=false;b.done=true;changed=true;}});
+  timers();if(changed)checkRace();}
+function checkRace(){if(!raceOn||!balls.every(b=>b.t2!=null))return;raceOn=false;
+  results.push({T,times:balls.map(b=>b.t2-b.t1)});if(results.length>6)results.shift();table();
+  const order=LQ.map((l,i)=>[l.n,balls[i].t2-balls[i].t1]).sort((a,b)=>a[1]-b[1]).map(x=>x[0]);
+  $('#msg').textContent='🏆 الترتيب: '+order.join(' ← ');judge(order);$('#go').disabled=false;}
+function table(){$('#tbl').innerHTML=`<thead><tr><th>T (°C)</th>${LQ.map(l=>`<th>${l.n}<br><small class="note">الزمن · السرعة</small></th>`).join('')}</tr></thead><tbody>`+
+  (results.length?results.map(r=>`<tr><td dir="ltr">${r.T}</td>${r.times.map(t=>`<td dir="ltr">${t.toFixed(2)} s · ${(15/t).toFixed(1)} cm/s</td>`).join('')}</tr>`).join('')
+  :`<tr><td colspan="5" class="note">لا توجد نتائج بعد. أسقطي الكرات معًا.</td></tr>`)+'</tbody>';}
+let pred=[];
+$('#pBtns').innerHTML=LQ.map((l,i)=>`<button type="button" class="opt" data-i="${i}">${l.n}</button>`).join('');
+$$('#pBtns .opt').forEach(b=>b.onclick=()=>{const n=LQ[+b.dataset.i].n;if(pred.includes(n)||pred.length>=4)return;pred.push(n);showPred();});
+$('#pClr').onclick=()=>{pred=[];showPred();$('#pRes').innerHTML='';};
+function showPred(){$('#pred').innerHTML=pred.length?pred.map((n,i)=>`<span>${i+1}. ${n}</span>`).join(''):'<span class="note">توقعك يظهر هنا</span>';}
+function judge(order){if(pred.length<4){$('#pRes').innerHTML='<p class="callout info">سجّلي توقعك كاملًا قبل السباق القادم لتقارنيه بالنتيجة.</p>';return;}
+  const ok=pred.every((n,i)=>n===order[i]);$('#pRes').innerHTML=ok?'<p class="callout ok">🎯 توقعك صحيح تمامًا!</p>':`<p class="callout bad">توقعك يختلف عن النتيجة. الترتيب الفعلي: ${order.join(' ← ')}</p>`;}
+$$('.mcq').forEach(m=>m.querySelectorAll('.opt').forEach((b,i)=>b.onclick=()=>{const ok=i===+m.dataset.ans;m.querySelectorAll('.opt').forEach((x,j)=>{x.classList.toggle('right',ok&&j===i);x.classList.toggle('wrong',!ok&&j===i);});
+  const f=m.querySelector('.fbk');f.className='fbk callout '+(ok?'ok':'bad');f.textContent=ok?'✅ صحيح!':'حاولي مرة ثانية، وانظري لجدول النتائج.';}));
+$$('.wcard').forEach(c=>c.onclick=()=>c.classList.toggle('open'));
+const cv=$('#cv'),cx=cv.getContext('2d');let last=performance.now();
+function draw(now){requestAnimationFrame(draw);const dt=Math.min(0.05,(now-last)/1000)*speed;last=now;if(!RM||raceOn||balls.some(b=>b.run))step(dt);
+  const d=Math.min(devicePixelRatio||1,2),W=cv.clientWidth,H=cv.clientHeight;if(!W)return;if(cv.width!==Math.round(W*d)){cv.width=Math.round(W*d);cv.height=Math.round(H*d);}
+  cx.setTransform(d*W/560,0,0,d*H/430,0,0);cx.clearRect(0,0,560,430);cx.direction='ltr';
+  const ink=css('--lab-ink'),mut=css('--lab-muted'),metal=css('--lab-metal'),glass=css('--lab-glass'),steel=css('--lab-steel'),bad=css('--lab-bad'),ok=css('--lab-ok');
+  const y0=70,px=16,colW=86,gap=40,x0=40;
+  cx.font='bold 15px Tajawal, sans-serif';cx.textAlign='center';
+  LQ.forEach((l,i)=>{const x=x0+(LQ.length-1-i)*(colW+gap),b=balls[i];
+    cx.fillStyle=glass;cx.fillRect(x,y0-30,colW,DEPTH*px+34);
+    cx.globalAlpha=l.a;cx.fillStyle=l.c;cx.fillRect(x+3,y0,colW-6,DEPTH*px);cx.globalAlpha=1;
+    cx.strokeStyle=metal;cx.lineWidth=3;cx.beginPath();cx.moveTo(x,y0-30);cx.lineTo(x,y0+DEPTH*px+4);cx.lineTo(x+colW,y0+DEPTH*px+4);cx.lineTo(x+colW,y0-30);cx.stroke();
+    cx.fillStyle=metal;cx.fillRect(x-8,y0+DEPTH*px+4,colW+16,8);
+    cx.strokeStyle=mut;cx.lineWidth=1;for(let c=0;c<=DEPTH;c+=2){const yy=y0+c*px;cx.beginPath();cx.moveTo(x+colW-14,yy);cx.lineTo(x+colW-3,yy);cx.stroke();}
+    [[TOP,ok],[BOT,bad]].forEach(([c,col])=>{cx.strokeStyle=col;cx.setLineDash([6,4]);cx.lineWidth=2;cx.beginPath();cx.moveTo(x+3,y0+c*px);cx.lineTo(x+colW-3,y0+c*px);cx.stroke();cx.setLineDash([]);});
+    const by=y0+b.y*px;cx.fillStyle=steel;cx.beginPath();cx.arc(x+colW/2,by,7,0,7);cx.fill();cx.fillStyle='rgba(255,255,255,.75)';cx.beginPath();cx.arc(x+colW/2-2,by-2,2.2,0,7);cx.fill();
+    cx.fillStyle=ink;cx.fillText(l.n,x+colW/2,y0+DEPTH*px+34);});
+  cx.font='13px Tajawal, sans-serif';cx.textAlign='left';cx.fillStyle=ok;cx.fillText('بداية',2,y0+TOP*px+4);cx.fillStyle=bad;cx.fillText('نهاية',2,y0+BOT*px+4);
+  cx.fillStyle=mut;cx.textAlign='center';cx.fillText(`15 cm · ${T}°C`,280,y0-40);}
+cv.addEventListener('click',e=>{const r=cv.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*560,j=Math.floor((x-40+20)/(86+40)),i=3-j;if(j>=0&&j<4){if(balls[i].done)balls[i]=({y:-1.2,t:0,run:false,v:0,t1:null,t2:null,done:false});drop(i);}});
+setT();timers();table();requestAnimationFrame(draw);
+</script>
+</body>
+</html>
