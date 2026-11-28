@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>درع المعادن الأخضر</title>
-<style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🛡️ درع المعادن الأخضر | معمل افتراضي مستقل</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><polygon points='18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5' stroke='%232a7de1' stroke-width='2.4' fill='none'/><circle cx='18' cy='18' r='4.5' fill='%230b8a4a'/></svg>">
+  <link rel="stylesheet" href="../assets/styles.css">
+  <script src="../assets/theme.js"></script>
+  <style>
+
 :root{--bg:#f4f7f5;--card:#fff;--tx:#1c2b24;--mu:#5d6f66;--ac:#1f8a5b;--bd:#d8e2dc;--rust:#b4501f;--bar:#1f8a5b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101a15;--card:#18261f;--tx:#e6f0ea;--mu:#9bb0a5;--ac:#3ecf8e;--bd:#2a3d33;--rust:#e0763a;--bar:#3ecf8e;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#101a15;--card:#18261f;--tx:#e6f0ea;--mu:#9bb0a5;--ac:#3ecf8e;--bd:#2a3d33;--rust:#e0763a;--bar:#3ecf8e;color-scheme:dark}
+[data-theme="dark"]{--bg:#101a15;--card:#18261f;--tx:#e6f0ea;--mu:#9bb0a5;--ac:#3ecf8e;--bd:#2a3d33;--rust:#e0763a;--bar:#3ecf8e;color-scheme:dark}
 *{box-sizing:border-box}
 body{margin:0;background:linear-gradient(160deg,color-mix(in srgb,var(--ac) 28%,var(--bg)),var(--bg) 45%,color-mix(in srgb,#2b8fd1 24%,var(--bg))) fixed;min-height:100vh;color:var(--tx);font-family:Tahoma,"Segoe UI",Arial,sans-serif;line-height:1.7}
 main{max-width:900px;margin:auto;padding:16px}
@@ -32,13 +36,108 @@ button.o{background:transparent;color:var(--ac);border:1px solid var(--ac)}
 .q button{display:block;width:100%;text-align:right;margin:6px 0}
 @media(max-width:560px){.b{grid-template-columns:70px 1fr 56px}.s{font-size:.68rem}}
 html,body{overflow-x:hidden}.top-nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-bottom:10px}.top-nav a{text-decoration:none;padding:6px 12px;border-radius:10px;font-size:.85rem;font-weight:700}.top-nav .home{background:var(--card);border:1px solid var(--bd);color:var(--tx)}.top-nav .back{background:var(--ac);color:#fff}.stu-input{width:100%;border:1px dashed var(--bd);border-radius:8px;background:transparent;color:var(--tx);font:inherit;padding:4px 8px;margin-top:3px}.stu-input:focus{outline:2px solid var(--ac);border-style:solid}
-</style>
+
+
+    :root {
+      --lab-bg: #f7f5f0;
+      --lab-card: #ffffff;
+      --lab-soft: #faf8f3;
+      --lab-ink: #1d2742;
+      --lab-muted: #5d6886;
+      --lab-line: #e6e1d6;
+      --bg: var(--lab-soft);
+      --card: var(--lab-card);
+      --tx: var(--lab-ink);
+      --mu: var(--lab-muted);
+      --bd: var(--lab-line);
+    }
+    [data-theme="dark"] {
+      --lab-bg: #101729;
+      --lab-card: #18223b;
+      --lab-soft: #1e2a48;
+      --lab-ink: #f2f5ff;
+      --lab-muted: #aab8d6;
+      --lab-line: #2e3e66;
+      --bg: var(--lab-soft);
+      --card: var(--lab-card);
+      --tx: var(--lab-ink);
+      --mu: var(--lab-muted);
+      --bd: var(--lab-line);
+    }
+    html, body { overflow-x: hidden; }
+    body {
+      background: var(--lab-bg);
+      color: var(--lab-ink);
+      font-family: 'Tajawal', Tahoma, sans-serif;
+      font-size: 17px;
+      line-height: 1.7;
+      margin: 0;
+    }
+    main.page {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 18px 16px 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .lab-hero {
+      background: linear-gradient(120deg, #0b8a4a 0%, #0e9aa7 45%, #2a7de1 100%);
+      color: #ffffff;
+      border-radius: 22px;
+      padding: 1.25rem 1.6rem;
+      box-shadow: 0 10px 26px rgba(42, 125, 225, 0.2);
+      text-align: right;
+    }
+    .lab-hero .eyebrow { margin: 0 0 0.25rem; font-weight: 800; opacity: 0.92; font-size: 0.95rem; color: #fff; }
+    .lab-hero h1 { margin: 0 0 0.35rem; font-size: clamp(24px, 3.4vw, 34px); font-weight: 900; line-height: 1.3; color: #fff; }
+    .lab-hero .note { color: rgba(255, 255, 255, 0.94); font-size: 1rem; margin: 0; }
+    .stu { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; text-align: right; }
+    .stu div { background: var(--lab-card); border: 2px solid var(--lab-line); border-radius: 14px; padding: 10px 14px; font-size: .92rem; color: var(--lab-ink); box-shadow: var(--shadow-sm); }
+    .stu span { display: block; font-size: .78rem; color: var(--lab-muted); font-weight: 700; }
+    .stu-input { width: 100%; border: 1.5px dashed var(--lab-line); border-radius: 9px; background: var(--lab-soft); color: var(--lab-ink); font: inherit; padding: 5px 9px; margin-top: 4px; }
+    .stu-input:focus { outline: 2px solid var(--ac); border-style: solid; }
+    .card {
+      background: var(--lab-card);
+      border: 2px solid var(--lab-line);
+      border-radius: 20px;
+      padding: 18px;
+      margin: 0;
+      box-shadow: var(--shadow-sm);
+    }
+
+  </style>
 </head>
 <body>
-<main>
-<nav class="top-nav" aria-label="التنقل"><a class="home" href="../index.html">الرئيسية</a><a class="back" href="../experiments.html">تجارب</a></nav>
+  <header class="classroom-bar">
+    <div class="classroom-bar-inner">
+      <div class="lesson-crumb">
+        <a class="btn btn-sm" href="../index.html">الرئيسية</a>
+        <a class="btn btn-sm" href="../experiments.html">تجارب</a>
+        <a class="btn btn-sm" href="green-filter.html">💧 الفلتر الأخضر: حارس المياه</a>
+        <h1>🛡️ درع المعادن الأخضر</h1>
+        <span class="page-ref">معمل افتراضي مستقل</span>
+      </div>
+      <div class="header-tools">
+        <button id="themeToggleBtn" type="button" class="btn btn-sm" aria-pressed="false">الوضع الليلي</button>
+      </div>
+    </div>
+  </header>
 
-<div class="hero"><h1>🛡️ درع المعادن الأخضر</h1><p class="sub">ابتكار طلاء واقٍ صديق للبيئة لمقاومة تآكل المعادن في المناطق الساحلية</p><div class="stu"><div><span>تصميم الطالبة</span><input type="text" class="stu-input" placeholder="اكتبي اسمك هنا" aria-label="اسم الطالبة"></div><div><span>الصف والشعبة</span><input type="text" class="stu-input" placeholder="اكتبي الصف والشعبة" aria-label="الصف والشعبة"></div><div><span>المدرسة</span><input type="text" class="stu-input" placeholder="اكتبي اسم المدرسة" aria-label="المدرسة"></div><div><span>المادة</span>كيمياء 3 – الكيمياء الكهربائية</div></div></div>
+  <main class="page">
+<section class="lab-hero">
+      <p class="eyebrow">كيمياء 3 · الكيمياء الكهربائية (معمل افتراضي مستقل)</p>
+      <h1>🛡️ درع المعادن الأخضر</h1>
+      <p class="note">ابتكار طلاء واقٍ صديق للبيئة لمقاومة تآكل المعادن في المناطق الساحلية</p>
+    </section>
+
+    <div class="stu" aria-label="بيانات الطالبة">
+      <div><span>تصميم الطالبة</span><input type="text" class="stu-input" placeholder="اكتبي اسمك هنا" aria-label="اسم الطالبة"></div>
+      <div><span>الصف والشعبة</span><input type="text" class="stu-input" placeholder="اكتبي الصف والشعبة" aria-label="الصف والشعبة"></div>
+      <div><span>المدرسة</span><input type="text" class="stu-input" placeholder="اكتبي اسم المدرسة" aria-label="المدرسة"></div>
+      <div><span>المادة</span>كيمياء 3 – الكيمياء الكهربائية</div>
+    </div>
+</div>
 
 <div class="card">
 <h2>المشكلة</h2>
@@ -82,7 +181,7 @@ html,body{overflow-x:hidden}.top-nav{display:flex;gap:8px;flex-wrap:wrap;justify
 </div>
 
 <p style="font-size:.8rem">⚠️ المحاكاة تعتمد على نموذج تقريبي لأغراض تعليمية، وتحتاج لتأكيد عملي بتجربة حقيقية (مسمار حديد + محلول ملحي + قياس الكتلة قبل وبعد).</p>
-</main>
+  </main>
 <script>
 const C=[
 {n:"بدون حماية",e:0,d:"عينة ضابطة: سطح الحديد مكشوف فيتفاعل مع الماء والأكسجين والأملاح."},
