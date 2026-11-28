@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>درع المعادن الأخضر</title>
+<style>
+:root{--bg:#f4f7f5;--card:#fff;--tx:#1c2b24;--mu:#5d6f66;--ac:#1f8a5b;--bd:#d8e2dc;--rust:#b4501f;--bar:#1f8a5b;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101a15;--card:#18261f;--tx:#e6f0ea;--mu:#9bb0a5;--ac:#3ecf8e;--bd:#2a3d33;--rust:#e0763a;--bar:#3ecf8e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#101a15;--card:#18261f;--tx:#e6f0ea;--mu:#9bb0a5;--ac:#3ecf8e;--bd:#2a3d33;--rust:#e0763a;--bar:#3ecf8e;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(160deg,color-mix(in srgb,var(--ac) 28%,var(--bg)),var(--bg) 45%,color-mix(in srgb,#2b8fd1 24%,var(--bg))) fixed;min-height:100vh;color:var(--tx);font-family:Tahoma,"Segoe UI",Arial,sans-serif;line-height:1.7}
+main{max-width:900px;margin:auto;padding:16px}
+h1{font-size:1.8rem;margin:.2em 0;color:var(--ac)}.hero{text-align:center;padding:18px 12px;border-radius:18px;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 30%,var(--card)),color-mix(in srgb,#2b8fd1 25%,var(--card)));border:1px solid var(--bd)}.hero .sub{color:var(--tx);margin:0 0 10px}.stu{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:10px;text-align:right}.stu div{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px 12px;font-size:.9rem}.stu span{display:block;font-size:.75rem;color:var(--mu)}h2{font-size:1.1rem;margin:0 0 8px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:12px 0}
+p{margin:.3em 0;color:var(--mu)}
+.eq{direction:ltr;text-align:left;font-family:monospace;background:var(--bg);padding:8px;border-radius:8px;color:var(--tx);font-size:.9rem;overflow-x:auto}
+label{display:flex;justify-content:space-between;font-size:.95rem;margin-top:8px}
+input[type=range]{width:100%;accent-color:var(--ac)}
+.row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;text-align:center}
+.s{font-size:.78rem;cursor:pointer;border:2px solid transparent;border-radius:10px;padding:4px}
+.s.sel{border-color:var(--ac)}
+svg.m{width:100%;max-width:110px;height:auto}
+.bars{display:flex;flex-direction:column;gap:8px}
+.b{display:grid;grid-template-columns:95px 1fr 70px;gap:8px;align-items:center;font-size:.85rem}
+.t{background:var(--bg);border-radius:6px;height:18px;overflow:hidden}
+.t i{display:block;height:100%;background:var(--bar);transition:width .4s}
+.t i.bare{background:var(--rust)}
+button{background:var(--ac);color:#fff;border:0;border-radius:10px;padding:8px 14px;font:inherit;cursor:pointer}
+button.o{background:transparent;color:var(--ac);border:1px solid var(--ac)}
+.res{font-size:1rem;color:var(--tx)}
+.q button{display:block;width:100%;text-align:right;margin:6px 0}
+@media(max-width:560px){.b{grid-template-columns:70px 1fr 56px}.s{font-size:.68rem}}
+</style>
+</head>
+<body>
+<main>
+<div class="hero"><h1>🛡️ درع المعادن الأخضر</h1><p class="sub">ابتكار طلاء واقٍ صديق للبيئة لمقاومة تآكل المعادن في المناطق الساحلية</p><div class="stu"><div><span>تصميم الطالبة</span>ألين فائز الغامدي</div><div><span>الصف</span>ثالث ثانوي – شعبة 8</div><div><span>المدرسة</span>الثانوية الثانية والخمسون</div><div><span>المادة</span>كيمياء 3 – الكيمياء الكهربائية</div></div></div>
+
+<div class="card">
+<h2>المشكلة</h2>
+<p>في المدن الساحلية مثل جدة تتآكل الحديد والفولاذ بسرعة بسبب الرطوبة العالية وأملاح البحر التي ترفع التوصيلية الكهربائية للماء فتسرّع التفاعل الكهروكيميائي.</p>
+<div class="eq">أكسدة (أنود): Fe → Fe²⁺ + 2e⁻<br>اختزال (كاثود): O₂ + 2H₂O + 4e⁻ → 4OH⁻<br>الصدأ: 4Fe(OH)₂ + O₂ → 2Fe₂O₃·xH₂O</div>
+<p><b>الابتكار:</b> طلاء واقٍ من مواد طبيعية آمنة يعزل السطح عن الماء والأكسجين ويُبطئ التفاعل، بدلًا من الطلاءات السامة.</p>
+</div>
+
+<div class="card">
+<h2>1) ظروف التجربة (بيئة ساحلية)</h2>
+<label><span>الرطوبة النسبية</span><b id="hv"></b></label><input type="range" id="h" min="30" max="100" value="80">
+<label><span>ملوحة الرذاذ (NaCl %)</span><b id="sv"></b></label><input type="range" id="s" min="0" max="5" step="0.5" value="3.5">
+<label><span>مدة التعرض</span><b id="dv"></b></label><input type="range" id="d" min="1" max="90" value="30">
+<p style="margin-top:8px">جرّب: ملوحة 0% ثم 5% ولاحظ أثرها على التآكل.</p>
+</div>
+
+<div class="card">
+<h2>2) العينات (اضغط على عينة لقراءة تفسيرها)</h2>
+<div class="row" id="samples"></div>
+</div>
+
+<div class="card">
+<h2>3) مقارنة كمية التآكل (فقد الكتلة)</h2>
+<div class="bars" id="bars"></div>
+<p id="info" class="res" style="margin-top:10px"></p>
+</div>
+
+<div class="card">
+<h2>4) النتيجة</h2>
+<p id="concl" class="res"></p>
+<div class="eq" id="calc"></div>
+</div>
+
+<div class="card q">
+<h2>تحقق من فهمك</h2>
+<p>لماذا يزداد التآكل عند ارتفاع الملوحة؟</p>
+<button class="o" data-a="0">لأن الملح يزيد كتلة الحديد</button>
+<button class="o" data-a="1">لأن الأيونات ترفع توصيلية الماء فيسهل انتقال الإلكترونات</button>
+<button class="o" data-a="0">لأن الملح يجفف سطح المعدن</button>
+<p id="qr"></p>
+</div>
+
+<p style="font-size:.8rem">⚠️ المحاكاة تعتمد على نموذج تقريبي لأغراض تعليمية، وتحتاج لتأكيد عملي بتجربة حقيقية (مسمار حديد + محلول ملحي + قياس الكتلة قبل وبعد).</p>
+</main>
+<script>
+const C=[
+{n:"بدون حماية",e:0,d:"عينة ضابطة: سطح الحديد مكشوف فيتفاعل مع الماء والأكسجين والأملاح."},
+{n:"شاي أخضر (حمض التانيك)",e:.55,d:"التانين يتفاعل مع الصدأ مكوّنًا طبقة تانات الحديد (III) الداكنة المستقرة التي تعيق التآكل."},
+{n:"كيتوزان (من قشور الروبيان)",e:.68,d:"بوليمر طبيعي يكوّن غشاءً يلتصق بالسطح ويحجز الماء والأكسجين، وتحتوي مجموعاته الأمينية على أزواج إلكترونات ترتبط بالمعدن."},
+{n:"زيت زيتون + شمع نحل",e:.74,d:"طبقة كارهة للماء تمنع وصول الإلكتروليت للسطح، لكنها تتأثر بالحرارة وتحتاج تجديدًا."},
+{n:"كيتوزان + مستخلص شاي",e:.88,d:"الطلاء المركّب: الغشاء العازل من الكيتوزان مع تثبيط التانين، فتعمل آليتا الحماية معًا."}];
+const $=id=>document.getElementById(id);let sel=0,res=[];
+function rnd(s){return()=>(s=(s*9301+49297)%233280)/233280}
+function calc(){
+const H=+$("h").value,S=+$("s").value,D=+$("d").value;
+$("hv").textContent=H+"%";$("sv").textContent=S+"%";$("dv").textContent=D+" يوم";
+const rate=0.05*(0.3+H/100*1.2)*(1+1.2*S);const A=10;
+const bare=rate*A*D;
+res=C.map((c,i)=>{if(!i)return{loss:bare,eff:0};
+const eff=Math.max(.1,c.e*(1-0.03*S)*(1-0.002*D));
+return{loss:bare*(1-eff),eff}});
+render(H,S,D,rate,A)}
+function svg(sev,seed){const r=rnd(seed+7);let o=`<svg class="m" viewBox="0 0 100 130"><rect x="8" y="5" width="84" height="120" rx="6" fill="#aab4ba"/><rect x="8" y="5" width="84" height="30" rx="6" fill="#ffffff22"/>`;
+const n=Math.floor(sev*90);for(let i=0;i<n;i++){const x=12+r()*76,y=9+r()*112,rad=2+r()*(3+sev*7);o+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${rad.toFixed(1)}" fill="${r()>.5?'#a8431a':'#c9662c'}" opacity="${(.5+sev*.5).toFixed(2)}"/>`}
+return o+`<circle cx="50" cy="15" r="3" fill="#6b757b"/></svg>`}
+function render(H,S,D,rate,A){
+const max=Math.max(...res.map(r=>r.loss),1);
+$("samples").innerHTML=C.map((c,i)=>`<div class="s ${i==sel?'sel':''}" onclick="sel=${i};render(${H},${S},${D},${rate},${A})">${svg(Math.min(1,res[i].loss/150),i)}<div>${c.n}</div></div>`).join("");
+$("bars").innerHTML=C.map((c,i)=>`<div class="b"><span>${i?c.n.split(" (")[0]:"بدون حماية"}</span><div class="t"><i class="${i?'':'bare'}" style="width:${res[i].loss/max*100}%"></i></div><b>${res[i].loss.toFixed(1)} mg</b></div>`).join("");
+const r=res[sel];$("info").innerHTML=`<b>${C[sel].n}:</b> ${C[sel].d}`+(sel?`<br>فقد الكتلة ${r.loss.toFixed(1)} mg، وكفاءة الحماية ${(r.eff*100).toFixed(0)}%.`:"");
+let bi=1;res.forEach((x,i)=>{if(i&&x.eff>res[bi].eff)bi=i});
+$("concl").innerHTML=`في هذه الظروف فقدت العينة غير المحمية <b>${res[0].loss.toFixed(1)} mg</b> بينما فقدت أفضل عينة محمية (${C[bi].n}) <b>${res[bi].loss.toFixed(1)} mg</b> فقط، أي أن الطلاء قلّل التآكل بنسبة <b>${(res[bi].eff*100).toFixed(0)}%</b>. ${S>=4?"لاحظ أن الملوحة العالية تُضعف كفاءة الطلاءات.":""}${D>60?" ومع طول المدة تتراجع الكفاءة قليلًا، ما يعني الحاجة لتجديد الطلاء.":""}`;
+$("calc").innerHTML=`معدل التآكل = ${rate.toFixed(3)} mg/cm²·day<br>فقد الكتلة (بدون حماية) = المعدل × المساحة (${A} cm²) × الأيام (${D}) = ${res[0].loss.toFixed(1)} mg<br>كفاءة الحماية % = (m₀ − m₁) / m₀ × 100`}
+document.querySelectorAll("input").forEach(e=>e.oninput=calc);
+document.querySelectorAll(".q button").forEach(b=>b.onclick=()=>{$("qr").textContent=b.dataset.a=="1"?"✅ صحيح! الأيونات (Na⁺, Cl⁻) تعمل كجسر ملحي يسرّع التفاعل الكهروكيميائي.":"❌ حاول مرة أخرى."});
+calc();
+</script>
+</body>
+</html>
