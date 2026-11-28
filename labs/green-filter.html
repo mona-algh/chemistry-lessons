@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>الفلتر الأخضر: حارس المياه</title>
+<style>
+:root{--bg:#f2f8fb;--card:#fff;--tx:#17262e;--mu:#587079;--ac:#0b8fa8;--bd:#d6e4ea;--bad:#c0462b;--ok:#1f9d63;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a20;--card:#162830;--tx:#e4f0f4;--mu:#97b0b9;--ac:#3cc4de;--bd:#28414b;--bad:#e8704f;--ok:#3ecf8e;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0e1a20;--card:#162830;--tx:#e4f0f4;--mu:#97b0b9;--ac:#3cc4de;--bd:#28414b;--bad:#e8704f;--ok:#3ecf8e;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(160deg,color-mix(in srgb,var(--ac) 28%,var(--bg)),var(--bg) 45%,color-mix(in srgb,#8a5ad6 20%,var(--bg))) fixed;min-height:100vh;color:var(--tx);font-family:Tahoma,"Segoe UI",Arial,sans-serif;line-height:1.7}
+main{max-width:920px;margin:auto;padding:16px}
+h1{font-size:1.8rem;margin:.2em 0;color:var(--ac)}h2{font-size:1.1rem;margin:0 0 8px}
+.hero{text-align:center;padding:18px 12px;border-radius:18px;background:linear-gradient(135deg,color-mix(in srgb,var(--ac) 30%,var(--card)),color-mix(in srgb,#8a5ad6 22%,var(--card)));border:1px solid var(--bd)}
+.stu{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin-top:10px;text-align:right}
+.stu div{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:8px 12px;font-size:.9rem}.stu span{display:block;font-size:.75rem;color:var(--mu)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:14px;margin:12px 0}
+p{margin:.3em 0;color:var(--mu)}
+.eq{direction:ltr;text-align:left;font-family:monospace;background:var(--bg);padding:8px;border-radius:8px;color:var(--tx);font-size:.88rem;overflow-x:auto}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:4px 18px}
+label{display:flex;justify-content:space-between;font-size:.93rem;margin-top:8px}
+input[type=range]{width:100%;accent-color:var(--ac)}
+.row{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;text-align:center}
+.s{font-size:.78rem;cursor:pointer;border:2px solid transparent;border-radius:10px;padding:4px}.s.sel{border-color:var(--ac)}
+svg.m{width:100%;max-width:110px;height:auto}
+.b{display:grid;grid-template-columns:110px 1fr 120px;gap:8px;align-items:center;font-size:.83rem;margin:6px 0}
+.t{background:var(--bg);border-radius:6px;height:18px;overflow:hidden}.t i{display:block;height:100%;background:var(--ac);transition:width .4s}
+.tag{font-weight:bold}.ok{color:var(--ok)}.no{color:var(--bad)}
+.res{color:var(--tx)}
+.q button{display:block;width:100%;text-align:right;margin:6px 0;background:transparent;color:var(--ac);border:1px solid var(--ac);border-radius:10px;padding:8px 12px;font:inherit;cursor:pointer}
+@keyframes fl{0%,100%{transform:translate(0,0)}50%{transform:translate(4px,-6px)}}@keyframes pu{0%,100%{transform:scale(1)}50%{transform:scale(1.12)}}@keyframes fall{to{transform:translateY(105vh) rotate(540deg)}}.p{animation:fl 3s ease-in-out infinite}.story{border:2px dashed var(--ac);background:color-mix(in srgb,var(--ac) 10%,var(--card))}.mis{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}.mis button{background:var(--ac);color:#fff;border:0;border-radius:999px;padding:8px 14px;font:inherit;cursor:pointer;transition:transform .15s}.mis button:hover{transform:scale(1.06)}.sb{display:flex;gap:14px;align-items:center;position:sticky;top:6px;z-index:5;box-shadow:0 4px 14px #0002}.face{font-size:2.8rem;animation:pu 2s infinite}.stars{font-size:1.5rem;letter-spacing:4px}.gauge{height:14px;border-radius:8px;background:var(--bg);overflow:hidden;border:1px solid var(--bd)}.gauge i{display:block;height:100%;width:0;background:linear-gradient(90deg,#e8704f,#f0c040,#3ecf8e);transition:width .6s}.cf{position:fixed;top:-30px;font-size:1.6rem;z-index:99;pointer-events:none;animation:fall 2.6s linear forwards}.s{transition:transform .2s}.s:hover{transform:translateY(-4px)}
+@media(max-width:600px){.g2{grid-template-columns:1fr}.b{grid-template-columns:72px 1fr 92px}.s{font-size:.66rem}}
+html,body{overflow-x:hidden}.top-nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-bottom:10px}.top-nav a{text-decoration:none;padding:6px 12px;border-radius:10px;font-size:.85rem;font-weight:700}.top-nav .home{background:var(--card);border:1px solid var(--bd);color:var(--tx)}.top-nav .back{background:var(--ac);color:#fff}.stu-input{width:100%;border:1px dashed var(--bd);border-radius:8px;background:transparent;color:var(--tx);font:inherit;padding:4px 8px;margin-top:3px}.stu-input:focus{outline:2px solid var(--ac);border-style:solid}
+</style>
+</head>
+<body>
+<main>
+<nav class="top-nav" aria-label="التنقل"><a class="home" href="../index.html">الرئيسية</a><a class="back" href="../experiments.html">تجارب</a></nav>
+
+<div class="hero"><h1>💧 الفلتر الأخضر: حارس المياه</h1>
+<p style="color:var(--tx)">ابتكار فلتر طبيعي من نوى التمر وقشر البيض لإزالة الرصاص من المياه الملوثة</p>
+<div class="stu"><div><span>تصميم الطالبة</span><input type="text" class="stu-input" placeholder="اكتبي اسمك هنا" aria-label="اسم الطالبة"></div><div><span>الصف والشعبة</span><input type="text" class="stu-input" placeholder="اكتبي الصف والشعبة" aria-label="الصف والشعبة"></div><div><span>المدرسة</span><input type="text" class="stu-input" placeholder="اكتبي اسم المدرسة" aria-label="المدرسة"></div><div><span>المادة</span>كيمياء 3 – الاتزان والذائبية</div></div></div>
+
+<div class="card story"><h2>🎬 مهمة الإنقاذ</h2><p style="color:var(--tx)">وصلت إلى المختبر عينات مياه ملوثة بالرصاص، وأنتِ الآن كيميائية بيئية! صمّمي فلترًا أخضر من مخلفات بيئتنا لإنقاذ الماء، واجمعي النجوم: ⭐ إزالة 90% ⭐⭐ إزالة 99% ⭐⭐⭐ ماء آمن (≤ 0.01 mg/L). اختاري مهمة للبدء:</p><div class="mis"><button onclick="mission(2)">🚰 أنبوب منزلي قديم</button><button onclick="mission(20)">🏭 مياه مصنع</button><button onclick="mission(50)">☣️ تلوث شديد</button></div></div>
+<div class="card"><h2>المشكلة</h2>
+<p>تلوث المياه بأيونات الفلزات الثقيلة كالرصاص Pb²⁺ (من الأنابيب القديمة والصناعة) يضر الجهاز العصبي، والحد الآمن عالميًا 0.01 mg/L فقط. والطرق التقليدية مكلفة، والكربون المنشّط التجاري غالٍ.</p>
+<p><b>الفكرة المبتكرة:</b> فلتر بخطوتين من مخلفات بيئتنا: <b>نوى التمر المحمّص (فحم حيوي)</b> يمتز الرصاص على سطحه، و<b>قشر البيض المطحون (CaCO₃)</b> يرفع الرقم الهيدروجيني ويوفّر أيونات الكربونات فيترسّب الرصاص على شكل ملح قليل الذوبان.</p>
+<div class="eq">Pb²⁺ + CO₃²⁻ ⇌ PbCO₃(s)  &nbsp; Ksp ≈ 7.4×10⁻¹⁴<br>Pb²⁺ + 2OH⁻ ⇌ Pb(OH)₂(s) &nbsp; Ksp ≈ 1.2×10⁻¹⁵</div></div>
+
+<div class="card sb"><div id="face" class="face">😟</div><div style="flex:1"><div class="stars" id="stars">☆☆☆</div><div class="gauge"><i id="gf"></i></div><p id="goal" class="res" style="font-size:.85rem"></p></div></div>
+<div class="card"><h2>1) 🎛️ صمّمي الفلتر وظروف التجربة</h2>
+<div class="g2"><div>
+<label><span>تركيز الرصاص الابتدائي</span><b id="av"></b></label><input type="range" id="c0" min="1" max="50" value="20">
+<label><span>جرعة نوى التمر (فحم حيوي)</span><b id="bv"></b></label><input type="range" id="d" min="0.5" max="10" step="0.5" value="3">
+</div><div>
+<label><span>جرعة قشر البيض</span><b id="ev"></b></label><input type="range" id="e" min="0" max="6" step="0.5" value="2">
+<label><span>زمن التلامس</span><b id="tv"></b></label><input type="range" id="t" min="5" max="120" step="5" value="60">
+</div></div>
+<p id="ph" style="margin-top:8px"></p></div>
+
+<div class="card"><h2>2) خمس عيّنات ماء (اضغطي على عينة)</h2>
+<div class="row" id="samples"></div></div>
+
+<div class="card"><h2>3) مقارنة تركيز الرصاص المتبقي ونسبة الإزالة</h2>
+<div id="bars"></div><p id="info" class="res" style="margin-top:10px"></p></div>
+
+<div class="card"><h2>4) النتيجة والحسابات</h2><p id="concl" class="res"></p>
+<div class="eq" id="calc"></div></div>
+
+<div class="card q"><h2>تحقق من فهمك</h2>
+<p>لماذا يساعد رفع pH (بقشر البيض) على إزالة Pb²⁺؟</p>
+<button data-a="0">لأنه يزيد ذوبان ملح الرصاص</button>
+<button data-a="1">لأن زيادة OH⁻ و CO₃²⁻ تُزيح الاتزان نحو تكوّن راسب الرصاص (مبدأ لوتشاتلييه)</button>
+<button data-a="0">لأنه يحوّل الرصاص إلى غاز</button>
+<p id="qr"></p></div>
+<p style="font-size:.8rem">⚠️ نموذج محاكاة تقريبي لأغراض تعليمية (يعتمد على معادلة لانجمير للامتزاز وثابت الذائبية Ksp). لا تُستخدم نتائجه لتنقية مياه الشرب فعليًا دون فحص مخبري معتمد.</p>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+const S=[
+{n:"بدون معالجة",d:"عينة ضابطة: يبقى الرصاص ذائبًا بتركيزه الأصلي.",a:null,e:0},
+{n:"قشور الموز",d:"تحتوي مجموعات كربوكسيل وهيدروكسيل ترتبط بأيونات Pb²⁺ (امتزاز كيميائي)، لكن سعتها متوسطة.",a:{q:25,k:.3},e:0},
+{n:"نوى التمر",d:"الفحم الحيوي من نوى التمر له مساحة سطح كبيرة ومجموعات وظيفية تمتز Pb²⁺ بسعة عالية. وهو مخلّف محلي رخيص.",a:{q:40,k:.5},e:0},
+{n:"قشر البيض",d:"CaCO₃ يرفع pH ويوفّر CO₃²⁻ فيترسّب الرصاص على هيئة PbCO₃ قليل الذوبان.",a:null,e:1},
+{n:"الفلتر المبتكر",d:"يجمع الآليتين: رفع pH يزيد قدرة الامتزاز على نوى التمر، وفي الوقت نفسه يترسّب جزء من الرصاص، فتتضاعف الكفاءة.",a:{q:40,k:.5},e:1}];
+let sel=4,R=[];
+function run(sc,C0,D,E,t){
+const pH=Math.min(9,5.5+(sc.e?.6*E:0)),f=Math.min(1,Math.max(.2,(pH-3)/3));
+let Ca=C0;
+if(sc.a){const q=sc.a.q*f,K=sc.a.k;let lo=0,hi=C0;for(let i=0;i<40;i++){const m=(lo+hi)/2;(C0-m-D*q*K*m/(1+K*m)>0)?lo=m:hi=m}
+Ca=C0-(C0-(lo+hi)/2)*(1-Math.exp(-t/20))}
+const pf=sc.e?(1-Math.exp(-.9*E))*(1-Math.exp(-t/40))*.85:0;
+const Cf=Ca*(1-pf);return{Cf,rem:(1-Cf/C0)*100,pf,pH,ads:sc.a?1:0}}
+function beaker(r,C0,i){const rn=(()=>{let s=i*77+5;return()=>(s=(s*9301+49297)%233280)/233280})();
+let o=`<svg class="m" viewBox="0 0 100 130"><rect x="14" y="28" width="72" height="92" rx="6" fill="#7fd0e6" opacity=".45"/>`;
+const n=Math.min(60,Math.round(r.Cf/C0*40));
+for(let k=0;k<n;k++)o+=`<circle class="p" style="animation-delay:-${(rn()*3).toFixed(1)}s" cx="${(20+rn()*60).toFixed(1)}" cy="${(36+rn()*66).toFixed(1)}" r="2.4" fill="#4a3b52"/>`;
+if(r.ads)for(let k=0;k<14;k++)o+=`<circle cx="${(18+rn()*64).toFixed(1)}" cy="${(112+rn()*6).toFixed(1)}" r="2.6" fill="#7a4a24"/>`;
+o+=`<rect x="16" y="${(116-r.pf*30).toFixed(1)}" width="68" height="${(r.pf*30+2).toFixed(1)}" fill="#e6e6ee" opacity=".9"/>`;
+return o+`<path d="M12 22 V120 a6 6 0 0 0 6 6 H82 a6 6 0 0 0 6-6 V22" fill="none" stroke="#6b7f87" stroke-width="3"/></svg>`}
+let won=0;
+function boom(){for(let i=0;i<30;i++){const s=document.createElement('span');s.className='cf';s.textContent=['🎉','💧','⭐','✨','🌿'][i%5];s.style.left=Math.random()*100+'vw';s.style.animationDelay=Math.random()*.8+'s';document.body.appendChild(s);setTimeout(()=>s.remove(),3800)}}
+function mission(c){$('c0').value=c;$('d').value=3;$('e').value=2;$('t').value=60;won=0;calc();$('face').scrollIntoView({behavior:'smooth',block:'center'})}
+function score(b,C0){const st=b.Cf<=.01?3:b.rem>=99?2:b.rem>=90?1:0,cost=+$('d').value+ +$('e').value;
+const pr=Math.max(0,Math.min(1,1-Math.log10(Math.max(b.Cf,.01)/.01)/Math.log10(C0/.01)));
+$('stars').textContent='⭐'.repeat(st)+'☆'.repeat(3-st);$('face').textContent=['😟','🙂','😀','🥳'][st];$('gf').style.width=(pr*100)+'%';
+$('goal').innerHTML=['حرّكي المنزلقات: اجعلي الإزالة 90% أو أكثر لتنالي النجمة الأولى!','أحسنتِ! ارفعي الإزالة إلى 99% للنجمة الثانية.','قريبة جدًا! خفّضي الرصاص إلى 0.01 mg/L أو أقل.','🏆 الماء آمن! '+(cost<=8?'وبكلفة موفّرة ('+cost+' g/L) ، أنتِ خبيرة توفير!':'جرّبي تقليل الجرعات (الآن '+cost+' g/L) لتوفّري أكثر.')][st];
+if(st==3&&!won){won=1;boom()}if(st<3)won=0}
+function calc(){
+const C0=+$("c0").value,D=+$("d").value,E=+$("e").value,t=+$("t").value;
+$("av").textContent=C0+" mg/L";$("bv").textContent=D+" g/L";$("ev").textContent=E+" g/L";$("tv").textContent=t+" دقيقة";
+R=S.map(s=>run(s,C0,D,E,t));
+$("ph").textContent=`pH الماء بعد إضافة قشر البيض ≈ ${R[4].pH.toFixed(1)} (الماء الملوث الحمضي الأصلي ≈ 5.5)`;
+render(C0)}
+function render(C0){
+$("samples").innerHTML=S.map((s,i)=>`<div class="s ${i==sel?'sel':''}" onclick="sel=${i};render(${C0})">${beaker(R[i],C0,i)}<div>${s.n}</div></div>`).join("");
+$("bars").innerHTML=S.map((s,i)=>{const r=R[i],ok=r.Cf<=.01;return `<div class="b"><span>${s.n}</span><div class="t"><i style="width:${Math.max(1,r.Cf/C0*100)}%"></i></div><span><b>${r.Cf<.1?r.Cf.toFixed(3):r.Cf.toFixed(2)}</b> mg/L · ${r.rem.toFixed(1)}%</span></div>`}).join("");
+const r=R[sel];$("info").innerHTML=`<b>${S[sel].n}:</b> ${S[sel].d}<br><span class="tag ${r.Cf<=.01?'ok':'no'}">${r.Cf<=.01?'✔ مطابق لحد منظمة الصحة العالمية (0.01 mg/L)':'✘ أعلى من الحد الآمن بحوالي '+(r.Cf/.01).toFixed(0)+' ضعفًا'}</span>`;
+const b=R[4];score(b,C0);
+$("concl").innerHTML=`بدأت المياه بتركيز <b>${C0} mg/L</b>. أنتج الفلتر المبتكر تركيزًا متبقيًا <b>${b.Cf<.1?b.Cf.toFixed(3):b.Cf.toFixed(2)} mg/L</b> بكفاءة إزالة <b>${b.rem.toFixed(1)}%</b>، مقابل ${R[2].rem.toFixed(1)}% لنوى التمر وحدها و${R[3].rem.toFixed(1)}% لقشر البيض وحده. ${b.Cf>.01?"جرّبي زيادة الجرعة أو زمن التلامس أو تقليل التركيز الابتدائي للوصول إلى الحد الآمن.":"وصل الماء إلى الحد الآمن 🎉"}`;
+$("calc").innerHTML=`كفاءة الإزالة % = (C₀ − C) / C₀ × 100 = (${C0} − ${b.Cf.toFixed(3)}) / ${C0} × 100 = ${b.rem.toFixed(1)}%<br>لانجمير: q = q_max·K·C / (1 + K·C) &nbsp;|&nbsp; Ksp = [Pb²⁺][CO₃²⁻]`}
+document.querySelectorAll("input").forEach(e=>e.oninput=calc);
+document.querySelectorAll(".q button").forEach(b=>b.onclick=()=>{$("qr").textContent=b.dataset.a=="1"?"✅ صحيح! زيادة الأيونات المترسّبة تُزيح الاتزان نحو الراسب فينخفض تركيز Pb²⁺ الذائب.":"❌ حاولي مرة أخرى."});
+calc();
+</script>
+</body>
+</html>
