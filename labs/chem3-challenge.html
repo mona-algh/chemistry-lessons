@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تحدي كيمياء 3</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><polygon points='18,3 31,10.5 31,25.5 18,33 5,25.5 5,10.5' stroke='%23725a9b' stroke-width='2.4' fill='none'/><circle cx='18' cy='18' r='4.5' fill='%23227f83'/></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.577.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root{--purple:#725a9b;--dark:#29334f;--teal:#227f83;--gold:#c69636;--line:#e8e3f0;--green:#157a57;--red:#b94e61}
+    *{box-sizing:border-box}html,body{overflow-x:hidden}body,button,input{font-family:"Cairo",sans-serif}body{margin:0;min-height:100vh;color:var(--dark);background:radial-gradient(circle at 10% 8%,#e9e0f6 0,transparent 28%),radial-gradient(circle at 90% 82%,#dcf1ef 0,transparent 29%),#f8f7fc}button,input{font-size:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible{outline:3px solid #bb9bd7;outline-offset:3px}
+    .shell{max-width:880px;margin:auto;padding:26px 20px 60px;position:relative}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:28px}.brand{display:flex;align-items:center;gap:10px;font-weight:800;color:var(--purple)}.brand-mark{width:40px;height:40px;display:grid;place-items:center;border-radius:13px;background:#e9def6}.top-note{font-size:13px;color:#7b7990}.deco{position:absolute;color:#a692c3;opacity:.16;pointer-events:none}.deco svg{width:90px;height:90px}.deco.a{top:110px;left:-30px;transform:rotate(-18deg)}.deco.b{bottom:40px;right:-22px;transform:rotate(20deg)}
+    .card{position:relative;background:#fff;border:1px solid #eee9f4;border-radius:26px;box-shadow:0 20px 60px rgba(73,57,112,.09);padding:clamp(24px,5vw,48px);overflow:hidden}.eyebrow{display:inline-flex;align-items:center;gap:7px;color:var(--teal);font-weight:800;font-size:13px;letter-spacing:.2px;background:#e9f6f4;border-radius:99px;padding:7px 13px}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(32px,6vw,52px);line-height:1.3;margin:18px 0 4px;color:#40365f}h2{font-size:clamp(23px,4vw,31px);line-height:1.5}h3{font-size:18px}.subtitle{font-size:19px;color:#77718a;margin-bottom:24px}.intro{max-width:610px;color:#6e7082;line-height:1.9}.topic-chips{display:flex;flex-wrap:wrap;gap:8px;margin:24px 0 30px}.chip{background:#f3f0f9;color:#62527f;padding:7px 12px;border-radius:99px;font-size:12px;font-weight:700}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.field label{display:block;font-weight:700;font-size:14px;margin-bottom:7px}.field input{width:100%;border:1px solid #dcd7e8;background:#fbfaff;border-radius:12px;padding:13px 15px;color:var(--dark)}.field input:focus{border-color:var(--purple)}.primary{border:0;border-radius:13px;background:var(--purple);color:white;font-weight:800;padding:13px 25px;display:inline-flex;align-items:center;justify-content:center;gap:9px;transition:transform .2s,background .2s}.primary:hover{background:#5f4788;transform:translateY(-2px)}.start-btn{margin-top:22px;min-width:190px}.error{color:var(--red);font-size:13px;margin:12px 0 0;min-height:22px}
+    .quiz-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.counter{font-weight:800;color:var(--purple)}.stars{display:inline-flex;align-items:center;gap:7px;background:#fff8e8;color:#9b7225;border-radius:99px;padding:7px 13px;font-weight:800}.progress-track{height:10px;border-radius:99px;background:#ece8f3;overflow:hidden;margin:17px 0 32px}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,#7b60a6,#47aaa5);border-radius:inherit;transition:width .35s}.topic{color:var(--teal);font-weight:800;font-size:13px;margin-bottom:12px}.question{margin-bottom:24px}.options{display:grid;gap:11px}.option{width:100%;border:1.5px solid #e5e1ed;border-radius:14px;background:#fff;text-align:right;padding:14px 17px;color:var(--dark);font-weight:700;display:flex;align-items:center;gap:12px;transition:border-color .2s,background .2s}.option:not(:disabled):hover{border-color:#a891c9;background:#faf7ff}.option:disabled{cursor:default;opacity:1}.letter{flex:none;width:30px;height:30px;border-radius:9px;display:grid;place-items:center;background:#f1edf7;color:var(--purple);font-size:13px}.option.correct{background:#e8f7ee;border-color:#42aa77;color:#176747}.option.correct .letter{background:#c9efd9;color:#176747}.option.wrong{background:#fff0f1;border-color:#e3909d;color:#aa394e}.option.wrong .letter{background:#fbd9df;color:#aa394e}.feedback{margin-top:22px;border-radius:15px;padding:16px 19px;background:#f4f8f9;border-right:4px solid var(--teal);line-height:1.8}.feedback strong{display:block;color:var(--teal)}.feedback.incorrect{background:#fff7f7;border-right-color:var(--red)}.feedback.incorrect strong{color:var(--red)}.enrichment{margin-top:15px;padding:19px 21px;background:#f8f5fc;border:1px solid #e8dff2;border-radius:17px;line-height:1.85}.enrichment h3{color:var(--purple);margin-bottom:8px}.enrichment p{margin-bottom:6px}.next{margin-top:20px}
+    .result{text-align:center}.result-icon{width:74px;height:74px;border-radius:50%;display:grid;place-items:center;background:#fff3d8;color:var(--gold);margin:0 auto 16px}.result-icon svg{width:34px;height:34px}.score{font-size:clamp(42px,8vw,68px);font-weight:800;color:var(--purple);line-height:1.2;margin:10px 0}.result-meta{color:#6e7082}.level{display:inline-block;background:#e9f6f4;color:var(--teal);padding:8px 19px;border-radius:99px;font-weight:800;margin:10px 0 32px}.certificate{border:2px solid #d7b66d;border-radius:18px;background:linear-gradient(135deg,#fffdf7,#fff 45%,#f8f3ff);padding:clamp(24px,5vw,44px);position:relative;overflow:hidden}.certificate:before{content:"✦";position:absolute;top:12px;left:22px;color:#d5b46b;font-size:28px}.certificate h2{color:#92702e;margin:8px 0 22px}.cert-name{font-size:clamp(24px,5vw,36px);font-weight:800;color:#544276;margin:8px 0}.cert-line{color:#606174;line-height:1.9}.medal{display:inline-flex;align-items:center;gap:7px;color:#906719;background:#fff2cc;border:1px solid #e7cb80;border-radius:99px;padding:8px 16px;font-weight:800;margin:18px 0}.cert-details{font-size:14px;color:#66647a}.restart{margin-top:26px}.hidden{display:none!important}.burst{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:10}.particle{position:absolute;top:40%;left:50%;font-size:19px;animation:fly .85s ease-out forwards;transform:translate(-50%,-50%)}@keyframes fly{to{transform:translate(var(--x),var(--y)) rotate(var(--r));opacity:0}}@media(max-width:600px){.shell{padding:18px 14px 42px}.top{margin-bottom:18px}.top-note{display:none}.card{border-radius:20px}.form-grid{grid-template-columns:1fr}.primary{width:100%}.deco{display:none}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+ </head>
+ <body>
+  <main class="shell canva-container">
+   <header class="top canva-header">
+    <div class="brand">
+     <span class="brand-mark"><i data-lucide="atom"></i></span><span>مختبر التميّز</span>
+    </div>
+    <span class="top-note">مسابقة كيمياء 3 • الصف الثالث الثانوي</span>
+   </header>
+   <div class="deco a" aria-hidden="true">
+    <i data-lucide="atom"></i>
+   </div>
+   <div class="deco b" aria-hidden="true">
+    <i data-lucide="flask-conical"></i>
+   </div>
+   <section id="start-screen" class="card canva-card" aria-labelledby="main-title">
+    <span class="eyebrow canva-tag"><i data-lucide="sparkles" size="16"></i> اختبري معلوماتك</span>
+    <h1 id="main-title">تحدي كيمياء 3</h1>
+    <p class="subtitle canva-text">رحلة علمية نحو التميز</p>
+    <p class="intro canva-text">40 سؤالًا في 5 موضوعات أساسية. أجيبي بالترتيب، واكتشفي بعد كل سؤال معلومة تساعدك على تثبيت الفكرة.</p>
+    <div class="topic-chips" aria-label="موضوعات المسابقة">
+     <span class="chip canva-tag">المخاليط والتركيز</span><span class="chip canva-tag">الذوبان والخواص الجامعة</span><span class="chip canva-tag">الأحماض والقواعد</span><span class="chip canva-tag">الأكسدة والاختزال</span><span class="chip canva-tag">الكيمياء الكهربائية</span>
+    </div>
+    <form id="start-form" novalidate>
+     <div class="form-grid">
+      <div class="field">
+       <label for="student-name">اسم الطالبة</label><input id="student-name" class="canva-input" type="text" maxlength="80" autocomplete="name" required placeholder="اكتبي اسمك هنا">
+      </div>
+      <div class="field">
+       <label for="section-number">رقم الشعبة</label><input id="section-number" class="canva-input" type="text" maxlength="20" required placeholder="مثال: 3">
+      </div>
+     </div>
+     <p id="form-error" class="error" role="alert"></p>
+     <button class="primary start-btn canva-button" type="submit">ابدئي المسابقة <i data-lucide="arrow-left" size="18"></i></button>
+    </form>
+   </section>
+   <section id="quiz-screen" class="card canva-card hidden" aria-labelledby="question-title">
+    <div class="quiz-top">
+     <span id="question-counter" class="counter canva-text"></span><span class="stars canva-tag"><i data-lucide="star" size="17"></i> <span id="star-count">0</span> نجمة</span>
+    </div>
+    <div id="progress-track" class="progress-track canva-progress" role="progressbar" aria-label="تقدم المسابقة" aria-valuemin="0" aria-valuemax="40" aria-valuenow="0">
+     <div id="progress-fill" class="progress-fill"></div>
+    </div>
+    <p id="topic-label" class="topic canva-text"></p>
+    <h2 id="question-title" class="question"></h2>
+    <div id="options" class="options"></div>
+    <div id="feedback" class="feedback hidden" role="status"></div>
+    <div id="enrichment" class="enrichment canva-card hidden">
+     <h3>معلومة إثرائية</h3>
+     <p id="enrichment-fact"></p>
+     <p id="enrichment-example"></p>
+     <p id="enrichment-rule"></p>
+    </div>
+    <button id="next-button" class="primary next canva-button hidden" type="button">السؤال التالي <i data-lucide="arrow-left" size="18"></i></button>
+   </section>
+   <section id="result-screen" class="card result canva-card hidden" aria-labelledby="result-title">
+    <div class="result-icon">
+     <i data-lucide="trophy"></i>
+    </div>
+    <span class="eyebrow canva-tag">اكتملت الرحلة العلمية</span>
+    <h1 id="result-title">نتيجتكِ النهائية</h1>
+    <p id="result-identity" class="result-meta"></p>
+    <div id="result-score" class="score"></div>
+    <p id="result-percent" class="result-meta"></p>
+    <span id="result-level" class="level canva-tag"></span>
+    <div class="certificate canva-card" aria-labelledby="certificate-title">
+     <span class="eyebrow canva-tag">✦ إنجاز يستحق الاحتفاء ✦</span>
+     <h2 id="certificate-title">شهادة شكر وتقدير</h2>
+     <p class="cert-line">تُمنح هذه الشهادة إلى الطالبة</p>
+     <p id="cert-name" class="cert-name"></p>
+     <p id="cert-section" class="cert-details"></p>
+     <p class="cert-line">تقديرًا لمشاركتك المتميزة في مسابقة كيمياء 3</p>
+     <span class="medal canva-tag">★ وسام التميز</span>
+     <p id="cert-score" class="cert-details"></p>
+     <p id="cert-date" class="cert-details"></p>
+    </div>
+    <button id="restart-button" class="primary restart canva-button" type="button"><i data-lucide="rotate-ccw" size="18"></i> إعادة المسابقة</button>
+   </section>
+  </main>
+  <div id="burst" class="burst" aria-hidden="true"></div>
+  <script>
+    const questions = [
+      {topic:"المخاليط وتركيز المحلول",question:"الحليب يُعد مثالًا على أي نوع من المخاليط؟",options:["محلول حقيقي","غروي","مركب","عنصر"],correctIndex:1,feedback:"الحليب غروي لأن جسيماته منتشرة ولا تترسب بسهولة.",enrichment:{fact:"الغرويات مخاليط غير متجانسة ذات جسيمات دقيقة.",example:"الحليب والضباب من أمثلة الغرويات.",rule:"يمكن تمييزها بتأثير تندال."}},
+      {topic:"المخاليط وتركيز المحلول",question:"ما المقصود بتأثير تندال؟",options:["تشتيت الضوء","الذوبان","الترسيب","التبخر"],correctIndex:0,feedback:"تشتت الجسيمات الغروية الضوء المار خلالها.",enrichment:{fact:"يكشف تأثير تندال وجود جسيمات غروية.",example:"يمكن رؤية مسار شعاع ضوء في الضباب.",rule:"المحلول الحقيقي لا يُظهر تأثير تندال بوضوح."}},
+      {topic:"المخاليط وتركيز المحلول",question:"الماء والطباشير مثال على:",options:["محلول متجانس","معلق","مركب","غروي"],correctIndex:1,feedback:"جسيمات الطباشير كبيرة نسبيًا وتترسب مع الزمن.",enrichment:{fact:"المعلقات مخاليط غير متجانسة.",example:"يترسب الطباشير في قاع كأس الماء عند تركه.",rule:"يمكن فصل جسيمات المعلق بالترشيح."}},
+      {topic:"المخاليط وتركيز المحلول",question:"أي مقياس يعبّر عن كمية المذاب في المحلول؟",options:["الكثافة","التركيز","الحجم","الكتلة"],correctIndex:1,feedback:"التركيز يوضح مقدار المذاب بالنسبة إلى المحلول أو المذيب.",enrichment:{fact:"للتعبير عن التركيز أكثر من طريقة.",example:"يمكن وصف محلول الملح بالمولارية.",rule:"المولارية = مولات المذاب ÷ حجم المحلول باللتر."}},
+      {topic:"المخاليط وتركيز المحلول",question:"ما وحدة المولارية؟",options:["mol/kg","mol/L","g/L","kg/mol"],correctIndex:1,feedback:"المولارية هي عدد مولات المذاب لكل لتر من المحلول.",enrichment:{fact:"المولارية تعتمد على حجم المحلول النهائي.",example:"1 مول مذاب في 1 لتر محلول تركيزه 1 M.",rule:"M = mol/L"}},
+      {topic:"المخاليط وتركيز المحلول",question:"عند تخفيف المحلول بإضافة مذيب، فإن عدد مولات المذاب:",options:["يزيد","ينقص","يبقى ثابتًا","يتضاعف"],correctIndex:2,feedback:"إضافة المذيب تزيد الحجم لكنها لا تغير كمية المذاب.",enrichment:{fact:"ينخفض التركيز عندما يزداد الحجم بالتخفيف.",example:"إضافة ماء إلى عصير مركز تقلل تركيزه.",rule:"M1V1 = M2V2"}},
+      {topic:"المخاليط وتركيز المحلول",question:"أي المخاليط التالية يمكن فصل جسيماته بالترشيح؟",options:["محلول السكر","محلول الملح","معلق الطباشير","محلول الخل"],correctIndex:2,feedback:"جسيمات المعلق كبيرة بما يكفي للاحتجاز في ورق الترشيح.",enrichment:{fact:"الترشيح وسيلة لفصل بعض المخاليط غير المتجانسة.",example:"يمكن فصل الطباشير عن الماء بورق الترشيح.",rule:"حجم جسيمات المعلق أكبر من جسيمات المحلول الحقيقي."}},
+      {topic:"المخاليط وتركيز المحلول",question:"إذا ذاب 2 mol من مادة في 1 L من المحلول، فما مولاريته؟",options:["0.5 M","1 M","2 M","3 M"],correctIndex:2,feedback:"نقسم عدد المولات على حجم المحلول باللتر: 2 ÷ 1 = 2 M.",enrichment:{fact:"المولارية تقارن كمية المذاب بحجم المحلول.",example:"مضاعفة المولات مع ثبات الحجم تضاعف المولارية.",rule:"M = n ÷ V"}},
+      {topic:"الذوبان والخواص الجامعة للمحاليل",question:"ماذا يحدث لجسيمات المذاب أثناء الذوبان؟",options:["تحيط بها جسيمات المذيب","تحيط بالمذيب دائمًا","تتبخر جميعها","تترسب جميعها"],correctIndex:0,feedback:"تحيط جسيمات المذيب بجسيمات المذاب وتساعد على انتشارها.",enrichment:{fact:"عندما يكون المذيب ماءً تسمى العملية إماهة.",example:"تحيط جزيئات الماء بأيونات الملح عند ذوبانه.",rule:"التجاذب بين المذيب والمذاب يساعد على الذوبان."}},
+      {topic:"الذوبان والخواص الجامعة للمحاليل",question:"تزداد ذائبية الغازات في السوائل بزيادة:",options:["درجة الحرارة","الضغط","التحريك فقط","الحجم"],correctIndex:1,feedback:"زيادة الضغط ترفع ذائبية الغاز وفق قانون هنري.",enrichment:{fact:"ذائبية الغاز تتأثر بضغطه فوق السائل.",example:"يبقى ثاني أكسيد الكربون مذابًا في العبوة المغلقة.",rule:"ذائبية الغاز ∝ ضغطه."}},
+      {topic:"الذوبان والخواص الجامعة للمحاليل",question:"أي قانون يربط ذائبية الغاز بالضغط؟",options:["بويل","شارل","هنري","جاي لوساك"],correctIndex:2,feedback:"قانون هنري يربط بين ضغط الغاز وذائبيته في السائل.",enrichment:{fact:"كلما ارتفع ضغط الغاز زادت ذائبيته عند ثبات الحرارة.",example:"تخرج فقاعات من المشروب الغازي عند فتحه.",rule:"قانون هنري: الذائبية ∝ الضغط."}},
+      {topic:"الذوبان والخواص الجامعة للمحاليل",question:"إضافة مذاب غير متطاير إلى مذيب تؤدي عادةً إلى:",options:["انخفاض درجة الغليان","ارتفاع درجة الغليان","ثبات درجة الغليان","زيادة التبخر"],correctIndex:1,feedback:"ارتفاع درجة الغليان إحدى الخواص الجامعة للمحاليل.",enrichment:{fact:"تعتمد الخواص الجامعة على عدد جسيمات المذاب.",example:"يمكن أن يرفع الملح درجة غليان الماء.",rule:"ΔTb = Kb × m عند تحقق شروط المعادلة."}},
+      {topic:"الذوبان والخواص الجامعة للمحاليل",question:"انخفاض درجة التجمد يُعد من:",options:["الخواص الكيميائية","الخواص الجامعة للمحاليل","خواص الفلزات","خواص الغازات"],correctIndex:1,feedback:"يرتبط انخفاض التجمد بعدد جسيمات المذاب.",enrichment:{fact:"المذاب يجعل تجمد المحلول أصعب من تجمد المذيب النقي.",example:"يُستخدم الملح للمساعدة في إذابة الجليد.",rule:"ΔTf = Kf × m عند تحقق شروط المعادلة."}},
+      {topic:"الذوبان والخواص الجامعة للمحاليل",question:"في الأسموزية، ينتقل المذيب عبر غشاء شبه منفذ من المحلول:",options:["المركز إلى المخفف","المخفف إلى المركز","المركز إلى الغاز","الصلب إلى السائل"],correctIndex:1,feedback:"ينتقل المذيب من الأقل تركيزًا بالمذاب إلى الأعلى تركيزًا به.",enrichment:{fact:"الأسموزية مهمة لتنظيم حركة الماء في الخلايا.",example:"قد تنتفخ الخلية عند انتقال الماء إلى داخلها.",rule:"اتجاه انتقال المذيب: مخفف ← مركز."}},
+      {topic:"الذوبان والخواص الجامعة للمحاليل",question:"أي مما يلي يفسر خروج الفقاعات عند فتح مشروب غازي؟",options:["زيادة الضغط داخل العبوة","انخفاض الضغط فوق السائل","زيادة ذائبية الغاز","تجمد السائل"],correctIndex:1,feedback:"ينخفض الضغط عند فتح العبوة فتقل ذائبية الغاز ويخرج.",enrichment:{fact:"يتناسب ذوبان الغاز طرديًا مع ضغطه.",example:"تظهر فقاعات ثاني أكسيد الكربون بعد فتح العلبة.",rule:"عند انخفاض الضغط تنخفض ذائبية الغاز."}},
+      {topic:"الذوبان والخواص الجامعة للمحاليل",question:"على ماذا تعتمد الخواص الجامعة للمحاليل أساسًا؟",options:["لون المذاب","عدد جسيمات المذاب","شكل الوعاء","رائحة المذيب"],correctIndex:1,feedback:"الخواص الجامعة تعتمد على عدد جسيمات المذاب لا على نوعها في المقام الأول.",enrichment:{fact:"منها ارتفاع الغليان وانخفاض التجمد والضغط الأسموزي.",example:"زيادة جسيمات المذاب تزيد أثر انخفاض التجمد.",rule:"الأثر الجامع يرتبط بتركيز الجسيمات."}},
+      {topic:"الأحماض والقواعد",question:"تحوّل محاليل الأحماض ورقة تباع الشمس من:",options:["الأزرق إلى الأحمر","الأحمر إلى الأزرق","الأزرق إلى الأخضر","الأحمر إلى الأصفر"],correctIndex:0,feedback:"الحمض يحوّل ورقة تباع الشمس الزرقاء إلى حمراء.",enrichment:{fact:"تنتج الأحماض أيونات الهيدرونيوم في الماء.",example:"يتغير لون ورقة تباع الشمس الزرقاء عند ملامسة محلول حمضي.",rule:"H⁺ + H₂O → H₃O⁺"}},
+      {topic:"الأحماض والقواعد",question:"من خصائص المركبات القاعدية أنها:",options:["تغير الأزرق إلى الأحمر","طعمها مر وملمسها صابوني","تنتج الهيدروجين مع الفلزات دائمًا","محاليلها غير موصلة للكهرباء"],correctIndex:1,feedback:"من خواص القواعد الطعم المر والملمس الصابوني، دون تذوق المواد عمليًا.",enrichment:{fact:"هيدروكسيد الصوديوم قاعدة قوية.",example:"تدخل بعض القواعد في صناعة الصابون.",rule:"NaOH → Na⁺ + OH⁻"}},
+      {topic:"الأحماض والقواعد",question:"الماء النقي عند 25°C يصنف بأنه:",options:["حمضي","قاعدي","متعادل","ملحي"],correctIndex:2,feedback:"الماء النقي متعادل وقيمة pH له تساوي 7 عند 25°C.",enrichment:{fact:"في الماء النقي يتساوى تركيز أيونات الهيدروجين والهيدروكسيد.",example:"يُستخدم الماء النقي مرجعًا لفهم التعادل.",rule:"[H⁺] = [OH⁻] عند التعادل."}},
+      {topic:"الأحماض والقواعد",question:"القاعدة حسب أرهينيوس مادة تنتج في الماء:",options:["H⁺","OH⁻","إلكترونات حرة","غاز الأكسجين"],correctIndex:1,feedback:"تعريف أرهينيوس للقاعدة هو أنها تزيد أيونات الهيدروكسيد في الماء.",enrichment:{fact:"تنتمي NaOH وKOH إلى قواعد أرهينيوس.",example:"يُطلق NaOH أيونات OH⁻ عند ذوبانه.",rule:"NaOH → Na⁺ + OH⁻"}},
+      {topic:"الأحماض والقواعد",question:"الحمض حسب أرهينيوس هو المادة التي تزيد تركيز:",options:["H⁺","OH⁻","الإلكترونات","أيونات الكلوريد دائمًا"],correctIndex:0,feedback:"حمض أرهينيوس يزيد تركيز أيونات الهيدروجين في المحلول المائي.",enrichment:{fact:"يتفاعل H⁺ مع الماء مكونًا H₃O⁺.",example:"حمض HCl مثال على حمض أرهينيوس.",rule:"HCl → H⁺ + Cl⁻"}},
+      {topic:"الأحماض والقواعد",question:"حمض لويس هو مادة:",options:["تمنح زوج إلكترونات","تستقبل زوج إلكترونات","تمنح OH⁻","تنتج OH⁻"],correctIndex:1,feedback:"حمض لويس مستقبل لزوج من الإلكترونات.",enrichment:{fact:"تعريف لويس أوسع من تعريف أرهينيوس.",example:"BF₃ مثال لحمض لويس.",rule:"حمض لويس: مستقبل زوج إلكتروني."}},
+      {topic:"الأحماض والقواعد",question:"إذا كانت قيمة pH أكبر من 7، فالمحلول:",options:["حمضي","متعادل","قاعدي","مشبع"],correctIndex:2,feedback:"عند 25°C تشير قيمة pH الأكبر من 7 إلى محلول قاعدي.",enrichment:{fact:"مقياس pH يصف حموضة المحلول أو قاعديته.",example:"قد يكون لمحلول صودا الخبز pH أكبر من 7.",rule:"pH > 7: قاعدي عند 25°C."}},
+      {topic:"الأحماض والقواعد",question:"ما قيمة pH للماء المقطر النقي عند 25°C؟",options:["0","7","10","14"],correctIndex:1,feedback:"الماء المقطر النقي متعادل عند 25°C، لذا pH = 7.",enrichment:{fact:"التعادل يعني تساوي تركيزي H⁺ وOH⁻.",example:"تُقارن قيمة pH للمحاليل بالماء النقي.",rule:"pH = 7 عند 25°C للماء النقي."}},
+      {topic:"الأكسدة والاختزال",question:"عملية الاختزال هي:",options:["فقد إلكترونات","اكتساب إلكترونات","زيادة عدد التأكسد","اكتساب بروتونات فقط"],correctIndex:1,feedback:"الاختزال يعني اكتساب الإلكترونات.",enrichment:{fact:"ينخفض عدد التأكسد غالبًا عند الاختزال.",example:"Cu²⁺ + 2e⁻ → Cu",rule:"اختزال = اكتساب إلكترونات."}},
+      {topic:"الأكسدة والاختزال",question:"ماذا يحدث للعامل المؤكسد خلال التفاعل؟",options:["يتأكسد","يُختزل","يفقد إلكترونات","يزداد عدد تأكسده دائمًا"],correctIndex:1,feedback:"العامل المؤكسد يكتسب إلكترونات، ولذلك يُختزل.",enrichment:{fact:"يؤكسد غيره بينما يُختزل هو.",example:"يمكن لأيون فلزي أن يستقبل إلكترونات من فلز آخر.",rule:"العامل المؤكسد: يكتسب e⁻."}},
+      {topic:"الأكسدة والاختزال",question:"عملية الأكسدة هي:",options:["اكتساب إلكترونات","فقد إلكترونات","اكتساب بروتون","تكوين مركب جديد فقط"],correctIndex:1,feedback:"الأكسدة تعني فقد الإلكترونات.",enrichment:{fact:"يرتفع عدد التأكسد غالبًا عند الأكسدة.",example:"Zn → Zn²⁺ + 2e⁻",rule:"أكسدة = فقد إلكترونات."}},
+      {topic:"الأكسدة والاختزال",question:"كم عدد تأكسد الأكسجين في H₂O؟",options:["-2","+2","+1","0"],correctIndex:0,feedback:"عدد تأكسد الأكسجين في الماء يساوي -2.",enrichment:{fact:"غالبًا يكون عدد تأكسد الأكسجين -2 في مركباته.",example:"في H₂O يعادل الأكسجين ذرتَي هيدروجين.",rule:"2(+1) + (-2) = 0"}},
+      {topic:"الأكسدة والاختزال",question:"كم عدد تأكسد الأكسجين في H₂O₂؟",options:["-1","+1","-2","+2"],correctIndex:0,feedback:"في فوق أكسيد الهيدروجين يكون عدد تأكسد الأكسجين -1.",enrichment:{fact:"فوق الأكاسيد استثناء من قاعدة -2 للأكسجين.",example:"H₂O₂ من فوق الأكاسيد.",rule:"2(+1) + 2(-1) = 0"}},
+      {topic:"الأكسدة والاختزال",question:"عدد تأكسد الألومنيوم المعتاد في مركباته:",options:["+3","+2","+1","-3"],correctIndex:0,feedback:"يميل الألومنيوم إلى فقد 3 إلكترونات، فيصبح عدد تأكسده +3.",enrichment:{fact:"يفقد الألومنيوم إلكترونات تكافؤه الثلاثة.",example:"أيون الألومنيوم هو Al³⁺.",rule:"Al → Al³⁺ + 3e⁻"}},
+      {topic:"الأكسدة والاختزال",question:"العامل المختزل مادة:",options:["تكتسب إلكترونات","تمنح إلكترونات","تستقبل بروتونات","تنتج OH⁻"],correctIndex:1,feedback:"العامل المختزل يمنح الإلكترونات لمادة أخرى ويتأكسد.",enrichment:{fact:"العامل المختزل يسبب اختزال المادة الأخرى.",example:"قد يعمل الزنك عاملًا مختزلًا عندما يفقد إلكترونات.",rule:"العامل المختزل: يمنح e⁻."}},
+      {topic:"الأكسدة والاختزال",question:"الفلزات القلوية تُعد غالبًا:",options:["عوامل مؤكسدة قوية","عوامل مختزلة قوية","غازات نبيلة","أشباه فلزات"],correctIndex:1,feedback:"سهولة فقدها إلكترون التكافؤ تجعلها عوامل مختزلة قوية.",enrichment:{fact:"تتميز فلزات المجموعة الأولى بسهولة فقد إلكترون.",example:"الصوديوم والبوتاسيوم من الفلزات القلوية.",rule:"فقد e⁻ يعني أكسدة المادة المانحة."}},
+      {topic:"الكيمياء الكهربائية",question:"أين يحدث الاختزال في الخلية الكهروكيميائية؟",options:["الأنود","القنطرة الملحية","الكاثود","السلك الخارجي"],correctIndex:2,feedback:"يحدث الاختزال دائمًا عند الكاثود.",enrichment:{fact:"تُسمى عملية اكتساب الإلكترونات اختزالًا.",example:"قد تترسب أيونات النحاس على الكاثود.",rule:"الكاثود: اختزال."}},
+      {topic:"الكيمياء الكهربائية",question:"أين تحدث الأكسدة في الخلية الكهروكيميائية؟",options:["الأنود","الكاثود","القنطرة الملحية","المحلول فقط"],correctIndex:0,feedback:"تحدث الأكسدة دائمًا عند الأنود.",enrichment:{fact:"الأكسدة هي فقد الإلكترونات.",example:"قد يذوب قطب الزنك عند الأنود مُكوّنًا Zn²⁺.",rule:"الأنود: أكسدة."}},
+      {topic:"الكيمياء الكهربائية",question:"الخلية الجلفانية نوع من:",options:["الخلايا الحرارية","الخلايا الكهروكيميائية","الخلايا الضوئية","الخلايا النووية"],correctIndex:1,feedback:"الخلية الجلفانية تحول طاقة تفاعل تلقائي إلى طاقة كهربائية.",enrichment:{fact:"تنتقل الإلكترونات عبر الدائرة الخارجية.",example:"خلية الزنك والنحاس مثال على خلية جلفانية.",rule:"طاقة كيميائية → طاقة كهربائية."}},
+      {topic:"الكيمياء الكهربائية",question:"ما وظيفة القنطرة الملحية؟",options:["إيقاف التفاعل","نقل الأيونات","توليد الضوء","زيادة كتلة القطب"],correctIndex:1,feedback:"تسمح بانتقال الأيونات للمحافظة على التعادل الكهربائي.",enrichment:{fact:"تُكمل القنطرة الملحية الدائرة الأيونية بين نصفي الخلية.",example:"قد تحتوي على محلول KNO₃.",rule:"الأيونات تتحرك للمحافظة على التعادل."}},
+      {topic:"الكيمياء الكهربائية",question:"يعبر جهد الاختزال عن قابلية المادة لـ:",options:["فقد الإلكترونات","اكتساب الإلكترونات","التبخر","الذوبان"],correctIndex:1,feedback:"كلما زاد جهد الاختزال زادت قابلية المادة لاكتساب الإلكترونات.",enrichment:{fact:"تُقارن جهود الاختزال باستخدام قطب مرجعي.",example:"تُستخدم القيم لتوقع اتجاه التفاعل في الخلية.",rule:"اختزال = اكتساب e⁻."}},
+      {topic:"الكيمياء الكهربائية",question:"كم يساوي جهد اختزال الهيدروجين القياسي؟",options:["0 فولت","1 فولت","-1 فولت","2 فولت"],correctIndex:0,feedback:"اعتُمد جهد قطب الهيدروجين القياسي مساويًا 0 فولت.",enrichment:{fact:"هو المرجع المستخدم لمقارنة جهود الأقطاب.",example:"تُقاس جهود اختزال مواد أخرى بالمقارنة معه.",rule:"E° لقطب الهيدروجين القياسي = 0 V."}},
+      {topic:"الكيمياء الكهربائية",question:"أي بطارية صغيرة تُستخدم في بعض الساعات؟",options:["بطارية الرصاص","بطارية الفضة","البطارية الجافة الكبيرة","خلية الوقود"],correctIndex:1,feedback:"تُستخدم بطاريات أكسيد الفضة في بعض الساعات والأجهزة الصغيرة.",enrichment:{fact:"تتميز البطاريات الزرية بصغر حجمها.",example:"يمكن أن تمد الساعة بالطاقة لفترة طويلة.",rule:"البطارية تحول الطاقة الكيميائية إلى كهربائية."}},
+      {topic:"الكيمياء الكهربائية",question:"تُعد البطارية الجافة التقليدية:",options:["بطارية ثانوية","بطارية أولية","خلية وقود","خلية تحليل كهربائي"],correctIndex:1,feedback:"البطارية الجافة التقليدية أولية، ولا تُشحن عادةً.",enrichment:{fact:"تُستهلك المواد المتفاعلة في البطاريات الأولية أثناء التشغيل.",example:"بعض البطاريات المستخدمة مرة واحدة أولية.",rule:"أولية: غير قابلة للشحن عادةً."}}
+    ];
+
+    const KEY="chemistry3-quiz-progress-v1";
+    const $=id=>document.getElementById(id);
+    const shuffle=a=>{const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
+    let state=null;
+    function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch(e){}}
+    function show(screen){["start-screen","quiz-screen","result-screen"].forEach(id=>$(id).classList.toggle("hidden",id!==screen));}
+    function newAttempt(name,section){
+      state={name,section,order:shuffle(questions.map((_,i)=>i)),optionOrders:questions.map(()=>shuffle([0,1,2,3])),answers:[],index:0,completedAt:null};
+      save();render();
+    }
+    function render(){
+      if(!state){show("start-screen");return}
+      if(state.index>=40){renderResult();return}
+      show("quiz-screen");
+      const q=questions[state.order[state.index]], selected=state.answers[state.index], answered=Number.isInteger(selected);
+      $("question-counter").textContent=`السؤال ${state.index+1} من 40`;
+      $("star-count").textContent=state.answers.reduce((n,a,i)=>n+(a===questions[state.order[i]].correctIndex?1:0),0);
+      $("progress-fill").style.width=(state.answers.length/40*100)+"%";
+      $("progress-track").setAttribute("aria-valuenow",state.answers.length);
+      $("topic-label").textContent=q.topic;$("question-title").textContent=q.question;
+      $("options").replaceChildren();
+      state.optionOrders[state.order[state.index]].forEach((originalIndex,displayIndex)=>{
+        const b=document.createElement("button");b.type="button";b.className="option canva-button";
+        const letter=document.createElement("span");letter.className="letter";letter.textContent=["A","B","C","D"][displayIndex];
+        const text=document.createElement("span");text.textContent=q.options[originalIndex];b.append(letter,text);
+        if(answered){b.disabled=true;if(originalIndex===q.correctIndex)b.classList.add("correct");else if(originalIndex===selected)b.classList.add("wrong")}
+        else b.addEventListener("click",()=>answer(originalIndex));
+        $("options").appendChild(b);
+      });
+      $("feedback").classList.toggle("hidden",!answered);$("enrichment").classList.toggle("hidden",!answered);$("next-button").classList.toggle("hidden",!answered);
+      if(answered){
+        const good=selected===q.correctIndex;
+        $("feedback").classList.toggle("incorrect",!good);
+        $("feedback").replaceChildren();
+        const strong=document.createElement("strong");strong.textContent=good?"أحسنتِ، إجابة صحيحة!":"محاولة جيدة، راجعي الفكرة الآتية";
+        const detail=document.createElement("span");detail.textContent=q.feedback;$("feedback").append(strong,detail);
+        $("enrichment-fact").textContent=q.enrichment.fact;
+        $("enrichment-example").textContent="مثال تطبيقي: "+q.enrichment.example;
+        $("enrichment-rule").textContent="قاعدة مهمة: "+q.enrichment.rule;
+        $("next-button").textContent=state.index===39?"اعرضي النتيجة":"السؤال التالي";
+      }
+    }
+    function answer(originalIndex){
+      if(!state||state.index>=40||state.answers.length!==state.index)return;
+      const q=questions[state.order[state.index]];
+      state.answers.push(originalIndex);save();render();
+      if(originalIndex===q.correctIndex)celebrate();
+    }
+    function celebrate(){
+      const box=$("burst");box.replaceChildren();
+      const colors=["#d8ae4f","#65bbb3","#a68acb","#f195a8"];
+      for(let i=0;i<22;i++){
+        const p=document.createElement("span");p.className="particle";p.textContent=i%3===0?"★":"▪";p.style.color=colors[i%4];
+        p.style.setProperty("--x",(Math.random()*440-220)+"px");p.style.setProperty("--y",(Math.random()*-340-40)+"px");p.style.setProperty("--r",(Math.random()*600-300)+"deg");box.appendChild(p);
+      }
+      setTimeout(()=>box.replaceChildren(),900);
+    }
+    function level(p){return p>=90?"متميزة":p>=80?"رائعة":p>=70?"جيدة جدًا":p>=60?"جيدة":"تحتاج إلى مراجعة"}
+    function renderResult(){
+      show("result-screen");
+      const score=state.answers.reduce((n,a,i)=>n+(a===questions[state.order[i]].correctIndex?1:0),0),percent=Math.round(score/40*100);
+      if(!state.completedAt){state.completedAt=new Date().toISOString();save()}
+      $("result-identity").textContent=`${state.name} • الشعبة ${state.section}`;
+      $("result-score").textContent=`${score} من 40`;
+      $("result-percent").textContent=`النسبة المئوية: ${percent}%`;
+      $("result-level").textContent=`مستوى الأداء: ${level(percent)}`;
+      $("cert-name").textContent=state.name;
+      $("cert-section").textContent=`رقم الشعبة: ${state.section}`;
+      $("cert-score").textContent=`الدرجة: ${score} من 40  |  النسبة: ${percent}%`;
+      $("cert-date").textContent="تاريخ إكمال المسابقة: "+new Intl.DateTimeFormat("en-GB",{day:"numeric",month:"long",year:"numeric",timeZone:"Asia/Riyadh"}).format(new Date(state.completedAt));
+    }
+    $("start-form").addEventListener("submit",e=>{
+      e.preventDefault();
+      const name=$("student-name").value.trim(),section=$("section-number").value.trim();
+      if(!name||!section){$("form-error").textContent="يرجى إدخال اسم الطالبة ورقم الشعبة قبل البدء.";(!name?$("student-name"):$("section-number")).focus();return}
+      $("form-error").textContent="";newAttempt(name,section);
+    });
+    $("next-button").addEventListener("click",()=>{
+      if(!state||state.index>=40||state.answers.length!==state.index+1)return;
+      state.index++;if(state.index===40)state.completedAt=new Date().toISOString();save();render();
+    });
+    $("restart-button").addEventListener("click",()=>{
+      const name=state?.name||"",section=state?.section||"";
+      state=null;try{localStorage.removeItem(KEY)}catch(e){}
+      $("student-name").value=name;$("section-number").value=section;$("form-error").textContent="";
+      show("start-screen");$("student-name").focus();
+    });
+    try{
+      const stored=JSON.parse(localStorage.getItem(KEY));
+      if(stored&&typeof stored.name==="string"&&stored.name.trim()&&typeof stored.section==="string"&&stored.section.trim()&&Array.isArray(stored.order)&&stored.order.length===40&&new Set(stored.order).size===40&&stored.order.every(i=>Number.isInteger(i)&&i>=0&&i<40)&&Array.isArray(stored.optionOrders)&&stored.optionOrders.length===40&&stored.optionOrders.every(a=>Array.isArray(a)&&a.length===4&&new Set(a).size===4&&a.every(i=>Number.isInteger(i)&&i>=0&&i<4))&&Array.isArray(stored.answers)&&stored.answers.length<=40&&stored.answers.every(i=>Number.isInteger(i)&&i>=0&&i<4)&&Number.isInteger(stored.index)&&stored.index>=0&&stored.index<=40&&stored.answers.length>=stored.index&&stored.answers.length<=stored.index+1){
+        state=stored;
+        $("student-name").value=state.name;$("section-number").value=state.section;
+      }
+    }catch(e){}
+    render();if(window.lucide)lucide.createIcons();
+  </script>
+ </body>
+</html>
